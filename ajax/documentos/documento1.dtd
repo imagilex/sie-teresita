@@ -1,0 +1,12 @@
+<!ELEMENT raiz (documento*)>
+<!ELEMENT documento (id_documento, consecutivo, posicion, objetivo, coordinador, estatus, fecha, lugar, palabras_clave, dias_activa)>
+<!ELEMENT id_documento (#PCDATA)>
+<!ELEMENT consecutivo (#PCDATA)>
+<!ELEMENT posicion (#PCDATA)>
+<!ELEMENT objetivo (#PCDATA)>
+<!ELEMENT coordinador (#PCDATA)>
+<!ELEMENT estatus (#PCDATA)>
+<!ELEMENT fecha (#PCDATA)>
+<!ELEMENT lugar (#PCDATA)>
+<!ELEMENT palabras_clave (#PCDATA)>
+<!ELEMENT dias_activa (#PCDATA)>

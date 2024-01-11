@@ -1,0 +1,23 @@
+CREATE TABLE `mapa` (
+`id_mapa` INT UNSIGNED AUTO_INCREMENT ,
+`nombre` VARCHAR( 250 ) ,
+`comentarios` TEXT,
+`tipo` VARCHAR( 250 ) ,
+`contenido` TEXT,
+PRIMARY KEY ( `id_mapa` ) 
+);
+
+CREATE TABLE `mapa_submapa` (
+`mapa_padre` INT,
+`mapa_hijo` INT,
+`figura` VARCHAR( 250 ) ,
+`coordenadas` VARCHAR( 250 ) ,
+`posicion` INT,
+`preposicion` VARCHAR( 250 ) ,
+PRIMARY KEY ( `mapa_padre` , `mapa_hijo` ) 
+);
+
+INSERT INTO `codigos_generales` ( `valor` , `campo` , `descripcion` , `posicion` , `otro` , `estatus` ) 
+VALUES ('1', 'tipo_mapa', 'Imagen', '1', NULL , NULL), ('2', 'tipo_mapa', 'Grafico', '2', NULL , NULL);
+INSERT INTO `codigos_generales` ( `valor` , `campo` , `descripcion` , `posicion` , `otro` , `estatus` ) 
+VALUES ('3', 'tipo_mapa', 'Lista', '3', NULL , NULL), ('4', 'tipo_mapa', 'Documentacion', '4', NULL , NULL);

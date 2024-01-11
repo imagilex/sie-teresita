@@ -1,0 +1,17 @@
+<!ELEMENT raiz (documento*)>
+<!ELEMENT documento (id_documento, fase, consecutivo, descripcion, responsable, cliente, fecha_plan_inicio, fecha_plan_fin, fecha_real_inicio, fecha_real_fin, estatus, fecha_act_inicio, fecha_act_fin, puntos, fecha_captura)>
+<!ELEMENT id_documento (#PCDATA)>
+<!ELEMENT fase (#PCDATA)>
+<!ELEMENT consecutivo (#PCDATA)>
+<!ELEMENT descripcion (#PCDATA)>
+<!ELEMENT responsable (#PCDATA)>
+<!ELEMENT cliente (#PCDATA)>
+<!ELEMENT fecha_plan_inicio (#PCDATA)>
+<!ELEMENT fecha_plan_fin (#PCDATA)>
+<!ELEMENT fecha_real_inicio (#PCDATA)>
+<!ELEMENT fecha_real_fin (#PCDATA)>
+<!ELEMENT estatus (#PCDATA)>
+<!ELEMENT fecha_act_inicio (#PCDATA)>
+<!ELEMENT fecha_act_fin (#PCDATA)>
+<!ELEMENT puntos (#PCDATA)>
+<!ELEMENT fecha_captura (#PCDATA)>
