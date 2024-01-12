@@ -1,14 +1,14 @@
-<?php 
+<?php
 session_start();
 /*
 
 	$_SESSION["id_usr"]			==>	usuario.clave
 	$_SESSION["tipo"]			==> usuario.tipo_usuario
 	$name=$_SESSION["id_usr"];	==> usuario.persona
-	
+
 */
 $namelogin=$_SESSION["id_usr"];
-include("apoyo.php"); 
+include("apoyo.php");
 $Con=Conectar();
 
 $ira=PostString("ira_cons").PostString("ira_adm").Get("ir_a");
@@ -74,12 +74,12 @@ if($ira!="")
 	{
 		//
 		$login = "select id_usuario from usuario where clave='".$_SESSION["id_usr"]."'";
-		$idusuario1 = mysql_query($login);
-		while($rowuser = mysql_fetch_array($idusuario1))
+		$idusuario1 = mysqli_query($Con, $login);
+		while($rowuser = mysqli_fetch_array($idusuario1))
 		{//echo '<br>'.$rowuser["nombre"].'-'.$rowuser["clave"];
 		$idusuario2=$rowuser["id_usuario"];
 		}
-		//		
+		//
 		header("location: minutas/minutas.php?id_usuario=$idusuario2");
 		exit();
 	}
@@ -107,7 +107,7 @@ if($ira!="")
 	{
 		header("location: frep_diar.php?tipo_rep=RF&noCache=".rand(0,32000));
 		exit();
-	}	
+	}
 	else if($ira=="8")
 	{
 		header("location: change_pass.php?noCache=".rand(0,32000));
@@ -117,7 +117,7 @@ if($ira!="")
 	{
 		header("location: frep_diar.php?tipo_rep=EF&noCache=".rand(0,32000));
 		exit();
-	}	
+	}
 	else if($ira=="51")
 	{
 		header("location: sistema.php?noCache=".rand(0,32000));
@@ -192,7 +192,7 @@ if($ira!="")
 <script language="javascript" src="u_yui/yahoo-dom-event.js"></script>
 <script language="javascript" src="u_yui/container_core.js"></script>
 <script language="javascript" src="u_yui/menu.js"></script>
-<script type="text/javascript">YAHOO.util.Event.onContentReady("barra_menu", function () {var oMenuBar = new YAHOO.widget.MenuBar("barra_menu", {autosubmenudisplay: true,hidedelay: 5000,lazyload: true });oMenuBar.render();});YAHOO.util.Event.onContentReady("menu_opciones", function () {var oMenuBar = new YAHOO.widget.MenuBar("menu_opciones", {autosubmenudisplay: true,hidedelay: 5000,lazyload: true });oMenuBar.render();});</script> 
+<script type="text/javascript">YAHOO.util.Event.onContentReady("barra_menu", function () {var oMenuBar = new YAHOO.widget.MenuBar("barra_menu", {autosubmenudisplay: true,hidedelay: 5000,lazyload: true });oMenuBar.render();});YAHOO.util.Event.onContentReady("menu_opciones", function () {var oMenuBar = new YAHOO.widget.MenuBar("menu_opciones", {autosubmenudisplay: true,hidedelay: 5000,lazyload: true });oMenuBar.render();});</script>
 <link href="style/Style_01.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
@@ -200,11 +200,11 @@ if($ira!="")
 	function Validar()
 	{
 		if(document.frmInicio.usr.value!="" && document.frmInicio.pass.value!="") return true;
-		else 
+		else
 		{
-			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseña");
+			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseï¿½a");
 			else if(document.frmInicio.usr.value=="") alert("Ingresa tu usuario");
-			else if(document.frmInicio.pass.value=="") alert("Ingresa tu contraseña");
+			else if(document.frmInicio.pass.value=="") alert("Ingresa tu contraseï¿½a");
 			return false;
 		}
 	}
@@ -244,7 +244,7 @@ AddNewFolder('c:\\','WT');
 </script>-->
 
 <div class="wrapper">
-<?php 
+<?php
 if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 {
 
@@ -252,28 +252,28 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 	$pass=PostString("pass").Get("pass");
 	$id_usr_usr="";
 	$tipo_usr="";
-	
+
 	if($usr!="" && $pass!="")
 	{
-		if($registro=mysql_query("select id_persona,clave as id_usuario,tipo_usuario, persona from usuario where clave='$usr' and password='$pass' and estatus='A' and persona in (select clave from persona where estatus = 'A')"))
+		if($registro=mysqli_query($Con, "select id_persona,clave as id_usuario,tipo_usuario, persona from usuario where clave='$usr' and password='$pass' and estatus='A' and persona in (select clave from persona where estatus = 'A')"))
 
 		{
-			$dato=mysql_fetch_array($registro);
+			$dato=mysqli_fetch_array($registro);
 			$id_usr_usr=$dato["id_usuario"];
 			$tipo_usr=$dato["tipo_usuario"];
 			$persona_usr=$dato["persona"];
 			$id_persona=$dato["id_persona"];
-			
+
 			if($id_usr_usr!="" && $tipo_usr!="")
 			{
 				$_SESSION["tipo"]=$tipo_usr;
 				$_SESSION["id_usr"]=$id_usr_usr; //clave del usuario
 				$_SESSION["id_persona_usr"]=$persona_usr;
-				
-				$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'"));
-				$name=@mysql_fetch_array(mysql_query("select nombre from persona where id_persona =".$id_persona));
+
+				$cuantos=@mysqli_fetch_array(mysqli_query($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'"));
+				$name=@mysqli_fetch_array(mysqli_query($Con, "select nombre from persona where id_persona =".$id_persona));
 				$_SESSION["nampersona"]=$name[0];
-				
+
 				if(intval($cuantos["n"])>0)
 				{
 					?>
@@ -281,23 +281,23 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 					<?php
 				}
 			}
-			
+
 			else
 			{
-				Alert("El nombre de usuario y/o contraseña son incorrectos");
+				Alert("El nombre de usuario y/o contraseï¿½a son incorrectos");
 			}
-			
+
 		}
 
 	}
-	
+
 }
 BarraHerramientas(!isset($_SESSION["tipo"]),4,false);
 if(! isset($_SESSION["tipo"]))
 {
-	$img=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Entrada' and elemento='Imagen'"));
+	$img=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Entrada' and elemento='Imagen'"));
 	?>
-<form action="entrada.php" method="post" enctype="multipart/form-data" name="frmInicio"> 
+<form action="entrada.php" method="post" enctype="multipart/form-data" name="frmInicio">
 	  <p>
 	    <!--onSubmit="javascript: return Validar();">-->
       </p>
@@ -398,11 +398,11 @@ else
 {
 $namep = $_SESSION["nampersona"];
 //echo $namep;
-$conteo = mysql_query("select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'"); 
-$count = mysql_fetch_array($conteo); 
+$conteo = mysqli_query($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'");
+$count = mysqli_fetch_array($conteo);
 
-//BH_Ayuda('0','4'); 
-$arch=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Lineamientos' and elemento='Introduccion'"));
+//BH_Ayuda('0','4');
+$arch=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Introduccion'"));
 ?>
 <h3 align="center" style="color:#999999;"><?php MostrarArchivo($Dir."/Archivos_Secciones/".$arch["valor"]); ?></h3>
 <p>
@@ -411,8 +411,8 @@ $arch=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion=
 ?>
 
 </p>
-<!--Finaliza el cuerpo del html e Inicia el piede página-->
-<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL NÙMERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
+<!--Finaliza el cuerpo del html e Inicia el piede pï¿½gina-->
+<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL Nï¿½MERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
 <?php
 if(!isset($_SESSION["tipo"]))
 {
@@ -440,7 +440,7 @@ echo"<div class='push'></div>
 <!--$namep tienes $count[0] archivo(s) bloqueados-->
 			  </td>
               <td width='28%' align='right'>&nbsp;</td>
-              <td width='35%' align='right'>&nbsp;";?><img src="Imagenes/menu/varilla.gif" alt='Gestión de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <? echo"</td>
+              <td width='35%' align='right'>&nbsp;";?><img src="Imagenes/menu/varilla.gif" alt='Gestiï¿½n de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
             </tr>
             </table>";
 		 }
@@ -450,18 +450,18 @@ echo"<div class='push'></div>
             <tr>
               <td width='37%' align='left'>&nbsp;</td>
               <td width='28%' align='right'>&nbsp;</td>
-              <td width='35%' align='right'>&nbsp;";?> <img src="Imagenes/menu/varilla.gif" alt='Gestión de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <? echo"</td>
+              <td width='35%' align='right'>&nbsp;";?> <img src="Imagenes/menu/varilla.gif" alt='Gestiï¿½n de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
             </tr>
-            </table>";	
+            </table>";
 			}
 echo"		  </p>
 </div>";
 }
 ?>
-<!--Finaliza piede página-->
+<!--Finaliza piede pï¿½gina-->
 </body>
 </html>
 <?php
-mysql_close($Con);
+mysqli_close($Con);
 unset($Con);
 ?>

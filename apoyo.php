@@ -2,17 +2,16 @@
 
 $Dir = dirname(__FILE__);
 include_once("util_base_datos/mysql/mysql_data_base.php");
-define(BD_HOST,"10.5.0.5",true);
-define(BD_USR,"root",true);
-define(BD_PASS,"password123",true);
-define(BD_BD,"teresita_intranet",true);
+define("BD_HOST","10.5.0.5");
+define("BD_USR","root");
+define("BD_PASS","password123");
+define("BD_BD","teresita_intranet");
 
 function Conectar()
 {
-	$conexion=mysql_connect(BD_HOST,BD_USR,BD_PASS);
-	mysql_select_db(BD_BD);
-	ErrorMySQLAlert();
-	return $conexion;
+	$bd = new DataBase(BD_HOST, BD_USR, BD_PASS, BD_BD);
+	ErrorMySQLAlert($bd->cnn());
+	return $bd->cnn();
 }
 
 function CTabla($tabla)
@@ -36,17 +35,18 @@ function Get($Variable)
 }
 function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 {
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
-	ErrorMySQLAlert();
+	$mysqli = Conectar();
+	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
+	ErrorMySQLAlert($mysqli);
 	$boton_salir=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+	ErrorMySQLAlert($mysqli);
 	$Logo=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
+	ErrorMySQLAlert($mysqli);
 	$linea1=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
+	ErrorMySQLAlert($mysqli);
 	$linea2=$regs["valor"];
 	?>
 <div id="div_menu" style=" border:top:3px; left:92%; width:336px; height:28px; position:absolute; z-index:200; vertical-align:middle; text-align:center; margin-left:-330px; visibility:hidden;" ><?php
@@ -302,20 +302,20 @@ function Alert($Mensaje)
 {
 	?>
 	<script language="javascript">
-		alert("<? echo $Mensaje; ?>");
+		alert("<?php echo $Mensaje; ?>");
 	</script>
-	<?
+	<?php
 }
-function ErrorMySQL()
+function ErrorMySQL($cnn)
 {
-	if(mysql_errno()!=0)
-		return mysql_errno().": ".mysql_error();
+	if($cnn && $cnn->errno)
+		return $cnn->errno.": ".$cnn->error;
 	return "";
 }
-function ErrorMySQLAlert()
+function ErrorMySQLAlert($cnn)
 {
-	if(ErrorMySQL()!="")
-		Alert(ErrorMySQL());
+	if(ErrorMySQL($cnn)!="")
+		Alert(ErrorMySQL($cnn));
 }
 function FormFecha($Variable)
 {
@@ -355,7 +355,7 @@ function FormComboNum($Variable,$Inicio,$Fin,$Incremento)
 	$Cad="";
 	for($x=$Inicio;$x<=$Fin;$x+=$Incremento)
 		$Cad=$Cad."<option value=\"$x\">$x</option>";
-	return "<select name=\"$Variable\"><option></option>$Cad</select>";
+	return '<select name="'.$Variable.'"><option></option>'.$Cad.'</select>';
 }
 function NoAcute($cad)
 {
@@ -431,18 +431,26 @@ function BH_Ayuda($prefijo,$opcion)
 				document.getElementById('ayuda_bh').value="";
 			}
 		</script>
-		<table border="0" width="100%"><tr><td align="right">Ayuda:
-		<select name="ayuda_bh" id="ayuda_bh" onchange="Ayuda_en_BH(this.value)"><option value=""></option>
-			<?php
-			while($item=mysql_fetch_array($items))
-			{
-				?>
-				<option value="<?php echo $item["archivo"]; ?>"><?php echo $item["descripcion"]; ?></option>
-				<?php
-			}
-			?>
-		</select>
-		</td></tr></table>
+		<table border="0" width="100%">
+			<tr>
+				<td align="right">
+					Ayuda:
+					<select name="ayuda_bh" id="ayuda_bh" onchange="Ayuda_en_BH(this.value)">
+						<option value=""></option>
+						<?php
+						while($item=mysql_fetch_array($items))
+						{
+							?>
+							<option value="<?php echo $item["archivo"]; ?>">
+								<?php echo $item["descripcion"]; ?>
+							</option>
+							<?php
+						}
+						?>
+					</select>
+				</td>
+			</tr>
+		</table>
 		<?php
 	}
 }
@@ -531,75 +539,168 @@ function DisplaySQLD3($lista,$usuar)
 }
 function Komp($id_documento,$fase,$consecutivo)
 {
-$tbl_comps=CTabla("docto3");
-$tbl_parts=CTabla("docto_participantes");
-$tbl_gral=CTabla("docto_general");
-$tbl_cg=CTabla("codigos_generales");
-$tbl_pers=CTabla("persona");
+	$tbl_comps=CTabla("docto3");
+	$tbl_parts=CTabla("docto_participantes");
+	$tbl_gral=CTabla("docto_general");
+	$tbl_cg=CTabla("codigos_generales");
+	$tbl_pers=CTabla("persona");
 
-$data_comps=$tbl_comps->select("id_documento, fase, consecutivo, descripcion, responsable, cliente, fecha_plan_inicio, fecha_plan_fin, fecha_real_inicio, fecha_real_fin, estatus, fecha_act_inicio, fecha_act_fin, puntos, fecha_captura, datediff(fecha_plan_fin,curdate()) as dias_venc, datediff(curdate(),fecha_plan_inicio) as dias_act","id_documento='$id_documento' and fase='$fase' and consecutivo='$consecutivo'");
-$data_parts=$tbl_parts->select("participante","id_documento='$id_documento'");
-$data_gral=$tbl_gral->select("*","id_documento='$id_documento'");
+	$data_comps=$tbl_comps->select("id_documento, fase, consecutivo, descripcion, responsable, cliente, fecha_plan_inicio, fecha_plan_fin, fecha_real_inicio, fecha_real_fin, estatus, fecha_act_inicio, fecha_act_fin, puntos, fecha_captura, datediff(fecha_plan_fin,curdate()) as dias_venc, datediff(curdate(),fecha_plan_inicio) as dias_act","id_documento='$id_documento' and fase='$fase' and consecutivo='$consecutivo'");
+	$data_parts=$tbl_parts->select("participante","id_documento='$id_documento'");
+	$data_gral=$tbl_gral->select("*","id_documento='$id_documento'");
 
-$origen=$tbl_cg->select("descripcion","campo='docto_origen' and valor='".$data_gral[0]["origen"]."'");
-$tipo=$tbl_cg->select("descripcion","campo='docto_origen' and valor='".$data_gral[0]["tipo_documento"]."'");
+	$origen=$tbl_cg->select("descripcion","campo='docto_origen' and valor='".$data_gral[0]["origen"]."'");
+	$tipo=$tbl_cg->select("descripcion","campo='docto_origen' and valor='".$data_gral[0]["tipo_documento"]."'");
 
-$docto=explode("-",$id_documento);
-$id_docto_p1=$docto[0];
-if(isset($docto[1])) $id_docto_p2=$docto[1];
-else $id_docto_p2="";
-$estatus=$tbl_cg->select("descripcion","campo='docto_comps_estatus' and valor='".$data_comps[0]["estatus"]."'");;
-$resp=$tbl_pers->select("nombre","clave='".$data_comps[0]["responsable"]."'");
-$parts="";
-foreach($data_parts as $reg)
-{
-	$tmp=$tbl_pers->select("nombre", "clave='".$reg["participante"]."'");
-	$parts.=" ".$tmp[0]["nombre"].",";
-}
-$parts=substr($parts,0,strlen($parts)-1);
-$cad="";
-$cad='
-<table border="0" align="center">
-	<tr><td>Komp '.$id_documento.'-'.$fase.'-'.$consecutivo.'</td><td align="right" rowspan="2"><input type="button" value="Documentos" /></td></tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr>
-		<td><strong style="color:#0000CC;">'.$origen[0]["descripcion"].'</strong></td>
-		<td rowspan="3" style="padding-right:30px;" align="right" valign="top">
-			<table border="0">
-				<tr><td align="right">Captura:</td><td align="left">'.DateConvencional($data_comps[0]["fecha_captura"]).'</td></tr>
-				<tr><td align="right">Inicio:</td><td align="left">'.DateConvencional($data_comps[0]["fecha_plan_inicio"]).'</td></tr>
-				<tr><td align="right">Fin:</td><td align="left">'.DateConvencional($data_comps[0]["fecha_plan_fin"]).'</td></tr>
-			</table>
-		</td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td align="center">
-		<table border="0">
-			<tr><td align="right">Proyecto:</td><td align="left">'.htmlentities($data_gral[0]["agrupador"]).'</td></tr>
-			<tr><td align="right">'.htmlentities(($data_gral[0]["tipo_documento"]=="2"?"Plan de Trabajo":"Minuta")).':</td><td align="left">'.htmlentities($data_gral[0]["nombre"]).'</td></tr>
-			<tr><td align="center" colspan="2">'.htmlentities(($id_docto_p2!=""?"Minuta numero $id_docto_p2":"")).'</td></tr>
-			<tr><td align="center" colspan="2"><strong>'.htmlentities($data_comps[0]["descripcion"]).'</strong></td>
+	$docto=explode("-",$id_documento);
+	$id_docto_p1=$docto[0];
+	if(isset($docto[1])) $id_docto_p2=$docto[1];
+	else $id_docto_p2="";
+	$estatus=$tbl_cg->select("descripcion","campo='docto_comps_estatus' and valor='".$data_comps[0]["estatus"]."'");;
+	$resp=$tbl_pers->select("nombre","clave='".$data_comps[0]["responsable"]."'");
+	$parts="";
+	foreach($data_parts as $reg)
+	{
+		$tmp=$tbl_pers->select("nombre", "clave='".$reg["participante"]."'");
+		$parts.=" ".$tmp[0]["nombre"].",";
+	}
+	$parts=substr($parts,0,strlen($parts)-1);
+	$cad="";
+	$cad='
+		<table border="0" align="center">
+			<tr>
+				<td>
+					Komp '.$id_documento.'-'.$fase.'-'.$consecutivo.'
+				</td>
+				<td align="right" rowspan="2">
+					<input type="button" value="Documentos" />
+				</td>
 			</tr>
-		</table>
-	</td></tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td align="right" rowspan="2" style="padding-right:30px;" valign="top">
-			<table border="0">
-				<tr><td align="right">D&iacute;as para vencimiento:</td><td align="left">'.htmlentities($data_comps[0]["dias_venc"]).'</td></tr>
-				<tr><td align="right">D&iacute;as activado:</td><td align="left">'.htmlentities($data_comps[0]["dias_act"]).'</td></tr>
-			</table>
-		</td>
-	</tr>
-	<tr><td>
-		<table border="0">
-			<tr><td align="left"><strong><font color="'.(($data_comps[0]["estatus"]=="1")?("#006600"):(($data_comps[0]["estatus"]=="")?("#990000"):("#000000"))).'">'.htmlentities($estatus[0]["descripcion"]).'</font></strong></td></tr>
-			<tr><td align="left" style="text-transform:capitalize;">Responsable: '.htmlentities($resp[0]["nombre"]).'</td></tr>
-			<tr><td align="left" style="text-transform:capitalize;">Participantes: '.htmlentities($parts).'</td></tr>
-		</table>
-	</td></tr>
-</table>';
-return $cad;
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>
+					<strong style="color:#0000CC;">
+						'.$origen[0]["descripcion"].'
+					</strong>
+				</td>
+				<td rowspan="3" style="padding-right:30px;" align="right" valign="top">
+					<table border="0">
+						<tr>
+							<td align="right">
+								Captura:
+							</td>
+							<td align="left">
+								'.DateConvencional($data_comps[0]["fecha_captura"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="right">
+								Inicio:
+							</td>
+							<td align="left">
+								'.DateConvencional($data_comps[0]["fecha_plan_inicio"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="right">
+								Fin:
+							</td>
+							<td align="left">
+								'.DateConvencional($data_comps[0]["fecha_plan_fin"]).'
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<table border="0">
+						<tr>
+							<td align="right">
+								Proyecto:
+							</td>
+							<td align="left">
+								'.htmlentities($data_gral[0]["agrupador"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="right">
+								'.htmlentities(($data_gral[0]["tipo_documento"]=="2"?"Plan de Trabajo":"Minuta")).':
+							</td>
+							<td align="left">
+								'.htmlentities($data_gral[0]["nombre"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2">
+								'.htmlentities(($id_docto_p2!=""?"Minuta numero $id_docto_p2":"")).'
+							</td>
+						</tr>
+						<tr>
+							<td align="center" colspan="2">
+								<strong>
+									'.htmlentities($data_comps[0]["descripcion"]).'
+								</strong>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="right" rowspan="2" style="padding-right:30px;" valign="top">
+					<table border="0">
+						<tr>
+							<td align="right">
+								D&iacute;as para vencimiento:
+							</td>
+							<td align="left">
+								'.htmlentities($data_comps[0]["dias_venc"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="right">
+								D&iacute;as activado:
+							</td>
+							<td align="left">
+								'.htmlentities($data_comps[0]["dias_act"]).'
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table border="0">
+						<tr>
+							<td align="left">
+								<strong>
+									<font color="'.(($data_comps[0]["estatus"]=="1")?("#006600"):(($data_comps[0]["estatus"]=="")?("#990000"):("#000000"))).'">
+										'.htmlentities($estatus[0]["descripcion"]).'
+									</font>
+								</strong>
+							</td>
+						</tr>
+						<tr>
+							<td align="left" style="text-transform:capitalize;">
+								Responsable: '.htmlentities($resp[0]["nombre"]).'
+							</td>
+						</tr>
+						<tr>
+							<td align="left" style="text-transform:capitalize;">
+								Participantes: '.htmlentities($parts).'
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>';
+	return $cad;
 }
 function Parametro($menu,$elem,$caract)
 {
@@ -613,46 +714,70 @@ function Parametro($menu,$elem,$caract)
 
 function B_reportes()
 {
-echo"<table bgcolor='f2f2f2' width='100%' height='40' border='0' align='center' cellpadding='0' cellspacing='0'>
-  <tr>
-    <td><table border='0' align='left' cellpadding='0' cellspacing='0'>
-      <tr>
-        <td><img src='Imagenes/menu/varilla.gif' width='14' height='1'></td>
-        <td>";?><img src="Imagenes/menu/home.png" alt="Inicio" title="Inicio" onclick="javascript: /*window.close()*/location.href='entrada.php';" /><? echo"</td>
-        <td><img src='Imagenes/menu/varilla.gif' width='14' height='1'></td>
-        <td>";?><? echo"</td>
-      </tr>
-    </table></td>
-    <td><div align='center'>$titulo</div></td>
-    <td><table border='0' align='right' cellpadding='0' cellspacing='0'>
-      <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>";?><img src="Imagenes/Btn_salir.png" onclick="javascript: /*window.close()*/location.href='index.php';" /><? echo"</td>
-        </tr>
-    </table></td>
-  </tr>
-</table>
-";
+	echo "
+		<table bgcolor='f2f2f2' width='100%' height='40' border='0' align='center' cellpadding='0' cellspacing='0'>
+			<tr>
+				<td>
+					<table border='0' align='left' cellpadding='0' cellspacing='0'>
+						<tr>
+							<td>
+								<img src='Imagenes/menu/varilla.gif' width='14' height='1'/>
+							</td>
+							<td>";
+								?>
+								<img src="Imagenes/menu/home.png" alt="Inicio" title="Inicio" onclick="javascript: /*window.close()*/location.href='entrada.php';" />
+								<?php echo "
+							</td>
+							<td>
+								<img src='Imagenes/menu/varilla.gif' width='14' height='1'>
+							</td>
+							<td>";
+								?>
+								<?php echo "
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<div align='center'>
+						$titulo
+					</div>
+				</td>
+				<td>
+					<table border='0' align='right' cellpadding='0' cellspacing='0'>
+						<tr>
+							<td>&nbsp;</td>
+							<td>&nbsp;</td>
+							<td>";
+								?>
+								<img src="Imagenes/Btn_salir.png" onclick="javascript: /*window.close()*/location.href='index.php';" />
+								<?php echo "
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	";
 }
 
 function BH_Plan()
 {
-echo"<table width='100%' border='0' bgcolor='F2F2F2'>
-<table width='100%' border='0' bgcolor='F2F2F2'>
-  <tr>
-    <th scope='col'><table border='0' align='left' cellpadding='0' cellspacing='0'><tr><td style='background-image:url(Imagenes/iconografia/go.png); background-repeat:no-repeat; width:88px; height:20px; vertical-align:middle; text-align:center; font-size:9px; font-weight:bold;' onclick='javascript: location.href='entrada.php''>Inicio</td></tr></table></th>
-    <th scope='col'>&nbsp;</th>
-    <th scope='col'><table border='0' align='right'>
-      <tr>
-        <th scope='col'>&nbsp;</th>
-        <th scope='col'><img height='15' title='Editar' alt='Editar' src='Imagenes/iconografia/11.png' onclick='EjecutaAccion_nivel0(2)' /></th>
-        <th scope='col'><img height='15' title='Agregar' alt='Agregar' src='Imagenes/iconografia/07.png' onclick='EjecutaAccion_nivel0(2)' /></th>
-        <th scope='col'><a href='index.php'><img height='15' title='Salir' alt='Salir' src='Archivos_Secciones/Btn_salir.png' /></a></th>
-      </tr>
-    </table></th>
-  </tr>
-</table>";
+	echo"<table width='100%' border='0' bgcolor='F2F2F2'>
+	<table width='100%' border='0' bgcolor='F2F2F2'>
+	<tr>
+		<th scope='col'><table border='0' align='left' cellpadding='0' cellspacing='0'><tr><td style='background-image:url(Imagenes/iconografia/go.png); background-repeat:no-repeat; width:88px; height:20px; vertical-align:middle; text-align:center; font-size:9px; font-weight:bold;' onclick='javascript: location.href='entrada.php''>Inicio</td></tr></table></th>
+		<th scope='col'>&nbsp;</th>
+		<th scope='col'><table border='0' align='right'>
+		<tr>
+			<th scope='col'>&nbsp;</th>
+			<th scope='col'><img height='15' title='Editar' alt='Editar' src='Imagenes/iconografia/11.png' onclick='EjecutaAccion_nivel0(2)' /></th>
+			<th scope='col'><img height='15' title='Agregar' alt='Agregar' src='Imagenes/iconografia/07.png' onclick='EjecutaAccion_nivel0(2)' /></th>
+			<th scope='col'><a href='index.php'><img height='15' title='Salir' alt='Salir' src='Archivos_Secciones/Btn_salir.png' /></a></th>
+		</tr>
+		</table></th>
+	</tr>
+	</table>";
 }
 function BH2()
 {
@@ -670,127 +795,143 @@ function BH2()
 	$linea2=$regs["valor"];
 	$favoritos=true;
 	?>
-  <table width="100%">
+  	<table width="100%">
 		<tr>
 			<td align="left" valign="top">
 				<table border="0" width="100%">
 
-				<?php
-		if($favoritos)
-		{
-			?>
-			<script language="javascript">
-				function trim (myString)
-				{
-					return myString.replace(/^\s+/g,'').replace(/\s+$/g,'')
-				}
-				function MuestraFav()
-				{
-					var elDiv=$('div_fav');
-					if(elDiv.style.visibility)
-						elDiv.style.visibility='visible';
-					else if(elDiv.style.display)
-						elDiv.style.display='block';
-					else elDiv.style.visibility='visible';
-				}
-				function OcultaFav()
-				{
-					var elDiv=$('div_fav');
-					if(elDiv.style.visibility)
-						elDiv.style.visibility='hidden';
-					else if(elDiv.style.display)
-						elDiv.style.display='none';
-					else elDiv.style.visibility='hidden';
-				}
-				function AddFav()
-				{
-					var nombre = (prompt("Nombre del v�nculo")) || "favorito";
-					if(nombre=="favorito")
-						return false;
-					var url_request = location.pathname;
-					var parametros = location.search.substring(1);
-					var cadena = "_add_to_fav.php?nombre="+nombre+"&urlrequest="+url_request+"&parametros='"+parametros+"'";
-					window.open(cadena,"addFav");
-				}
-				function DelFav()
-				{
-					var checks=document.getElementsByTagName('input');
-					var cads="", valor,x ,y, url="_del_to_fav.php?usr=<?php echo $_SESSION["id_usr"]; ?>";
-					for(x=0;x<checks.length;x++)
+					<?php
+					if($favoritos)
 					{
-						if(checks[x].type=="checkbox" && checks[x].checked)
-						{
-							nomb="";
-							valor=checks[x].value.split('*');
-							if(valor.length>=2 && valor[0]=="fav")
-							{
-								for(y=1;y<valor.length;y++)
-								{
-									nomb += valor[y]+" ";
-								}
-							}
-							nomb=trim(nomb);
-							url += "&nombre"+x+"="+nomb;
-						}
-					}
-					window.open(url,"delFav");
-				}
-			</script>
-			<tr><td colspan="2" align="left">
-				<?php
-				if (isset($_SESSION["id_usr"]) && $_SESSION["id_usr"]!="0")
-				{
-				?>
-				<img src="Imagenes/fav.bmp" border="0" onmousemove="MuestraFav();" />
-				<img src="Imagenes/fav_add.bmp" border="0" onclick="AddFav()" />
-				<?php
-				}
-				?>
-			</td></tr>
-			<tr><td colspan="2" valign="top">
-				<div id="div_fav" style="width:250px; height:200px; position:absolute; z-index:1; background-color:#EEEEEE; visibility:hidden;" onmouseout="OcultaFav();">
-					<table border="0" align="left" width="100%" onmousemove="MuestraFav()">
-						<tr><td align="right"><input type="button" value="Eliminar" style="width:75px; height:25px;" onclick="DelFav();" /></td></tr>
-						<?php
-						if($favs=mysql_query("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
-						{
-							while($fav=mysql_fetch_array($favs))
-							{
-								?>
-								<tr onmousemove="MuestraFav()"><td onmousemove="javascript: this.style.background='#FFFFFF'; MuestraFav();" onmouseout="javascript: this.style.background='#EEEEEE';" ondblclick="javascript: location.href='<?php echo $fav["url_request"]."?".$fav["parametros_url"]; ?>'">
-									<label><input type="checkbox" value="fav*<?php echo $fav["nombre"]; ?>" /><?php echo $fav["nombre"]; ?></label>
-								</td></tr>
-								<?php
-							}
-						}
 						?>
-					</table>
-				</div>
-			</td></tr>
-			<?php
-		}
-		?>
-				</table></td>
-			<td valign="top" align="right" width="10"><img src="Archivos_Secciones/<?php echo $boton_salir; ?>" onclick="javascript: location.href='index.php';" /></td>
+						<script language="javascript">
+							function trim (myString)
+							{
+								return myString.replace(/^\s+/g,'').replace(/\s+$/g,'')
+							}
+							function MuestraFav()
+							{
+								var elDiv=$('div_fav');
+								if(elDiv.style.visibility)
+									elDiv.style.visibility='visible';
+								else if(elDiv.style.display)
+									elDiv.style.display='block';
+								else elDiv.style.visibility='visible';
+							}
+							function OcultaFav()
+							{
+								var elDiv=$('div_fav');
+								if(elDiv.style.visibility)
+									elDiv.style.visibility='hidden';
+								else if(elDiv.style.display)
+									elDiv.style.display='none';
+								else elDiv.style.visibility='hidden';
+							}
+							function AddFav()
+							{
+								var nombre = (prompt("Nombre del v�nculo")) || "favorito";
+								if(nombre=="favorito")
+									return false;
+								var url_request = location.pathname;
+								var parametros = location.search.substring(1);
+								var cadena = "_add_to_fav.php?nombre="+nombre+"&urlrequest="+url_request+"&parametros='"+parametros+"'";
+								window.open(cadena,"addFav");
+							}
+							function DelFav()
+							{
+								var checks=document.getElementsByTagName('input');
+								var cads="", valor,x ,y, url="_del_to_fav.php?usr=<?php echo $_SESSION["id_usr"]; ?>";
+								for(x=0;x<checks.length;x++)
+								{
+									if(checks[x].type=="checkbox" && checks[x].checked)
+									{
+										nomb="";
+										valor=checks[x].value.split('*');
+										if(valor.length>=2 && valor[0]=="fav")
+										{
+											for(y=1;y<valor.length;y++)
+											{
+												nomb += valor[y]+" ";
+											}
+										}
+										nomb=trim(nomb);
+										url += "&nombre"+x+"="+nomb;
+									}
+								}
+								window.open(url,"delFav");
+							}
+						</script>
+						<tr>
+							<td colspan="2" align="left">
+								<?php
+								if (isset($_SESSION["id_usr"]) && $_SESSION["id_usr"]!="0")
+								{
+									?>
+									<img src="Imagenes/fav.bmp" border="0" onmousemove="MuestraFav();" />
+									<img src="Imagenes/fav_add.bmp" border="0" onclick="AddFav()" />
+									<?php
+								}
+								?>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" valign="top">
+								<div id="div_fav" style="width:250px; height:200px; position:absolute; z-index:1; background-color:#EEEEEE; visibility:hidden;" onmouseout="OcultaFav();">
+									<table border="0" align="left" width="100%" onmousemove="MuestraFav()">
+										<tr>
+											<td align="right">
+												<input type="button" value="Eliminar" style="width:75px; height:25px;" onclick="DelFav();" />
+											</td>
+										</tr>
+										<?php
+										if($favs=mysql_query("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
+										{
+											while($fav=mysql_fetch_array($favs))
+											{
+												$url_fav = $fav["url_request"]."?".$fav["parametros_url"];
+												?>
+												<tr onmousemove="MuestraFav()">
+													<td
+															onmousemove="javascript: this.style.background='#FFFFFF'; MuestraFav();"
+															onmouseout="javascript: this.style.background='#EEEEEE';"
+															ondblclick="javascript: location.href='<?php echo $url_fav; ?>'">
+														<label>
+															<input type="checkbox" value="fav*<?php echo $fav["nombre"]; ?>" /><?php echo $fav["nombre"]; ?>
+														</label>
+													</td>
+												</tr>
+												<?php
+											}
+										}
+										?>
+									</table>
+								</div>
+							</td>
+						</tr>
+						<?php
+					}
+					?>
+
+				</table>
+			</td>
+			<td valign="top" align="right" width="10">
+				<img src="Archivos_Secciones/<?php echo $boton_salir; ?>" onclick="javascript: location.href='index.php';" />
+			</td>
 		</tr>
 	</table>
-
 	<?php
 }
 function NombreTabla($s)
 {
-    $s = '' . $s;
     return $s;
 }
 
 function NombreTablaL($s)
 {
-    $s = '' . $s;
     return $s;
 }
 function NombreTablaB($s)
 {
-    $s = 'TB' . $s;
-    return $s;
+    return 'TB' . $s;
 }
 ?>
