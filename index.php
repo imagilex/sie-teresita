@@ -12,9 +12,8 @@ $ira=PostString("ira").Get("ira");;
 
 $Con=Conectar();
 
-var_dump($Con);
 
-if($regs=mysqli_query($Con, "select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
+if($regs=consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
 	{
 		$registro=$regs->fetch_array();
 		$principal=$registro["valor"];
@@ -42,7 +41,7 @@ if($regs=mysqli_query($Con, "select valor from seccion where id_seccion='Princip
 		if(document.frmInicio.usr.value!="" && document.frmInicio.pass.value!="") return true;
 		else
 		{
-			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contrase�a");
+			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseña");
 			else if(document.frmInicio.usr.value=="") alert("Ingresa tu usuario");
 			else if(document.frmInicio.pass.value=="") alert("Ingresa tu password");
 			return false;
@@ -97,8 +96,8 @@ fullscreen = window.open(pagina, "fullscreen", 'top=0,left=0,width='+(screen.ava
 
 if($ira=="1") //quienes somos
 {
-	$titulo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
+	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
 	?>
 	<table border="0" align="center" width="65%">
 		<tr>
@@ -117,9 +116,9 @@ if($ira=="1") //quienes somos
 }
 else if($ira=="2") // nuestros productos
 {
-	$titulo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
-	$imagen=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
+	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
+	$imagen=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
 	?>
 	<script language="javascript">
 		//location.href="catalogos_01.php?lista=1&noCache="+parseInt(Math.random()*1000);
@@ -146,7 +145,7 @@ else if($ira=="2") // nuestros productos
 }
 else if($ira=="3") // contactenos
 {
-	$archivo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
 	?>
   <table border="0" align="center" width="65%">
 		<tr>
@@ -168,8 +167,8 @@ else if($ira=="3") // contactenos
 }
 else
 {
-	$txt1=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
-	$txt2=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+	$txt1=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
+	$txt2=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
 	?>
 
 <?php
@@ -196,7 +195,7 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 		</tr>
 		<tr>
 			<td height="100" align="center" valign="middle">
-				<?php $archivo=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+				<?php $archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
 	?>
 	<table border="0" align="center" width="100%">
 		<tr><td></td>
@@ -225,20 +224,20 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 					Galones de Lentejuela,
 					Galones de Tul,
 					Galones de Perla,
-					El�sticos,
+					Elásticos,
 					Espiguilla,
-					Espiguilla Met�lica,
+					Espiguilla Metálica,
 					Encaje de Bolillo,
 					Cintas,
-					Cintas Met�licas,
+					Cintas Metálicas,
 					Cintas con Alambre,
 					Trenzas,
-					Trenzas Met�licas,
+					Trenzas Metálicas,
 					Mallas,
-					Mallas Met�licas,
+					Mallas Metálicas,
 					Cordones Trenzados,
 					Cordones Torcidos,
-					Cordones El�sticos,
+					Cordones Elásticos,
 					Cordones con Cenefa,
 					Cordones con Alambre,
 					Flecos,
@@ -254,8 +253,8 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 }
 
 ?>
-<!--Finaliza el cuerpo del html e Inicia el piede p�gina-->
-<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL N�MERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
+<!--Finaliza el cuerpo del html e Inicia el piede página-->
+<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL NÚMERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
 <div class='push'></div>
 </div>
 <div class='footer' style='background-color:#193452; color: #FFF;'>
@@ -267,12 +266,12 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
     </tr>
             <tr>
               <td width='24%' height='30' align='right'>&nbsp;</td>
-              <td width='60%' align='center'><font color='#FFFFFF'>Copyright (c) 2011.�Elasticintas Teresita S.A. de C.V.�Todos los derechos reservados.</font></td>
+              <td width='60%' align='center'><font color='#FFFFFF'>Copyright (c) 2011. Elasticintas Teresita S.A. de C.V. Todos los derechos reservados.</font></td>
               <td width='16%' align='center'><a href='olvido_pass.php'><font color='#FFFFFF'>Recordar acceso</font></a></td>
             </tr>
             </table>
 </div>
-<!--Finaliza piede p�gina-->
+<!--Finaliza piede página-->
 </body>
 </html>
 <?php

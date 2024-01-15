@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -81,7 +81,7 @@ for($x=0; $x<$total; $x++)
 		$opci=$opciones[$x];
 		$posi=$pos[$x];
 		$desc=$descr[$x];
-		mysql_query("update menu set descripcion='$desc', posicion='$posi' where prefijo_menu='$pref' and opcion='$opci'");
+		consulta_directa($Con, "update menu set descripcion='$desc', posicion='$posi' where prefijo_menu='$pref' and opcion='$opci'");
 	}
 }
 
@@ -93,11 +93,11 @@ for($x=0; $x<$total; $x++)
 			<td align="left" colspan="2">
 				Men&uacute;:
 				<select name="menu_opc" onchange="javascript: document.menu.sincambios.value='yes'; document.menu.submit()">
-					<option value="">Raíz</option>
+					<option value="">RaÃ­z</option>
 					<?php
-					if($menus_bd=mysql_query("select m1.prefijo_menu as prefijo, m1.opcion as opc, m1.descripcion as descr from menu as m1, menu as m2 where concat(m1.prefijo_menu,'.',m1.opcion)=m2.prefijo_menu or (m1.prefijo_menu='' and m2.prefijo_menu=m1.opcion) group by m1.prefijo_menu, m1.descripcion order by m1.prefijo_menu, m1.opcion"))
+					if($menus_bd=consulta_directa($Con, "select m1.prefijo_menu as prefijo, m1.opcion as opc, m1.descripcion as descr from menu as m1, menu as m2 where concat(m1.prefijo_menu,'.',m1.opcion)=m2.prefijo_menu or (m1.prefijo_menu='' and m2.prefijo_menu=m1.opcion) group by m1.prefijo_menu, m1.descripcion order by m1.prefijo_menu, m1.opcion"))
 					{
-						while($menu_bd=mysql_fetch_array($menus_bd))
+						while($menu_bd=mysqli_fetch_array($menus_bd))
 						{
 							?>
 							<option value="<?php echo $menu_bd["prefijo"]; ?>.<?php echo $menu_bd["opc"]; ?>"><?php echo (($menu_bd["prefijo"]!="")?($menu_bd["prefijo"]."."):("")).$menu_bd["opc"].". ".$menu_bd["descr"]; ?></option>
@@ -119,10 +119,10 @@ for($x=0; $x<$total; $x++)
 			$pref=substr($menu_actual,1);
 		else
 			$pref=$menu_actual;
-		if($elementos=mysql_query("select prefijo_menu, opcion, descripcion, posicion from menu where prefijo_menu='$pref' order by posicion"))
+		if($elementos=consulta_directa($Con, "select prefijo_menu, opcion, descripcion, posicion from menu where prefijo_menu='$pref' order by posicion"))
 		{
 			$x=0;
-			while($elemento=mysql_fetch_array($elementos))
+			while($elemento=mysqli_fetch_array($elementos))
 			{
 				$x++;
 				?>
@@ -149,6 +149,6 @@ for($x=0; $x<$total; $x++)
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

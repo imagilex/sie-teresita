@@ -8,7 +8,7 @@ header("Cache-Control: no-store,no-cache,must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -25,7 +25,7 @@ $proyecto=PostString("proyecto").Get("proyecto");
 
 if($proyecto=="")
 {
-	$proys_db=mysql_fetch_array(mysql_query("select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre limit 1"));
+	$proys_db=mysqli_fetch_array(consulta_directa($Con, "select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre limit 1"));
 	$proyecto=$proys_db["proyecto"];
 }
 
@@ -87,7 +87,7 @@ $ruta=$raiz."/".$proyecto;
 	{
 		YAHOO.example.container.FormArchivo.center();
 		YAHOO.example.container.FormArchivo.show();
-	}	
+	}
 	function FACancel()
 	{
 		YAHOO.example.container.FormArchivo.hide();
@@ -97,12 +97,12 @@ $ruta=$raiz."/".$proyecto;
 	{
 		YAHOO.example.container.FormCarpeta.hide();
 		return false;
-	}	
+	}
 	function FAOk()
-	{		
+	{
 		var x,inputs=$('dataArchivo').getElementsByTagName('input');
 		for(x=0;x<inputs.length;x++)
-		{			
+		{
 			if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
 			{
 				inputs[x].value=location.href;
@@ -113,7 +113,7 @@ $ruta=$raiz."/".$proyecto;
 		return false;
 	}
 	function FCOk()
-	{		
+	{
 		var x,inputs=$('dataCarpeta').getElementsByTagName('input');
 		for(x=0;x<inputs.length;x++)
 		{
@@ -163,11 +163,11 @@ $ruta=$raiz."/".$proyecto;
 
 BarraHerramientas();
 
-BH_Ayuda('0.4.',''); 
+BH_Ayuda('0.4.','');
 
-if ($handle = @opendir(addslashes($ruta))) 
+if ($handle = @opendir(addslashes($ruta)))
 {
-	while (($file = readdir($handle))) 
+	while (($file = readdir($handle)))
 	{
 		if($file!="." && $file!="..")
 		{
@@ -184,10 +184,10 @@ if(@count($directorios)>0)
 {
 	foreach($directorios as $dir_fis)
 	{
-		if ($handle = @opendir(addslashes($ruta."/".$dir_fis))) 
-		{	
+		if ($handle = @opendir(addslashes($ruta."/".$dir_fis)))
+		{
 			$x=0;
-			while (($file = readdir($handle))) 
+			while (($file = readdir($handle)))
 			{
 				if($file!="." && $file!="..")
 				{
@@ -203,7 +203,7 @@ if(@count($directorios)>0)
 			}
 			else
 			{
-				$directorios_fisicos[] = $dir_fis; 
+				$directorios_fisicos[] = $dir_fis;
 			}
 		}
 	}
@@ -220,9 +220,9 @@ $ruta_relativa=substr($ruta,$longi);
 		<td>
 			<select name="plan" onchange="javascript: location.href='_vista_explo_01.php?proyecto='+this.value">
 				<?php
-				if($proys_db=mysql_query("select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre"))
+				if($proys_db=consulta_directa($Con, "select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre"))
 				{
-					while($proy_db=mysql_fetch_array($proys_db))
+					while($proy_db=mysqli_fetch_array($proys_db))
 					{
 						?>
 						<option value="<?php echo $proy_db["proyecto"]; ?>"><?php echo $proy_db["nombre"]; ?></option>
@@ -259,7 +259,7 @@ $ruta_relativa=substr($ruta,$longi);
 			<input type="hidden" name="accion" id="accion" value="crea_carpteta" />
 			<input type="hidden" name="ruta" value="<?php echo $ruta."/"; ?>" />
 			<input type="hidden" name="url_retorno" id="url_retorno" value="" />
-			
+
 			<table align="center">
 				<tr><td align="left">Nombre: </td></tr>
 				<tr><td align="center"><input type="text" maxlength="250" size="30" name="carpeta" id="carpeta" /></td></tr>
@@ -268,7 +268,7 @@ $ruta_relativa=substr($ruta,$longi);
 		</form>
 	</div>
 </div>
-<div id="FormArchivo" class="div_panel">	
+<div id="FormArchivo" class="div_panel">
 	<div class="hd">Cargar Archivo</div>
 	<div class="bd">
 		<form id="dataArchivo" action="ajax/archivos.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data">
@@ -297,14 +297,14 @@ $ruta_relativa=substr($ruta,$longi);
 				{
 					?>
 					<tr><td width="145" height="55" background="Imagenes/explo_archivos.jpg" align="center" valign="middle" ondblclick="AbrirArchivo('<?php echo "$ruta_relativa/".$dir_arch["real"]."/".$dir_arch["mostrar"]; ?>','<?php
-					$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from archivos where archivo='".basename($dir_arch["mostrar"])."'"));
+					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($dir_arch["mostrar"])."'"));
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';
 					echo $edicion;
 					?>')">
 					<?php echo $dir_arch["mostrar"]; ?>
 					</td></tr>
-					<?
+					<?php
 				}
 				?>
 				</table>
@@ -330,7 +330,7 @@ $ruta_relativa=substr($ruta,$longi);
 					<tr><td width="135" height="95" background="Imagenes/explo_carpetas.jpg" align="center" valign="middle" ondblclick="AbrirCarpeta('<?php echo $dir_fis; ?>');">
 					<?php echo $dir_fis; ?>
 					</td></tr>
-					<?
+					<?php
 				}
 				?>
 				</table>
@@ -342,7 +342,7 @@ $ruta_relativa=substr($ruta,$longi);
 	<tr>
 		<td align="center" valign="middle" colspan="3">
 			<?php
-			if(@count($archivos)>0) 
+			if(@count($archivos)>0)
 			{
 				$x=0;
 				foreach($archivos as $arch)
@@ -350,24 +350,24 @@ $ruta_relativa=substr($ruta,$longi);
 					$x++;
 					?>
 					<div align="left" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';" ondblclick="AbrirArchivo('<?php echo "$ruta_relativa/$arch"; ?>','<?php
-					$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from archivos where archivo='".basename($arch)."'"));
+					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($arch)."'"));
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';
 					echo $edicion;
 					?>')">
-					<?
+					<?php
 					$inf=pathinfo("$ruta/$arch");
 					if($inf["extension"]=="txt" || $inf["extension"]=="doc" || $inf["extension"]=="ppt" || $inf["extension"]=="rar" || $inf["extension"]=="tar" || $inf["extension"]=="pps" || $inf["extension"]=="html" || $inf["extension"]=="xls" || $inf["extension"]=="pdf" || $inf["extension"]=="mht" || $inf["extension"]=="zip" || $inf["extension"]=="odp" || $inf["extension"]=="htm" || $inf["extension"]=="odt" || $inf["extension"]=="pub")
-					{ 
+					{
 						?>
-						<img src="Imagenes/extencion/<?php echo $inf["extension"]; ?>.bmp" align="absmiddle" border="0" />	
-						<?
+						<img src="Imagenes/extencion/<?php echo $inf["extension"]; ?>.bmp" align="absmiddle" border="0" />
+						<?php
 					}
 					else
-					{ 
+					{
 						?>
-						<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" />	
-						<?
+						<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" />
+						<?php
 					}
 					echo $arch;
 					?>
@@ -384,6 +384,6 @@ $ruta_relativa=substr($ruta,$longi);
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

@@ -12,7 +12,7 @@ $Con=Conectar();
 $raiz=PostString("raiz").Get("raiz");
 $proyecto=PostString("proyecto").Get("proyecto");
 $ruta_expl=PostString("ruta_expl").Get("ruta_expl");
-if($ruta_expl!="") 
+if($ruta_expl!="")
 {
 	$pos=strpos($ruta_expl,"Archivos_Informacion");
 	if($pos!==false)
@@ -26,12 +26,12 @@ if($accion!="")
 {
 	if($accion=="add_files")
 	{
-	
+
 		$archivos=PostString("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
-		
+
 			/*foreach($archivos as $arch			{)*/
 
 			//echo "file: ".$arch."<br>";
@@ -41,18 +41,18 @@ if($accion!="")
 				$arch_upl2=str_replace("-","_",str_replace(".",".",str_replace(" ","_",$arch)));
 				//echo "kke ".$arch_upl2;
 			//echo "<br>";
-			
+
 			//echo $_FILES[$arch_upl]["name"];
 				if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
 				{
-					$datos=@mysql_fetch_array(mysql_query("select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
+					$datos=@mysqli_fetch_array(consulta_directa($Con, "select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
 					$noarchivo=$datos["archivo"];
 			//		echo "original= ".  $noarchivo."<br>";
 			//		echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
 					if ($noarchivo == basename( $_FILES[$arch_upl]['name']))
 					{
 					$original=str_replace("\\","/",$Dir)."/".$datos["ruta"];
-					
+
 					$Pnewfile = explode("/",$datos["ruta"]);
 					$PVdir=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/";
 		//			echo $original."<br>";
@@ -66,7 +66,7 @@ if($accion!="")
 
           /* This is the correct way to loop over the directory. */
             while (false !== ($file = readdir($handle))) {
-            
+
         //    echo "$file\n";
             $DirfileNAE= explode(".",$file);
             $DirfileNA= explode("-V",$DirfileNAE[0]);
@@ -77,8 +77,8 @@ if($accion!="")
             {
             $countersas = $countersas+1;
             }
-            
-            
+
+
           }
 //echo $countersas;
 
@@ -88,7 +88,7 @@ case 0:
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Filname."-V1.".$filexp[1];
         break;
     case 1:
-        //echo "Existe Versi�n -V1, Generando -V2";
+        //echo "Existe Versión -V1, Generando -V2";
         //$archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Filname."-V2.".$filexp[1];
         break;
@@ -105,20 +105,20 @@ case 0:
         unlink($elimina);
         $archivo2=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
         $archivo21=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
-        
+
        // echo $archivo2 ."<br>";
         //echo $Nelimina ."<br>";
          rename($archivo2,$Nelimina);
-         
+
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V3.".$DirfileNAE[1];
         $archivoparacopiarN= $DirfileN."-V3.".$DirfileNAE[1];
         //echo $archivo21;
          //echo ($archivoparacopiar ."<br>".$archivo21);
          rename($archivoparacopiarNR,$archivo21);
-         
+
         //$archivoparacopiar= $DirfileN."-V".$countersas.".".$DirfileNAE[1];
-        
-        
+
+
         break;
 }
 
@@ -127,20 +127,20 @@ case 0:
 
 				//	$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Pnewfile[3];
 					$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/". $archivoparacopiar;
-          
-          
-          
-					
+
+
+
+
 				//	if (!copy($original, $PFnewfile)) {
 					if (!copy($original, $archivoparacopiarNR)) {
           echo "copia fallida $original";
           }
 //echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-					
+
 					if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
 					{
 					//echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-						mysql_query("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
+						consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
 					}
 				}
 				else
@@ -164,7 +164,7 @@ case 0:
 			foreach($archivos as $arch)
 			{
 				$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				mysql_query("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
+				consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 			}
 		}
 	}
@@ -198,7 +198,7 @@ function cambiatitulo(param)
      $carpetaaa = $_GET["carpetaa"];
 switch ($carpetaa) {
 case "Definicion":
-       $carpeta="Definici�n";
+       $carpeta="Definición";
         break;
     case "PT":
        $carpeta="Planes de Trabajo";
@@ -209,7 +209,7 @@ case "Definicion":
     default:
       $carpeta=$carpetaaa;
 }
-		$nombre_p=@mysql_fetch_array(mysql_query("select nombre from docto_general where id_documento='$proyecto'"));
+		$nombre_p=@mysqli_fetch_array(consulta_directa($Con, "select nombre from docto_general where id_documento='$proyecto'"));
 ?>
 var titulooriginal='<?php echo $carpeta ; ?>'
 var titulo=document.getElementById('notifica').innerHTML;
@@ -228,9 +228,9 @@ document.getElementById('notifica').innerHTML=titulooriginal;
 }
 function details2(directorio,nproy)
 	{
-	
+
 	var Arr_Archivo = directorio.split("/");
-	
+
 	dir=directorio;
 	var bleer2= '<iframe  frameborder="0" ID="Frame1" style="height: 200px; width: 340px" SRC="Ldir.php?dir='+dir+'">';
 	var bleer3='</iframe>';
@@ -261,7 +261,7 @@ YAHOO.example.container.panel1.render("FormCarpeta");
 	    YAHOO.example.container.FormCarpeta.hide();
 		YAHOO.example.container.FormArchivo.center();
 		YAHOO.example.container.FormArchivo.show();
-	}	
+	}
 	function FACancel()
 	{
 		YAHOO.example.container.FormArchivo.hide();
@@ -286,9 +286,9 @@ return true;
 	{
 		YAHOO.example.container.FormCarpeta.hide();
 		return false;
-	}	
+	}
 	function FAOk()
-	{		
+	{
 		var x,inputs=$('dataArchivo').getElementsByTagName('input');
 		var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
 		var direccion="";
@@ -334,7 +334,7 @@ return true;
 		return false;
 	}
 	function FCOk()
-	{		
+	{
 		var x,inputs=$('dataCarpeta').getElementsByTagName('input');
 		var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
 		var direccion="";
@@ -389,11 +389,11 @@ return true;
 		if($(obj).disabled) $(obj).disabled=false;
 		else $(obj).disabled = true;
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////
 	///                     activavfile
-	
-	
+
+
 function Error_Mail(mensaje,titulo)
 	{
 	//alert('<?php echo $vista;?>');
@@ -430,7 +430,7 @@ YAHOO.example.container.panel1.show();
 	var casa=0;
 	var lolo=getElementsById(obj);
 		if($(obj).disabled)
-		{ 
+		{
 		 $(obj).disabled = true;
 		$(obj).style.visibility="hidden";
 YAHOO.example.container.FormArchivo.hide();
@@ -443,36 +443,36 @@ YAHOO.example.container.panel1.hide();
 		//alert("lalala");
 		$(obj).disabled=false;
 		$(obj).style.visibility="visible";
-		
+
 		*/
-		
+
 		//'<form id="dataArchivo2" action="upload.php" method="post" <!--onsubmit="return FASubmit()"--> enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="text" name="archivo" id="archivo" value="<?php echo $Dir."/".$raiz; ?>" /> <input type="hidden" name="url_retorno" id="url_retorno" value="" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="archivo" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>'
-		
+
 					//alert('ahora publica');
-		
+
 		YAHOO.example.container.FormArchivo.hide();
-		
+
 		//var bleer4='<form id="dataArchivo2" action="upload.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>';
 		var bleer4='<form id="dataArchivo2"  method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel2w()" /></td></tr> </table> </form>';
 		//			alert(bleer4);
- 
-					
+
+
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
 YAHOO.example.container.panel1.setHeader("Publicarq");
 YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
-		
-		
+
+
 		/*
-		
-		
+
+
 		}
 		*/
-		
-		
-		
+
+
+
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////
 	function Foco(obj)
@@ -528,7 +528,7 @@ YAHOO.example.container.panel1.show();
 			{
 				if(checks[x].checked && hiddens[x].value!="<?php echo $_SESSION["id_persona_usr"]; ?>")
 				{
-					alert("�Accion incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
+					alert("¡Acción incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
 					return false;
 					y++;
 				}
@@ -539,7 +539,7 @@ YAHOO.example.container.panel1.show();
 			}
 			if(y>0)
 			{
-				if(confirm("�Esta seguro?"))
+				if(confirm("¿Esta seguro?"))
 				{
 					$('accion').value='free_files';
 					$('form_arch').submit();
@@ -580,7 +580,7 @@ YAHOO.example.container.panel1.show();
 			<input type="hidden" name="accion" id="accion" value="crea_carpteta" />
 			<input type="hidden" name="ruta" id="ruta_nc" value="<?php echo $Dir."/".$raiz; ?>" />
 			<input type="hidden" name="url_retorno" id="url_retorno" value="" />
-			
+
 			<table align="center">
 				<tr><td align="left">Nombre: </td></tr>
 				<tr><td align="center"><input type="text" maxlength="250" size="30" name="carpeta" id="carpeta" /></td></tr>
@@ -589,7 +589,7 @@ YAHOO.example.container.panel1.show();
 		</form>
 	</div>
 </div>
-<div id="FormArchivo" class="div_panel">	
+<div id="FormArchivo" class="div_panel">
 	<div class="hd">Cargar Archivo</div>
 	<div class="bd">
 		<form id="dataArchivo" action="ajax/archivos.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data">
@@ -620,7 +620,7 @@ YAHOO.example.container.panel1.show();
         <!--atras gerardo--></td>
       </tr>
     </table></th>
-    <th width="73%" scope='col'>	
+    <th width="73%" scope='col'>
       <span id="notifica"/>
       <?php echo $carpeta ; ?></span>
     </th>
@@ -645,7 +645,7 @@ YAHOO.example.container.panel1.show();
 	</tr>
 </table>
 
-  <!--Finaliza el cuerpo del html e Inicia el piede p�gina-->
+  <!--Finaliza el cuerpo del html e Inicia el piede página-->
 </div>
 <div class="push"></div>
 <div class="footer" style="background-color:f2f2f2">
@@ -674,5 +674,5 @@ YAHOO.example.container.panel1.show();
 </body>
 </html>
 <?php
-mysql_close($Con);
+mysqli_close($Con);
 ?>

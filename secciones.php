@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -17,12 +17,12 @@ if(!isset($_SESSION["tipo"]) )
 
 $secc=PostString("secc");
 
-if($secc=="1") //¿Como usar un mapa?
+if($secc=="1") //Â¿Como usar un mapa?
 {
 	header("location: usar_mapa.php?noCache=".rand(0,32000));
 	exit();
 }
-else if($secc=="2") //Indicadores Críticos
+else if($secc=="2") //Indicadores CrÃ­ticos
 {
 	header("location: ind_crit.php?noCache=".rand(0,32000));
 	exit();
@@ -72,13 +72,13 @@ BarraHerramientas();
 	document.Administracion.ira_adm.value="53";
 	document.Seccion.secc.value="";
 </script>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 </body>
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

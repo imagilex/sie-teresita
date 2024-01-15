@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -84,13 +84,13 @@ if($seccion!="")
 		</select>
 	</form>
 </div>
-<?php 
+<?php
 BH_Ayuda('0.4','51');
 ?>
 </body>
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

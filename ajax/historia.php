@@ -9,14 +9,14 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 $dato=PostString("clave").Get("clave");
 
 if($dato=="") exit();
 
 $query="select fecha_ingreso from persona where clave='$dato'";
-$ant=@mysql_fetch_array($db->consulta($query));
+$ant=@mysqli_fetch_array($db->consulta($query));
 $fecha_actual=getdate();
 $antiguedad=$fecha_actual["year"]-intval(substr($ant["fecha_ingreso"],0,4));
 if($fecha_actual["mon"]<intval(substr($ant["fecha_ingreso"],5,2))) $antiguedad--;
@@ -68,9 +68,9 @@ else
 	{
 		$anio="";
 		$puesto="";
-		while($reg=mysql_fetch_array($regs))
+		while($reg=mysqli_fetch_array($regs))
 		{
-			$pto=@mysql_fetch_array($db->consulta("select descripcion from puesto where clave='".$reg["puesto"]."'"));
+			$pto=@mysqli_fetch_array($db->consulta("select descripcion from puesto where clave='".$reg["puesto"]."'"));
 			echo "<tr><td style='padding-left:20px;' align='right'>";
 			if($anio!=$reg["anio"]) {$anio=DateConvencional($reg["anio"]); echo htmlentities($anio); }
 			else echo "&nbsp;&nbsp;";

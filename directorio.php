@@ -3,10 +3,11 @@
 session_start();
 
 include "apoyo.php";
+include "__access_data.php";
 
 include_once("u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 include_once("u_mapa/mapa.php");
 include_once("u_tabla/tabla.php");
@@ -22,16 +23,17 @@ if(!isset($_SESSION["tipo"]))
 }
 $cont=PostString("cont").Get("cont");
 list($area,$lista)=explode("-",$cont);
-if(!lista) $lista="";
+if(!$lista) $lista="";
+
 
 if($area=="")
 {
-	$tmp=mysql_fetch_array($db->consulta("select valor from codigos_generales where campo='area' order by posicion limit 1"));
+	$tmp=mysqli_fetch_array($db->consulta("select valor from codigos_generales where campo='area' order by posicion limit 1"));
 	$area=$tmp["valor"];
 }
 if($lista=="")
 {
-	$tmp=mysql_fetch_array($db->consulta("select lista from area_lista where area='".$area."' limit 1"));
+	$tmp=mysqli_fetch_array($db->consulta("select lista from area_lista where area='".$area."' limit 1"));
 	$lista=$tmp["lista"];
 }
 $ar_aux=$area;
@@ -62,11 +64,11 @@ $enc=array("","","Nombre".addslashes(' <br /><input type="text" size="10" name="
 $cue=array();
 $query="select persona.clave as clav, concat(persona.nombre, ' ', persona.apaterno) as nomb, puesto.descripcion as pues, cg.descripcion as area, persona.imagen as imag
 from persona inner join puesto on puesto.clave=persona.puesto_actual left join codigos_generales as cg on cg.campo='area' and cg.valor=puesto.area where persona.clave in ( select persona from lista_persona where lista='$lista' ) and concat(persona.nombre, ' ', persona.apaterno) like '%$txt_nombre%' and (cg.descripcion like '%$txt_area%' or cg.descripcion is null) and (puesto.descripcion like '%$txt_puesto%' or puesto.descripcion is null) order by concat(persona.nombre, ' ', persona.apaterno, ' ', persona.amaterno)";
-if($regs=mysql_query($query))
+if($regs=consulta_directa($Con, $query))
 {
-	while($reg=mysql_fetch_array($regs))
+	while($reg=mysqli_fetch_array($regs))
 	{
-		$tmp=mysql_fetch_array($db->consulta("select valor from persona_contacto where persona='".$reg["clav"]."' and medio_contacto='3' limit 1"));
+		$tmp=mysqli_fetch_array($db->consulta("select valor from persona_contacto where persona='".$reg["clav"]."' and medio_contacto='3' limit 1"));
 		$cue[]=array(
 			$reg["clav"]!=""?addslashes('<input type="checkbox" value="'.$reg["clav"].'" />'):'""',
 			$reg["imag"]!=""?addslashes('<img src="img_personas/'.$reg["imag"].'" title="'.$tmp["valor"].'" ondblclick="javascript: location.href='."'".'organigrama_pers.php?clave='.$reg["clav"]."&ret=1'".'" height="75" />'):'""',
@@ -201,7 +203,7 @@ else
 		<tr><td align="right">Ir a:</td><td><select name="ir_a" id="ir_a" onchange="ChangeArea(this.value);"><?php echo CboCG("area"); ?></select></td></tr>
 		<tr><td align="right">Lista:</td><td><select name="lista" id="lista" onchange="ChangeLista(this.value);"><?php
 			$listas=$db->consulta("select lista, nombre from lista where lista in (select lista from area_lista where area='".$area."')");
-			while($lista=mysql_fetch_array($listas)) { ?><option value="<?php echo $lista["lista"]; ?>"><?php echo $lista["nombre"]; ?></option><?php }
+			while($lista=mysqli_fetch_array($listas)) { ?><option value="<?php echo $lista["lista"]; ?>"><?php echo $lista["nombre"]; ?></option><?php }
 			?></select></td></tr>
 		</table></td>
 		<td align="center" valign="bottom" width="50%">

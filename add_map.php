@@ -32,7 +32,7 @@ if($accion=="add_map"){
 	for($x=0;$x<@count($nombre);$x++){
 		if($nombre_documento[$x]!=""){
 			$db->consulta("insert into mapa_documento (nombre_documento,contenido,tipo_documento,fecha) values ('".$nombre_documento[$x]."','".$contenido[$x]."','".$tipo_documento[$x]."',currdate())");
-			$id_docto=@mysql_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='".$nombre_documento[$x]."' and contenido='".$contenido[$x]."' and tipo_documento='".$tipo_documento[$x]."' and fecha=currdate()"));
+			$id_docto=@mysqli_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='".$nombre_documento[$x]."' and contenido='".$contenido[$x]."' and tipo_documento='".$tipo_documento[$x]."' and fecha=currdate()"));
 			$db->consulta("insert into mapa_doc_cont (id_mapa,id_documento,fecha) values ('$id_mapa','".$id_docto["id_documento"]."',currdate())");
 		}
 	}
@@ -65,22 +65,22 @@ input, textarea, select {font-size:small; font-family:Arial, Helvetica, sans-ser
 	<fieldset>
 		<legend>Relacion Mapa Padre - Hijo: </legend>
 		<table border="0" align="center"><tr><td><div style="overflow:auto; width:800px; height:500px;"><table border="0" align="center">
-			<tr><td align="left">Padre: <select name="mapa_padre"><?php 
+			<tr><td align="left">Padre: <select name="mapa_padre"><?php
 			if($regs=$db->consulta("select id_mapa, nombre from mapa order by nombre, id_mapa"))
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 					echo '<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
 			?></select></td></tr>
 			<?php
 			if($regs=$db->consulta("select id_mapa, nombre from mapa order by nombre, id_mapa"))
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 				{
 					?>
 					<tr><td align="left"><table border="0" align="center">
 						<tr><td align="right"><input type="hidden" name="mapa_hijo[]" value="<?php echo $reg["id_mapa"]; ?>" /></td><td align="left"><?php echo $reg["nombre"]; ?></td></tr>
 						<tr><td align="right">Figura: </td><td align="left"><input type="text" maxlength="250" size="50" name="figura[]" /></td></tr>
 						<tr><td align="right">Coordenadas: </td><td align="left"><input type="text" maxlength="250" size="50" name="coordenadas[]" /></td></tr>
-						<tr><td align="right">Posición: </td><td align="left"><input type="text" maxlength="250" size="50" name="posicion[]" /></td></tr>
-						<tr><td align="right">Preposición: </td><td align="left"><input type="text" maxlength="250" size="50" name="preposicion[]" /></td></tr>
+						<tr><td align="right">PosiciÃ³n: </td><td align="left"><input type="text" maxlength="250" size="50" name="posicion[]" /></td></tr>
+						<tr><td align="right">PreposiciÃ³n: </td><td align="left"><input type="text" maxlength="250" size="50" name="preposicion[]" /></td></tr>
 					</table></td></tr>
 					<?php
 				}
@@ -93,9 +93,9 @@ input, textarea, select {font-size:small; font-family:Arial, Helvetica, sans-ser
 	<fieldset>
 		<legend>Relacion Mapa - Documento: </legend>
 		<table border="0" align="center"><tr><td><div style="overflow:auto; width:800px; height:350px;"><table border="0" align="center">
-			<tr><td align="left">Mapa: <select name="id_mapa"><?php 
+			<tr><td align="left">Mapa: <select name="id_mapa"><?php
 			if($regs=$db->consulta("select id_mapa, nombre from mapa where tipo = '4' order by nombre, id_mapa"))
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 					echo '<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
 			?></select></td></tr>
 			<tr><td><table border="0" align="center"><tr><th>Nombre</th><th>Contenido</th><th>Tipo</th></tr>

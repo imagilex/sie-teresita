@@ -1,8 +1,12 @@
 <?php
 
+include_once "apoyo.php";
+
+$mysqli = Conectar();
+
 function Add_to_list($list, $curr, $atrib)
 {
-	if(!Is_in_list($list, $curr, $atrib) && mysql_query("insert into lista_atributo (lista, producto, valor_atributo, atributo) values ('$list', '$curr', '$atrib','1')"))
+	if(!Is_in_list($list, $curr, $atrib) && consulta_directa($mysqli, "insert into lista_atributo (lista, producto, valor_atributo, atributo) values ('$list', '$curr', '$atrib','1')"))
 		return true;
 	return false;
 }
@@ -10,7 +14,7 @@ function Add_to_list($list, $curr, $atrib)
 function Del_to_list($list, $curr, $atrib)
 {
 	$query="delete from lista_atributo where lista = '$list' and producto like '%$curr' and valor_atributo like '%$atrib'";
-	if(mysql_query($query))
+	if(consulta_directa($mysqli, $query))
 		return true;
 	return false;
 }
@@ -27,7 +31,7 @@ function Move_to_list($list_from, $list_to, $curr, $atrib)
 
 function Clear_list($list)
 {
-	if(mysql_query("delete from lista_atributo where lista='$list'"))
+	if(consulta_directa($mysqli, "delete from lista_atributo where lista='$list'"))
 		return true;
 	return false;
 }
@@ -35,13 +39,13 @@ function Clear_list($list)
 function Del_list($list)
 {
 	$x=0;
-	if(mysql_query("delete from lista where lista='$list'"))
+	if(consulta_directa($mysqli, "delete from lista where lista='$list'"))
 		$x++;
-	if(mysql_query("delete from lista_asociada where lista='$list' or lista_asociada='$list'"))
+	if(consulta_directa($mysqli, "delete from lista_asociada where lista='$list' or lista_asociada='$list'"))
 		$x++;
-	if(mysql_query("delete from lista_atributo where lista='$list'"))
+	if(consulta_directa($mysqli, "delete from lista_atributo where lista='$list'"))
 		$x++;
-	if(mysql_query("delete from lista_usuario where lista='$list'"))
+	if(consulta_directa($mysqli, "delete from lista_usuario where lista='$list'"))
 		$x++;
 	if(Clear_list($list))
 		$x++;
@@ -52,7 +56,7 @@ function Del_list($list)
 
 function Is_in_list($list, $curr, $atrib)
 {
-	$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from lista_atributo where lista='$list' and producto='$curr' and valor_atributo='$atrib'"));
+	$cuantos=@mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from lista_atributo where lista='$list' and producto='$curr' and valor_atributo='$atrib'"));
 	return (intval($cuantos["n"])>0);
 }
 
@@ -62,14 +66,14 @@ function List_exists($list_name, $usr="")
 		$q="select count(*) as n from lista where nombre='$list_name' and usuario='$usr'";
 	else
 		$q="select count(*) as n from lista where nombre='$list_name'";
-	$cuantos=@mysql_fetch_array(mysql_query($q));
+	$cuantos=@mysqli_fetch_array(consulta_directa($mysqli, $q));
 	return (intval($cuantos["n"])>0);
 }
 
 function Change_name_list($list, $new_name)
 {
-	$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from lista where nombre = '$new_name'"));
-	if(intval($cuantos["n"])==0 && mysql_query("update lista set nombre='$new_name' where lista='$list'"))
+	$cuantos=@mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from lista where nombre = '$new_name'"));
+	if(intval($cuantos["n"])==0 && consulta_directa($mysqli, "update lista set nombre='$new_name' where lista='$list'"))
 		return true;
 	return false;
 }

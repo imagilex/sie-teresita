@@ -1,11 +1,11 @@
-<?php 
-include("apoyo.php"); 
+<?php
+include("apoyo.php");
 $Con=Conectar();
 
 $title="";
 if(Get("file")!="")
 {
-	$titul=@mysql_fetch_array(mysql_query("select descripcion from ayuda where archivo='".Get("file")."'"));
+	$titul=@mysqli_fetch_array(consulta_directa($Con, "select descripcion from ayuda where archivo='".Get("file")."'"));
 	if($titul["descripcion"]!="") $title=$titul["descripcion"];
 }
 ?>
@@ -25,28 +25,28 @@ BarraHerramientas();
 if(Get("file")!="")
 {
 	?>
-	<table border="0" width="65%" align="center"><tr><td><?php 
-	
+	<table border="0" width="65%" align="center"><tr><td><?php
+
 	$archivo=Get("file");
-	
+
 	$info=pathinfo($Dir."/Ayuda/".$archivo);
-	
-	
+
+
 	if(strtoupper($info["extension"])=="TXT")
 	{
-		MostrarArchivo($Dir."/Ayuda/".$archivo); 
+		MostrarArchivo($Dir."/Ayuda/".$archivo);
 	}
 	else if(strtoupper($info["extension"])=="JPG" || strtoupper($info["extension"])=="PNG" || strtoupper($info["extension"])=="BMP" || strtoupper($info["extension"])=="GIF")
 	{
 		?>
 		<img src="Ayuda/<?php echo $archivo; ?>" border="0" />
-		<?
+		<?php
 	}
 	else
 	{
 		echo "NO SE RECONOCE EL TIPO DE ARCHIVO";
-	}	
-		
+	}
+
 	?></td></tr></table>
 	<?php
 }
@@ -55,5 +55,5 @@ if(Get("file")!="")
 </body>
 </html>
 <?php
-mysql_close($Con);
+mysqli_close($Con);
 ?>

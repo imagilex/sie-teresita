@@ -13,14 +13,18 @@ $_MAPA_ = true;
 class mapa
 {
 	public $id;
-	function mapa($tmp_id="")
+	function __construct($tmp_id="")
 	{
-		$this->id=$tmp_id;		
+		$this->id=$tmp_id;
 	}
+	// function mapa($tmp_id="")
+	// {
+	// 	$this->id=$tmp_id;
+	// }
 	function seach_id($nombre_mapa)
 	{
 		global $db;
-		$id_find=@mysql_fetch_array($db->consulta("select id_mapa from mapa where nombre = '$nombre_mapa'"));
+		$id_find=@mysqli_fetch_array($db->consulta("select id_mapa from mapa where nombre = '$nombre_mapa'"));
 		$this->id=$id_find['id_mapa'];
 	}
 	function get_id()
@@ -36,7 +40,7 @@ class mapa
 		global $db;
 		if($this->id!="")
 		{
-			$dato=@mysql_fetch_array($db->consulta("select nombre from mapa where id_mapa='".$this->id."'"));
+			$dato=@mysqli_fetch_array($db->consulta("select nombre from mapa where id_mapa='".$this->id."'"));
 			return $dato["nombre"];
 		}
 		return "";
@@ -46,7 +50,7 @@ class mapa
 		global $db;
 		if($this->id!="")
 		{
-			$dato=@mysql_fetch_array($db->consulta("select comentarios from mapa where id_mapa='".$this->id."'"));
+			$dato=@mysqli_fetch_array($db->consulta("select comentarios from mapa where id_mapa='".$this->id."'"));
 			return $dato["comentarios"];
 		}
 		return "";
@@ -57,7 +61,7 @@ class mapa
 		if($this->id!="")
 		{
 			$query="select tipo from mapa where id_mapa='".$this->id."'";
-			$dato=mysql_fetch_array($db->consulta($query));
+			$dato=mysqli_fetch_array($db->consulta($query));
 			return $dato["tipo"];
 		}
 		return "";
@@ -68,7 +72,7 @@ class mapa
 		if($this->id!="")
 		{
 			$query="select contenido from mapa where id_mapa='".$this->id."'";
-			$dato=@mysql_fetch_array($db->consulta($query));
+			$dato=@mysqli_fetch_array($db->consulta($query));
 			return $dato["contenido"];
 		}
 		return "";
@@ -113,7 +117,7 @@ class mapa
 		{
 			if($regs=$db->consulta("select mapa_padre from mapa_submapa where mapa_hijo = '".$this->id."'"))
 			{
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 				{
 					$datos[]=$reg["mapa_padre"];
 				}
@@ -130,7 +134,7 @@ class mapa
 			$query="select mapa_hijo from mapa_submapa where mapa_padre = '".$this->id."'";
 			if($regs=$db->consulta($query))
 			{
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 				{
 					$datos[]=$reg["mapa_hijo"];
 				}
@@ -184,7 +188,7 @@ class mapa
 		$dato="";
 		if($this->id!="")
 		{
-			$data=@mysql_fetch_array($db->consulta("select $parametro as param form mapa_submapa where mapa_padre='".$this->id."' and mapa_hijo='$hijo'"));
+			$data=@mysqli_fetch_array($db->consulta("select $parametro as param form mapa_submapa where mapa_padre='".$this->id."' and mapa_hijo='$hijo'"));
 			$dato=$data["param"];
 		}
 		return $dato;
@@ -199,9 +203,9 @@ class mapa
 			while($actual!="")
 			{
 				$query="select mapa_padre from mapa_submapa where mapa_hijo='$actual'";
-				$id_papa=@mysql_fetch_array($db->consulta($query));
+				$id_papa=@mysqli_fetch_array($db->consulta($query));
 				$query="select id_mapa, nombre from mapa where id_mapa='".$id_papa["mapa_padre"]."'";
-				$papa=@mysql_fetch_array($db->consulta($query));
+				$papa=@mysqli_fetch_array($db->consulta($query));
 				$actual=$papa["id_mapa"];
 				if($papa["id_mapa"]!="")
 				{
@@ -211,12 +215,12 @@ class mapa
 			if($superiores!="")
 			{
 				$superiores='<optgroup label="Superior">'.$superiores.'</optgroup>';
-			}			
+			}
 			$inferiores="";
 			if($regs=$db->consulta("select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='".$this->get_id()."' order by posicion, nombre"))
 			{
 				$inferiores='<optgroup label="Inferior">';
-				while($reg=mysql_fetch_array($regs))
+				while($reg=mysqli_fetch_array($regs))
 				{
 					$inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
 				}
@@ -229,7 +233,7 @@ class mapa
 				<tr>
 					<td align="right">Mapa:</td>
 					<td align="left">
-						<select name="mapa" id="mapa" onchange="javascript: location.href='<?php echo $link_page; ?>id_mapa='+this.value;"><option value=""></option>						
+						<select name="mapa" id="mapa" onchange="javascript: location.href='<?php echo $link_page; ?>id_mapa='+this.value;"><option value=""></option>
 							<?php echo $superiores.$inferiores; ?>
 						</select>
 						<script language="javascript">
@@ -253,10 +257,10 @@ class mapa
 				for($x=0;$x<@count($hijos);$x++)
 				{
 					$query="select * from mapa_submapa where mapa_padre='".$this->get_id()."' and mapa_hijo='".$hijos[$x]."'";
-					$inpho=mysql_fetch_array($db->consulta($query));
+					$inpho=mysqli_fetch_array($db->consulta($query));
 					$query="select * from mapa where id_mapa='".$hijos[$x]."'";
-					$inpho_map=mysql_fetch_array($db->consulta($query));
-					$doctos=@mysql_fetch_array($db->consulta("select count(*) as n from mapa_doc_cont where id_mapa = '".$hijos[$x]."'"));
+					$inpho_map=mysqli_fetch_array($db->consulta($query));
+					$doctos=@mysqli_fetch_array($db->consulta("select count(*) as n from mapa_doc_cont where id_mapa = '".$hijos[$x]."'"));
 					if(($inpho_map["tipo"]!="" && $inpho_map["contenido"]!="") || ($inpho_map["tipo"]=="4" && intval($doctos["n"])>0))
 					{
 					?>
@@ -286,7 +290,7 @@ class mapa
 								$img01="img_mapas/basic09.png";
 								$img02="&nbsp;&nbsp;";
 								$img03="&nbsp;&nbsp;";
-							}							
+							}
 							else if($x==count($hijos)/2 || $x==(count($hijos)/2 -0.5))
 							{
 								$img01="img_mapas/basic07.png";
@@ -306,9 +310,9 @@ class mapa
 								$img03="&nbsp;&nbsp;";
 							}
 							$query="select * from mapa_submapa where mapa_padre='".$this->get_id()."' and mapa_hijo='".$hijos[$x]."'";
-							$inpho=mysql_fetch_array($db->consulta($query));
+							$inpho=mysqli_fetch_array($db->consulta($query));
 							$query="select * from mapa where id_mapa='".$hijos[$x]."'";
-							$inpho_map=mysql_fetch_array($db->consulta($query));
+							$inpho_map=mysqli_fetch_array($db->consulta($query));
 							?>
 							<td align="center" valign="middle"><?php echo $img02; ?></td>
 							<td align="center" valign="middle"><?php echo $img03; ?></td>
@@ -327,7 +331,7 @@ class mapa
 							<?php
 							$link="";
 							$link2="";
-							$doctos=@mysql_fetch_array($db->consulta("select count(*) as n from mapa_doc_cont where id_mapa = '".$hijos[$x]."'"));
+							$doctos=@mysqli_fetch_array($db->consulta("select count(*) as n from mapa_doc_cont where id_mapa = '".$hijos[$x]."'"));
 							if(($inpho_map["tipo"]!="" && $inpho_map["contenido"]!="") || ($inpho_map["tipo"]=="4" && intval($doctos["n"])>0))
 							{
 								$link="<a href=\"$link_page"."id_mapa=".$hijos[$x]."\">";
@@ -340,7 +344,7 @@ class mapa
 							echo $link2;
 							?>
 							</td>
-							<?
+							<?php
 							if($x!=count($hijos)-1) echo "</tr><tr>";
 						}
 						?>
@@ -361,15 +365,15 @@ class mapa
 					<table border="0"><tr>
 					<?php
 						$query="select id_documento from mapa_doc_cont where id_mapa='".$this->get_id()."'";
-						if($doctos=mysql_query($query))
+						if($doctos=$db->consulta($query))
 						{
-							while($docto=mysql_fetch_array($doctos))
+							while($docto=mysqli_fetch_array($doctos))
 							{
 								$onclick="";
 								$query="select id_documento, nombre_documento from mapa_documento where id_documento='".$docto["id_documento"]."'";
 								if($id_documento=="") $id_documento=$docto["id_documento"];
-								$prod=@mysql_fetch_array(mysql_query($query));
-								if($prod["nombre_documento"]!="") 
+								$prod=@mysqli_fetch_array($db->consulta($query));
+								if($prod["nombre_documento"]!="")
 								{
 									?>
 									<td class="<?php echo (($id_documento==$prod["id_documento"])?("celda_actual"):("celda_normal")); ?>" style="font-size:small;" onclick="javascript: location.href='mapas.php?id_mapa=<?php echo $this->get_id(); ?>&docto=<?php echo $prod["id_documento"]; ?>';"><?php echo $prod["nombre_documento"];?></td>
@@ -389,9 +393,9 @@ class mapa
 					<table class="contenedor_resultados" align="center">
 					<tr>
 						<td style="font-size:small;"><div style="overflow:auto; height:375px; width:825px;">
-							<?php 
+							<?php
 							$query="select contenido, tipo_documento from mapa_documento where id_documento='$id_documento'";
-							$prod=@mysql_fetch_array(mysql_query($query));
+							$prod=@mysqli_fetch_array($db->consulta($query));
 							ErrorMySQLAlert();
 							switch(intval($prod["tipo_documento"]))
 							{
@@ -413,7 +417,7 @@ class mapa
 						</div></td>
 					</tr>
 				</table>
-				<?
+				<?php
 			}
 			?>
 			</div></td></tr></table>
@@ -421,7 +425,7 @@ class mapa
 		}
 	}
 	function add_archivo($file,$directorio_destino,$nombre,$new_name="")
-	{		
+	{
 		global $db;
 		if(isset($_FILES[$file]["name"]) && $_FILES[$file]["name"]!="")
 		{
@@ -430,7 +434,7 @@ class mapa
 			if(move_uploaded_file($_FILES[$file]["tmpname"],$directorio_destino."/".$new_name))
 			{
 				$db->consulta("insert into mapa_documento (nombre_documento, contenido, tipo_documento, fecha) values ('$nombre', '$new_name', '3', currdate())");
-				$id_docto=@mysql_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$new_name' and tipo_documento='3' and fecha=curdate()"));
+				$id_docto=@mysqli_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$new_name' and tipo_documento='3' and fecha=curdate()"));
 				$db->consulta("insert into mpapa_doc_cont (id_mapa, id_documento, fecha) values ('".$this->get_id()."', '".$id_docto["id_documento"]."', currdate())");
 				return true;
 			}
@@ -444,7 +448,7 @@ class mapa
 		$db->consulta("delete from mapa_doc_cont where id_documento=$id_file and id_mapa='".$this->get_id()."'");
 	}
 	function add_img($file,$directorio_destino,$nombre,$new_name="")
-	{		
+	{
 		global $db;
 		if(isset($_FILES[$file]["name"]) && $_FILES[$file]["name"]!="")
 		{
@@ -453,7 +457,7 @@ class mapa
 			if(move_uploaded_file($_FILES[$file]["tmpname"],$directorio_destino."/".$new_name))
 			{
 				$db->consulta("insert into mapa_documento (nombre_documento, contenido, tipo_documento, fecha) values ('$nombre', '$new_name', '2', currdate())");
-				$id_docto=@mysql_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$new_name' and tipo_documento='2' and fecha=curdate()"));
+				$id_docto=@mysqli_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$new_name' and tipo_documento='2' and fecha=curdate()"));
 				$db->consulta("insert into mpapa_doc_cont (id_mapa, id_documento, fecha) values ('".$this->get_id()."', '".$id_docto["id_documento"]."', currdate())");
 				return true;
 			}
@@ -467,10 +471,10 @@ class mapa
 		$db->consulta("delete from mapa_doc_cont where id_documento=$id_file and id_mapa='".$this->get_id()."'");
 	}
 	function add_txt($contenido,$nombre)
-	{		
+	{
 		global $db;
 		$db->consulta("insert into mapa_documento (nombre_documento, contenido, tipo_documento, fecha) values ('$nombre', '$contenido', '1', currdate())");
-		$id_docto=@mysql_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$contenido' and tipo_documento='1' and fecha=curdate()"));
+		$id_docto=@mysqli_fetch_array($db->consulta("select id_documento from mapa_documento where nombre='$nombre' and contenido='$contenido' and tipo_documento='1' and fecha=curdate()"));
 		$db->consulta("insert into mpapa_doc_cont (id_mapa, id_documento, fecha) values ('".$this->get_id()."', '".$id_docto["id_documento"]."', currdate())");
 		return true;
 	}

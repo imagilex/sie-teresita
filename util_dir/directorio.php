@@ -55,7 +55,7 @@ class directorio
 				$datos[$x]=implode(".",array($val,$exts[$x]));
 			}
 		}
-		foreach($datos as $val) 
+		foreach($datos as $val)
 		{
 			if($pattern!="")
 			{

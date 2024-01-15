@@ -2,7 +2,7 @@
 
 session_start();
 
-include "../apoyo.php"; 
+include "../apoyo.php";
 
 $Con=Conectar();
 
@@ -34,7 +34,7 @@ if(!isset($_SESSION["tipo"]) )
 </style>
 </head>
 <?php
-$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+$regs=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 $Logo=$regs["valor"];
 $pto=PostString("pto").Get("pto");
 $persona=PostString("persona").Get("persona");
@@ -50,8 +50,8 @@ if($persona=="" && $pto!="")
 else if($persona!="" && $pto=="")
 {
 	$query="select distinct puesto_actual as p from persona where clave in ('".str_replace(",","','",$persona)."')";
-	$ps=mysql_query($query);
-	while($p=mysql_fetch_array($ps)) { $puestos[]=$p["p"]; }
+	$ps=consulta_directa($Con, $query);
+	while($p=mysqli_fetch_array($ps)) { $puestos[]=$p["p"]; }
 }
 else
 {
@@ -61,11 +61,11 @@ $aux=0;
 foreach($puestos as $pto)
 {
 $aux++;
-$puesto=@mysql_fetch_array(mysql_query("select puesto.clave as clave, puesto.descripcion as descripcion, are.descripcion as area, dep.descripcion as departamento, proposito from puesto inner join codigos_generales as are on are.campo='area' and are.valor=puesto.area inner join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where clave='$pto'"));
+$puesto=@mysqli_fetch_array(consulta_directa($Con, "select puesto.clave as clave, puesto.descripcion as descripcion, are.descripcion as area, dep.descripcion as departamento, proposito from puesto inner join codigos_generales as are on are.campo='area' and are.valor=puesto.area inner join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where clave='$pto'"));
 $query="select descripcion from puesto where clave in (select puesto_padre from organigrama where puesto_hijo='$pto')";
-$jefe=@mysql_fetch_array(mysql_query($query));
+$jefe=@mysqli_fetch_array(consulta_directa($Con, $query));
 $query="select descripcion from puesto where clave in (select puesto_hijo from organigrama where puesto_padre='$pto') order by descripcion";
-$subditos=mysql_query($query);
+$subditos=consulta_directa($Con, $query);
 ?>
 <table border="0" align="center" width="800">
 	<tr>
@@ -82,18 +82,18 @@ $subditos=mysql_query($query);
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 		<td align="left" width="50%" valign="top"><strong>Reporta a: </strong><?php echo $jefe["descripcion"]; ?></td>
-		<td align="left" width="50%" valign="top"><strong>Puestos que le reportan: </strong><ul style="margin:0px;"><?php while($subdito=mysql_fetch_array($subditos)) echo "<li>".htmlentities($subdito["descripcion"])."</li>" ?></ul></td>
+		<td align="left" width="50%" valign="top"><strong>Puestos que le reportan: </strong><ul style="margin:0px;"><?php while($subdito=mysqli_fetch_array($subditos)) echo "<li>".htmlentities($subdito["descripcion"])."</li>" ?></ul></td>
 	</tr>
-	<tr><td colspan="2">&nbsp;</td></tr>	
-	<tr><td colspan="2" align="left"><strong>Prop&oacute;sito principal:</strong></td></tr>	
-	<tr><td colspan="2" align="left"><?php echo $puesto["proposito"]; ?></td></tr>	
-	<tr><td colspan="2">&nbsp;</td></tr>	
-	<tr><td colspan="2" align="left"><strong>Es responsable de:</strong></td></tr>	
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr><td colspan="2" align="left"><strong>Prop&oacute;sito principal:</strong></td></tr>
+	<tr><td colspan="2" align="left"><?php echo $puesto["proposito"]; ?></td></tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr><td colspan="2" align="left"><strong>Es responsable de:</strong></td></tr>
 	<tr><td colspan="2" align="left"><?php
-		if($regs=mysql_query("select responsabilidad from puesto_responsabilidad where puesto='$pto' order by secuencia"))
+		if($regs=consulta_directa($Con, "select responsabilidad from puesto_responsabilidad where puesto='$pto' order by secuencia"))
 		{
 			?><ol type="1"><?php
-			while($reg=mysql_fetch_array($regs))
+			while($reg=mysqli_fetch_array($regs))
 			{
 				echo "<li>".htmlentities($reg["responsabilidad"])."</li>";
 			}
@@ -101,20 +101,20 @@ $subditos=mysql_query($query);
 		}
 	?></td></tr>
 	<?php
-	if($datos=mysql_query("select distinct indicador.nombre as nomb from persona inner join indicador_responsable on clave=responsable inner join indicador_nivel on id_indicador=id_indicador_nivel inner join indicador on indicador_nivel.indicador=indicador.indicador where puesto_actual='$pto'"))
+	if($datos=consulta_directa($Con, "select distinct indicador.nombre as nomb from persona inner join indicador_responsable on clave=responsable inner join indicador_nivel on id_indicador=id_indicador_nivel inner join indicador on indicador_nivel.indicador=indicador.indicador where puesto_actual='$pto'"))
 	{
 		$x=0;
-		while($dato=mysql_fetch_array($datos))
+		while($dato=mysqli_fetch_array($datos))
 		{
 			if($x==0){ echo '<tr><td colspan="2" align="left"><strong>Indicadores</strong></td></tr><tr><td colspan="2" align="left"><ol type="1">'; $x++; }
 			echo "<li>Indicador de ".htmlentities($dato["nomb"])."</li>";
 		}
 		if($x>0) { echo '</ol></td></tr>'; }
 	}
-	if($datos=mysql_query("select distinct reportes.nombre as nomb from persona inner join reportes_responsable on persona.clave=reportes_responsable.responsable inner join reporte_nivel on reportes_responsable.id_reporte=reporte_nivel.id_reporte inner join reportes on reporte_nivel.reporte=reportes.reporte where puesto_actual='$pto'"))
+	if($datos=consulta_directa($Con, "select distinct reportes.nombre as nomb from persona inner join reportes_responsable on persona.clave=reportes_responsable.responsable inner join reporte_nivel on reportes_responsable.id_reporte=reporte_nivel.id_reporte inner join reportes on reporte_nivel.reporte=reportes.reporte where puesto_actual='$pto'"))
 	{
 		$x=0;
-		while($dato=mysql_fetch_array($datos))
+		while($dato=mysqli_fetch_array($datos))
 		{
 			if($x==0){ echo '<tr><td colspan="2" align="left"><strong>Reportes</strong></td></tr><tr><td colspan="2" align="left"><ol type="1">'; $x++; }
 			echo "<li>Reporte de ".htmlentities($dato["nomb"])."</li>";
@@ -129,4 +129,4 @@ if($aux<@count($puestos)) echo '<hr class="salto" />';
 ?>
 </body>
 </html>
-<?php mysql_close(); ?>
+<?php mysqli_close($Con); ?>

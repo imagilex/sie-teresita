@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -36,15 +36,15 @@ if(PostString("Guardar")!="" || PostString("save")!="")
 	}
 	if(PostString("add")=="yes" && $clave!="")
 	{
-		mysql_query("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
+		consulta_directa($Con, "insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
 	}
 	else if($clave!="")
 	{
-		mysql_query("update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
+		consulta_directa($Con, "update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
 	}
 	$persona_form=$clave;
 }
-$datos=@mysql_fetch_array(mysql_query("select * from persona where clave='$persona_form'"));
+$datos=@mysqli_fetch_array(consulta_directa($Con, "select * from persona where clave='$persona_form'"));
 
 $photo_src=(($datos["imagen"]!="")?($datos["imagen"]):("photo.jpg"));
 ?>
@@ -106,9 +106,9 @@ if(PostString("Nuevo")=="")
 			<select name="persona" onchange="javascript: document.datos.submit();">
 				<option value=""></option>
 				<?php
-				if($personas=mysql_query("select nombre, clave from persona order by nombre"))
+				if($personas=consulta_directa($Con, "select nombre, clave from persona order by nombre"))
 				{
-					while($persona=mysql_fetch_array($personas))
+					while($persona=mysqli_fetch_array($personas))
 					{
 						?>
 						<option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
@@ -227,8 +227,8 @@ else
 		</td>
 		<td align="right">Fecha:</td>
 		<td>
-			<?php 
-			echo FormFecha("fecha"); 
+			<?php
+			echo FormFecha("fecha");
 			$hoy=getdate();
 			?>
 			<script language="javascript">
@@ -248,6 +248,6 @@ else
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

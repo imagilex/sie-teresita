@@ -9,15 +9,15 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 $dato=PostString("pto").Get("pto");
 
 if($dato=="") exit();
 
-$pto=@mysql_fetch_array($db->consulta("select descripcion from puesto where clave='$dato'"));
+$pto=@mysqli_fetch_array($db->consulta("select descripcion from puesto where clave='$dato'"));
 $query="select descripcion from puesto where clave in (select puesto_padre from organigrama where puesto_hijo='$dato')";
-$jefe=@mysql_fetch_array($db->consulta($query));
+$jefe=@mysqli_fetch_array($db->consulta($query));
 $query="select descripcion from puesto where clave in (select puesto_hijo from organigrama where puesto_padre='$dato') order by descripcion";
 $subditos=$db->consulta($query);
 ?>
@@ -30,13 +30,13 @@ $subditos=$db->consulta($query);
 		<img src="Imagenes/up.png" border="0" /><br />&nbsp;<br />
 		<font size="+2"><a href="organigrama_puesto.php?pto=<?php echo $dato; ?>" title="Descriptivo de Puesto"><?php echo htmlentities($pto["descripcion"]); ?></a></font><br />&nbsp;<br />
 		<?php
-		if(mysql_num_rows($subditos)>0) echo '<img src="Imagenes/down.png" border="0" />';
+		if($subditos->num_rows > 0) echo '<img src="Imagenes/down.png" border="0" />';
 		?>
 	</td></tr><?php
-	if(mysql_num_rows($subditos)>0)
+	if($subditos->num_rows > 0)
 	{
 	?>
-	<tr><th align="right" style="padding-right:20px;">Le reportan: </th><td valign="middle" align="center"><?php while($subdito=mysql_fetch_array($subditos)) echo htmlentities($subdito["descripcion"])."<br />" ?></td></tr>
+	<tr><th align="right" style="padding-right:20px;">Le reportan: </th><td valign="middle" align="center"><?php while($subdito=mysqli_fetch_array($subditos)) echo htmlentities($subdito["descripcion"])."<br />" ?></td></tr>
 	<?php
 	}
 	?>

@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -31,7 +31,7 @@ if(!isset($_SESSION["tipo"]))
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
 <style type="text/css">
-	ul 
+	ul
 	{
 		list-style-type: none;
 	}
@@ -74,12 +74,12 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 {
 	$total=intval(PostString("total"));
 	if($total>0)
-		mysql_query("delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
+		consulta_directa($Con, "delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
 	for($x=1;$x<=$total;$x++)
 	{
 		$dato=PostString("Reg$x");
 		if($dato!="")
-			mysql_query("insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
+			consulta_directa($Con, "insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
 	}
 }
 ?>
@@ -103,13 +103,13 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 			</td>
 		</tr>
 		<?php
-		if($funciones=mysql_query("select valor,descripcion from codigos_generales where campo='funcion' order by posicion"))
+		if($funciones=consulta_directa($Con, "select valor,descripcion from codigos_generales where campo='funcion' order by posicion"))
 		{
 			$x=0;
-			while($func=mysql_fetch_array($funciones))
+			while($func=mysqli_fetch_array($funciones))
 			{
 				$x++;
-				$cuantos=mysql_fetch_array(mysql_query("select count(*) as n from tipo_usuario_funcion where tipo_usuario='$tipo_usr' and funcion='".$func["valor"]."'"));
+				$cuantos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from tipo_usuario_funcion where tipo_usuario='$tipo_usr' and funcion='".$func["valor"]."'"));
 				if(intval($cuantos["n"])>0)
 					$chec=" checked='checked'";
 				else
@@ -131,6 +131,6 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

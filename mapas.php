@@ -6,7 +6,7 @@ include "apoyo.php";
 
 include_once("u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 include_once("u_mapa/mapa.php");
 
@@ -69,10 +69,10 @@ $docto=PostString("docto").Get("docto");
 $superiores= array();
 $inferiores="";
 
-if($regs=mysql_query("select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
+if($regs=consulta_directa($Con, "select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
 {
 	$inferiores='<optgroup label="Inferior">';
-	while($reg=mysql_fetch_array($regs))
+	while($reg=mysqli_fetch_array($regs))
 	{
 		$inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
 	}
@@ -95,6 +95,6 @@ $cont->print_mapa("mapas.php?",'950px','760px',$docto);
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

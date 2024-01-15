@@ -11,7 +11,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -37,12 +37,12 @@ $Con=Conectar();
 
 BarraHerramientas();
 
-BH_Ayuda('0.4.',''); 
+BH_Ayuda('0.4.','');
 ?>
 </body>
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

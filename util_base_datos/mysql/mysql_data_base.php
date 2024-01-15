@@ -70,7 +70,7 @@ if(!isset($__BD__))
 			$result=array();
 			if($camps = $this->query("select $campos from $tabla ".($where_cond!=""?"where $where_cond ":"").($order!=""?"order by $order":"")) )
 			{
-				while($camp = mysql_fetch_array($camps))
+				while($camp = mysqli_fetch_array($camps))
 				{
 					$result[] = $camp;
 				}

@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -18,16 +18,16 @@ if(!isset($_SESSION["tipo"])  )
 if(PostString("add")=='yes')
 {
 	$nombre=PostString("nombre");
-	$cuantos=mysql_fetch_array(mysql_query("select count(*) as n from reporte where nombre = '$nombre'"));
+	$cuantos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from reporte where nombre = '$nombre'"));
 	if(intval($cuantos["n"])>0)
 	{
 		Alert("Ya existe un reporte con el nombre agregado");
 	}
 	else
 	{
-		mysql_query("insert into reporte (nombre) values ('$nombre')");
+		consulta_directa($Con, "insert into reporte (nombre) values ('$nombre')");
 		ErrorMySQLAlert();
-		$id=mysql_fetch_array(mysql_query("select id_reporte from reporte where nombre =  '$nombre'"));
+		$id=mysqli_fetch_array(consulta_directa($Con, "select id_reporte from reporte where nombre =  '$nombre'"));
 		$id_reporte=$id["id_reporte"];
 		$num_secc=PostString("num_secc");
 		for($x=2;$x<=$num_secc;$x++)
@@ -38,15 +38,15 @@ if(PostString("add")=='yes')
 			if($seccion!="" && isset($_FILES["arc$x"]["name"]) && $_FILES["arc$x"]["name"]!="")
 			{
 				$info=pathinfo($Dir."/Archivos_Reportes/".$_FILES["arc$x"]["name"]);
-				$archivo="rep$id_reporte".ereg_replace(" ","",$seccion).".".$info["extension"];
+				$archivo="rep$id_reporte".preg_replace(" ","",$seccion).".".$info["extension"];
 				move_uploaded_file($_FILES["arc$x"]["tmp_name"],$Dir."/Archivos_Reportes/".$archivo);
-				mysql_query("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
+				consulta_directa($Con, "insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 			}
 		}
 		$seccion=PostString("nom1");
 		$posicion=PostString("pos1");
 		$mostrar=PostString("mos1");
-		mysql_query("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
+		consulta_directa($Con, "insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 	}
 }
 
@@ -116,7 +116,7 @@ if(PostString("add")=='yes')
 
 BarraHerramientas();
 
-BH_Ayuda('0.4.',''); 
+BH_Ayuda('0.4.','');
 ?>
 <form name="add_reporte" method="post" action="add_report.php" enctype="multipart/form-data" onsubmit="return DataValidation();">
 	<input type="hidden" name="add" value="yes" />
@@ -162,6 +162,6 @@ BH_Ayuda('0.4.','');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

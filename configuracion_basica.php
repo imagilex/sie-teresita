@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -30,9 +30,9 @@ if($datos!="")
 		{
 			//Eliminar el archivo anterior
 			$query="select valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'";
-			if($Regs=mysql_query($query))
+			if($Regs=consulta_directa($Con, $query))
 			{
-				$Reg=mysql_fetch_array($Regs);
+				$Reg=mysqli_fetch_array($Regs);
 				$photo=$Dir."/Archivos_Secciones/".$Reg["valor"];
 				if($Reg["valor"]!="" && file_exists($photo))
 					unlink($photo);
@@ -42,7 +42,7 @@ if($datos!="")
 			$foto=$Dir."/Archivos_Secciones/".$photo["basename"];
 			move_uploaded_file($_FILES["valor"]["tmp_name"],$foto);
 			$fotografia=basename($foto);
-			mysql_query("update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa($Con, "update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
 		}
 	}
 	else if($tipo_contenido=="imagen")
@@ -51,9 +51,9 @@ if($datos!="")
 		{
 			//Eliminar la imagen anterior
 			$query="select valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'";
-			if($Regs=mysql_query($query))
+			if($Regs=consulta_directa($Con, $query))
 			{
-				$Reg=mysql_fetch_array($Regs);
+				$Reg=mysqli_fetch_array($Regs);
 				$photo=$Dir."/Archivos_Secciones/".$Reg["valor"];
 				if($Reg["valor"]!="" && file_exists($photo))
 					unlink($photo);
@@ -63,13 +63,13 @@ if($datos!="")
 			$foto=$Dir."/Archivos_Secciones/".$photo["basename"];
 			move_uploaded_file($_FILES["valor"]["tmp_name"],$foto);
 			$fotografia=basename($foto);
-			mysql_query("update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa($Con, "update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
 		}
 	}
 	else if($tipo_contenido=="texto")
 	{
 		if(PostString("valor")!="")
-			mysql_query("update seccion set valor='".PostString("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa($Con, "update seccion set valor='".PostString("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
 	}
 ?>
 
@@ -105,8 +105,8 @@ BarraHerramientas();
 		document.sist.seccion.value=3;
 	</script>
 </div>
-<?php 
-BH_Ayuda('0.4.51','3'); 
+<?php
+BH_Ayuda('0.4.51','3');
 ?>
 <form method="post" action="configuracion_basica.php" enctype="multipart/form-data" name="DataConfig">
 <table border="0" align="center">
@@ -114,16 +114,16 @@ BH_Ayuda('0.4.51','3');
 		<td valign="top">Secciones:<br />
 			<select name="datos" size="9" onchange="javascript: document.DataConfig.submit();">
 				<?php
-				if($secciones=mysql_query("select distinct(id_seccion) as secc from seccion order by id_seccion"))
+				if($secciones=consulta_directa($Con, "select distinct(id_seccion) as secc from seccion order by id_seccion"))
 				{
-					while($seccion_actual=mysql_fetch_array($secciones))
+					while($seccion_actual=mysqli_fetch_array($secciones))
 					{
 						?>
 						<optgroup label="<?php echo $seccion_actual["secc"]; ?>">
 						<?php
-						if($elementos=mysql_query("select elemento, tipo, valor from seccion where id_seccion='".$seccion_actual["secc"]."'"))
+						if($elementos=consulta_directa($Con, "select elemento, tipo, valor from seccion where id_seccion='".$seccion_actual["secc"]."'"))
 						{
-							while($elemento_actual=mysql_fetch_array($elementos))
+							while($elemento_actual=mysqli_fetch_array($elementos))
 							{
 								?>
 								<option value="<?php echo $seccion_actual["secc"]." ".$elemento_actual["elemento"]?>"><?php echo $elemento_actual["elemento"]?></option>
@@ -164,7 +164,7 @@ BH_Ayuda('0.4.51','3');
 						$valor="";
 						if($id_seccion!="" && $elemento!="")
 						{
-							$Reg=mysql_fetch_array(mysql_query("select tipo,valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'"));
+							$Reg=mysqli_fetch_array(consulta_directa($Con, "select tipo,valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'"));
 							$tipo_elem=$Reg["tipo"];
 							$valor=$Reg["valor"];
 							if($tipo_elem=="texto")
@@ -196,7 +196,7 @@ BH_Ayuda('0.4.51','3');
 				</tr>
 				<tr>
 					<td align="center" colspan="4">
-						<?php 
+						<?php
 							if($id_seccion!="" && $elemento!="")
 							{
 								echo $tipo_elem.": "
@@ -234,6 +234,6 @@ BH_Ayuda('0.4.51','3');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

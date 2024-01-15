@@ -1,8 +1,8 @@
-<?php 
+<?php
 session_start();
 
 
-include("apoyo.php"); 
+include("apoyo.php");
 
 $Con=Conectar();
 $proyecto=PostString("proyecto").Get("proyecto");
@@ -24,4 +24,4 @@ $proyecto=PostString("proyecto").Get("proyecto");
 <strong>Documentos:</strong><br />
 </body>
 </html>
-<?php mysql_close($Con); ?>
+<?php mysqli_close($Con); ?>

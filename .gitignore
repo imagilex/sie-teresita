@@ -10,9 +10,12 @@
 **/Archivos_Reportes_Financieros
 **/Docu
 **/Febrero 24
+**/img_mapas
 **/img_personas
 **/Indicadores
 **/Reportes_Diarios
+
+__access_data.php
 
 /*.txt
 /*.xlsx

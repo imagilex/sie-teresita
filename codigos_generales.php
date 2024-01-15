@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 session_start();
 
-include("apoyo.php"); 
+include("apoyo.php");
 
 $Con=Conectar();
 
@@ -23,7 +23,7 @@ if(!isset($_SESSION["tipo"]) )
 <title>MANAIZ</title>
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
-<script language="javascript">	
+<script language="javascript">
 	function Inicializar()
 	{
 		for(x=1;x<=10;x++)
@@ -52,7 +52,7 @@ if(!isset($_SESSION["tipo"]) )
 				}
 				else if(eval("document.getElementById('Descrip"+x+"').value")=="" || eval("document.getElementById('Clave"+x+"').value")=="")
 				{
-					alert("Debe llenar completamente el último código general agregado");
+					alert("Debe llenar completamente el Ãºltimo cÃ³digo general agregado");
 					anexado++;
 				}
 			}
@@ -65,14 +65,14 @@ if(!isset($_SESSION["tipo"]) )
 				}
 				else if(eval("document.getElementById('Descrip"+x+"').value")=="" || eval("document.getElementById('Clave"+x+"').value")=="")
 				{
-					alert("Debe llenar completamente el último código general agregado");
+					alert("Debe llenar completamente el Ãºltimo cÃ³digo general agregado");
 					anexado++;
 				}
 			}
 			if(anexado) break;
 		}
 		if(!anexado)
-			alert("Sólo es posible agregar hasta 10 elementos");
+			alert("SÃ³lo es posible agregar hasta 10 elementos");
 	}
 	function Borrar()
 	{
@@ -87,7 +87,7 @@ if(!isset($_SESSION["tipo"]) )
 
 <body onload="Inicializar()">
 
-<?php 
+<?php
 BarraHerramientas();
 
 $Campo=PostString("campo");
@@ -105,10 +105,10 @@ if($total>0 && $Campo!="")
 			$pos=PostString("pos$x");
 			$otr=PostString("otr$x");
 			$estatus=PostString("estatus$x");
-			mysql_query("update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
+			consulta_directa($Con, "update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
 		}
 	}
-		
+
 for($x=1;$x<=10;$x++)
 {
 	$id=PostString("Clave$x");
@@ -118,9 +118,9 @@ for($x=1;$x<=10;$x++)
 	$estatus=PostString("estat$x");
 	if($id!="" && $desc!="")
 	{
-		$registros_repetidos=mysql_fetch_array(mysql_query("select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
+		$registros_repetidos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
 	if(intval($registros_repetidos["n"])==0)
-		mysql_query("insert into codigos_generales (valor,campo,descripcion,estatus,posicion,otro) values ('$id','$Campo','$desc','$estatus','$posi','$otro')");
+		consulta_directa($Con, "insert into codigos_generales (valor,campo,descripcion,estatus,posicion,otro) values ('$id','$Campo','$desc','$estatus','$posi','$otro')");
 	}
 }
 
@@ -159,8 +159,8 @@ $query=$query." order by length(valor),valor,posicion";
 		document.sist.seccion.value=2;
 	</script>
 </div>
-<?php 
-BH_Ayuda('0.4.51','2'); 
+<?php
+BH_Ayuda('0.4.51','2');
 ?>
 <form name="DatosCG" action="codigos_generales.php" method="post">
 	<table align="center">
@@ -171,8 +171,8 @@ BH_Ayuda('0.4.51','2');
 	C&oacute;digo general:
 	<select name="campo" onchange="document.DatosCG.submit();"><option></option>
 	<?php
-		if($Regs=mysql_query("select distinct(campo) as campo from codigos_generales order by campo"))
-			while($Reg=mysql_fetch_array($Regs))
+		if($Regs=consulta_directa($Con, "select distinct(campo) as campo from codigos_generales order by campo"))
+			while($Reg=mysqli_fetch_array($Regs))
 				echo "<option value=\"".$Reg["campo"]."\">".$Reg["campo"]."</option>";
 	?>
 	</select>
@@ -197,8 +197,8 @@ BH_Ayuda('0.4.51','2');
 		if($Campo!="")
 		{
 			$x=0;
-			if($Regs=mysql_query($query))
-				while($Reg=mysql_fetch_array($Regs))
+			if($Regs=consulta_directa($Con, $query))
+				while($Reg=mysqli_fetch_array($Regs))
 				{
 				$x++
 				?>
@@ -238,7 +238,7 @@ BH_Ayuda('0.4.51','2');
 </form>
 </body>
 </html>
-<?php 
-mysql_close($Con);
+<?php
+mysqli_close($Con);
 unset($Campo, $Con, $Reg, $Regs, $x);
 ?>

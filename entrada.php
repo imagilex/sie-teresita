@@ -7,7 +7,7 @@ session_start();
 	$name=$_SESSION["id_usr"];	==> usuario.persona
 
 */
-$namelogin=$_SESSION["id_usr"];
+$namelogin=isset($_SESSION["id_usr"]) ? $_SESSION["id_usr"] : "";
 include("apoyo.php");
 $Con=Conectar();
 
@@ -74,7 +74,7 @@ if($ira!="")
 	{
 		//
 		$login = "select id_usuario from usuario where clave='".$_SESSION["id_usr"]."'";
-		$idusuario1 = mysqli_query($Con, $login);
+		$idusuario1 = consulta_directa($Con, $login);
 		while($rowuser = mysqli_fetch_array($idusuario1))
 		{//echo '<br>'.$rowuser["nombre"].'-'.$rowuser["clave"];
 		$idusuario2=$rowuser["id_usuario"];
@@ -202,9 +202,9 @@ if($ira!="")
 		if(document.frmInicio.usr.value!="" && document.frmInicio.pass.value!="") return true;
 		else
 		{
-			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contrase�a");
+			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseña");
 			else if(document.frmInicio.usr.value=="") alert("Ingresa tu usuario");
-			else if(document.frmInicio.pass.value=="") alert("Ingresa tu contrase�a");
+			else if(document.frmInicio.pass.value=="") alert("Ingresa tu contraseña");
 			return false;
 		}
 	}
@@ -255,7 +255,7 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 
 	if($usr!="" && $pass!="")
 	{
-		if($registro=mysqli_query($Con, "select id_persona,clave as id_usuario,tipo_usuario, persona from usuario where clave='$usr' and password='$pass' and estatus='A' and persona in (select clave from persona where estatus = 'A')"))
+		if($registro=consulta_directa($Con, "select id_persona,clave as id_usuario,tipo_usuario, persona from usuario where clave='$usr' and password='$pass' and estatus='A' and persona in (select clave from persona where estatus = 'A')"))
 
 		{
 			$dato=mysqli_fetch_array($registro);
@@ -270,8 +270,8 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 				$_SESSION["id_usr"]=$id_usr_usr; //clave del usuario
 				$_SESSION["id_persona_usr"]=$persona_usr;
 
-				$cuantos=@mysqli_fetch_array(mysqli_query($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'"));
-				$name=@mysqli_fetch_array(mysqli_query($Con, "select nombre from persona where id_persona =".$id_persona));
+				$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'"));
+				$name=@mysqli_fetch_array(consulta_directa($Con, "select nombre from persona where id_persona =".$id_persona));
 				$_SESSION["nampersona"]=$name[0];
 
 				if(intval($cuantos["n"])>0)
@@ -284,7 +284,7 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 
 			else
 			{
-				Alert("El nombre de usuario y/o contrase�a son incorrectos");
+				Alert("El nombre de usuario y/o contraseña son incorrectos");
 			}
 
 		}
@@ -295,7 +295,7 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 BarraHerramientas(!isset($_SESSION["tipo"]),4,false);
 if(! isset($_SESSION["tipo"]))
 {
-	$img=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Entrada' and elemento='Imagen'"));
+	$img=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Entrada' and elemento='Imagen'"));
 	?>
 <form action="entrada.php" method="post" enctype="multipart/form-data" name="frmInicio">
 	  <p>
@@ -398,11 +398,11 @@ else
 {
 $namep = $_SESSION["nampersona"];
 //echo $namep;
-$conteo = mysqli_query($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'");
+$conteo = consulta_directa($Con, "select count(*) as n from archivos where usuario='".$_SESSION["id_usr"]."'");
 $count = mysqli_fetch_array($conteo);
 
 //BH_Ayuda('0','4');
-$arch=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Introduccion'"));
+$arch=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Introduccion'"));
 ?>
 <h3 align="center" style="color:#999999;"><?php MostrarArchivo($Dir."/Archivos_Secciones/".$arch["valor"]); ?></h3>
 <p>
@@ -411,8 +411,8 @@ $arch=mysqli_fetch_array(mysqli_query($Con, "select valor from seccion where id_
 ?>
 
 </p>
-<!--Finaliza el cuerpo del html e Inicia el piede p�gina-->
-<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL N�MERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
+<!--Finaliza el cuerpo del html e Inicia el piede página-->
+<!--HAY DOS SENTENCIAS, UNA QUE QUITA EL LINK RECU PASS CUANDO TE LOGEAS, LA SEGUNDA MUESTRA EN PIE EL NÚMERO DE ARCHIVOS QUE ESTAN BLOQUEADOS POR EL USUARIO LOGEADO-->
 <?php
 if(!isset($_SESSION["tipo"]))
 {
@@ -440,7 +440,7 @@ echo"<div class='push'></div>
 <!--$namep tienes $count[0] archivo(s) bloqueados-->
 			  </td>
               <td width='28%' align='right'>&nbsp;</td>
-              <td width='35%' align='right'>&nbsp;";?><img src="Imagenes/menu/varilla.gif" alt='Gesti�n de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
+              <td width='35%' align='right'>&nbsp;";?><img src="Imagenes/menu/varilla.gif" alt='Gestión de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
             </tr>
             </table>";
 		 }
@@ -450,7 +450,7 @@ echo"<div class='push'></div>
             <tr>
               <td width='37%' align='left'>&nbsp;</td>
               <td width='28%' align='right'>&nbsp;</td>
-              <td width='35%' align='right'>&nbsp;";?> <img src="Imagenes/menu/varilla.gif" alt='Gesti�n de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
+              <td width='35%' align='right'>&nbsp;";?> <img src="Imagenes/menu/varilla.gif" alt='Gestión de Archivos' onclick='javascript:window.location.replace("upload.php")' /> <?php echo"</td>
             </tr>
             </table>";
 			}
@@ -458,7 +458,7 @@ echo"		  </p>
 </div>";
 }
 ?>
-<!--Finaliza piede p�gina-->
+<!--Finaliza piede página-->
 </body>
 </html>
 <?php

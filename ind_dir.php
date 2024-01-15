@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -30,8 +30,8 @@ $btn_sig=((PostString("sig_ind")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
-	$indicadores=mysql_query("select indicador_dir.indicador as ind from indicador_dir,codigos_generales where campo = 'indicador_tipo' and tipo = valor order by codigos_generales.posicion,indicador_dir.posicion");
-	while($indica=mysql_fetch_array($indicadores))
+	$indicadores=consulta_directa($Con, "select indicador_dir.indicador as ind from indicador_dir,codigos_generales where campo = 'indicador_tipo' and tipo = valor order by codigos_generales.posicion,indicador_dir.posicion");
+	while($indica=mysqli_fetch_array($indicadores))
 	{
 		$ind[]=$indica["ind"];
 	}
@@ -52,14 +52,14 @@ if($btn_ant || $btn_sig)
 		if($x>0)
 			$x--;
 		else
-			Alert("¡Ya no existen más indicadores!");
+			Alert("Â¡Ya no existen mÃ¡s indicadores!");
 	}
 	else if($btn_sig)
 	{
 		if($x<count($ind)-1)
 			$x++;
 		else
-			Alert("¡Ya no existen más indicadores!");
+			Alert("Â¡Ya no existen mÃ¡s indicadores!");
 	}
 	$nivel="";
 	$indicador=$ind[$x];
@@ -94,19 +94,19 @@ if(PostString("indicador_actual")!=$indicador)
 		var anio="<?php echo "20".$anio; ?>";
 		var mes="<?php echo $mes; ?>";
 		var id_usuario="<?php echo $_SESSION["id_usr"]; ?>";
-		if(indicador=="") 
+		if(indicador=="")
 		{
 			alert("No hay indicador seleccionado");
 			return false;
 		}
-		if(nivel=="") 
+		if(nivel=="")
 		{
 			alert("No hay nivel seleccionado");
 			return false;
 		}
 		if(id_usuario=="")
 		{
-			alert("No hay usuario en sesión");
+			alert("No hay usuario en sesiÃ³n");
 			return false;
 		}
 		var query='comentario='+comentario+'&indicador='+indicador+'&nivel='+nivel+'&id_usuario='+id_usuario+"&noCache="+Math.random()+'&anio='+anio+'&mes='+mes+'&fecha='+($('fecha_comentario').value);
@@ -115,7 +115,7 @@ if(PostString("indicador_actual")!=$indicador)
 		if(petHttp!="")
 		{
 			petHttp.onreadystatechange = mostrarComentarios;
-			
+
 			petHttp.open('POST', '_add_comentario_ind_dir.php', true);
 			petHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			petHttp.send(query);
@@ -157,19 +157,19 @@ if(PostString("indicador_actual")!=$indicador)
 		var anio="<?php echo $anio; ?>";
 		var mes="<?php echo $mes; ?>";
 		var id_usuario="<?php echo $_SESSION["id_usr"]; ?>";
-		if(indicador=="") 
+		if(indicador=="")
 		{
 			alert("No hay indicador seleccionado");
 			return false;
 		}
-		if(nivel=="") 
+		if(nivel=="")
 		{
 			alert("No hay nivel seleccionado");
 			return false;
 		}
 		if(id_usuario=="")
 		{
-			alert("No hay usuario en sesión");
+			alert("No hay usuario en sesiÃ³n");
 			return false;
 		}
 		var query='indicador='+indicador+'&nivel='+nivel+'&id_usuario='+id_usuario+"&noCache="+Math.random()+'&anio='+anio+'&mes='+mes+'&fecha='+fecha;
@@ -195,7 +195,7 @@ if(PostString("indicador_actual")!=$indicador)
 							$('elComentario').innerHTML='<div style="padding:0px; margin:0px"><textarea name="comentario" id="comentario" rows="6" cols="150"></textarea><br /><input name="button" type="button" value="Guardar" onclick="Comentar();" class="btn_normal" /></div>';
 						}
 					}
-				};			
+				};
 			petHttp02.open('POST', '_ver_comentario_ind_crit_hoy.php', true);
 			petHttp02.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			petHttp02.send(query);
@@ -227,7 +227,7 @@ if(PostString("indicador_actual")!=$indicador)
 </table>
 <?php
 //B_reportes();
-BH_Ayuda('0.4','2'); 
+BH_Ayuda('0.4','2');
 ?>
 <table border="0" width="100%" align="center"><tr><td>
 <form name="datos" action="ind_dir.php" method="post">
@@ -235,9 +235,9 @@ BH_Ayuda('0.4','2');
 		<tr>
 			<td align="left" width="250" valign="top">
 			<?php
-				if ($handle = opendir($Dir.'/Archivos_Indicadores_Direccion')) 
+				if ($handle = opendir($Dir.'/Archivos_Indicadores_Direccion'))
 				{
-   					while (false !== ($file = readdir($handle))) 
+   					while (false !== ($file = readdir($handle)))
 					{
 						if(intval($file)>0)
 						{
@@ -276,7 +276,7 @@ BH_Ayuda('0.4','2');
 					$fech=getdate();
 					?>
 					<option value="<?php echo $anio_num[$key]."-".$mes_num[$key]; ?>"><?php echo $mes_disp[$key]." ".($val!=$fech["year"]?$val:""); ?></option>
-					<?
+					<?php
 				}
 			?>
 			</select>
@@ -288,16 +288,16 @@ BH_Ayuda('0.4','2');
 				<select name="indicador" onchange="javascript: document.datos.nivel.value=''; document.datos.submit();">
 					<?php
 						$x=1;
-						if($tipos_indicadores=mysql_query("select valor, descripcion from codigos_generales where campo ='indicador_tipo' order by posicion, descripcion"))
+						if($tipos_indicadores=consulta_directa($Con, "select valor, descripcion from codigos_generales where campo ='indicador_tipo' order by posicion, descripcion"))
 						{
-							while($tipo_indicador=mysql_fetch_array($tipos_indicadores))
+							while($tipo_indicador=mysqli_fetch_array($tipos_indicadores))
 							{
 								?>
 								<optgroup label="<?php echo $tipo_indicador["descripcion"]; ?>">
 									<?php
-									if($indicadores_bd=mysql_query("select indicador, nombre from indicador_dir where tipo='".$tipo_indicador["valor"]."' order by posicion"))
+									if($indicadores_bd=consulta_directa($Con, "select indicador, nombre from indicador_dir where tipo='".$tipo_indicador["valor"]."' order by posicion"))
 									{
-										while($indicador_bd=mysql_fetch_array($indicadores_bd))
+										while($indicador_bd=mysqli_fetch_array($indicadores_bd))
 										{
 											?>
 											<option value="<?php echo $indicador_bd["indicador"]; ?>" <?php if ($x==1) echo 'selected="selected"';?>><?php echo $indicador_bd["nombre"]; ?></option>
@@ -330,10 +330,10 @@ BH_Ayuda('0.4','2');
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel:
 				<select name="nivel" onchange="javascript: document.datos.submit();">
 					<?php
-						if($niveles_bd=mysql_query("select id_indicador_nivel, descripcion from indicador_dir_nivel where indicador = '$indicador' order by posicion, descripcion"))
+						if($niveles_bd=consulta_directa($Con, "select id_indicador_nivel, descripcion from indicador_dir_nivel where indicador = '$indicador' order by posicion, descripcion"))
 						{
 							$x=1;
-							while($nivel_bd=mysql_fetch_array($niveles_bd))
+							while($nivel_bd=mysqli_fetch_array($niveles_bd))
 							{
 								?>
 								<option value="<?php echo $nivel_bd["id_indicador_nivel"]; ?>" <?php if ($x==1) echo 'selected="selected"';?>><?php echo $nivel_bd["descripcion"]; ?></option>
@@ -358,7 +358,7 @@ BH_Ayuda('0.4','2');
 				}
 				else
 				{
-					$id_nivel=mysql_fetch_array(mysql_query("select id_indicador_nivel from indicador_dir_nivel where indicador = '$indicador' and descripcion=''"));
+					$id_nivel=mysqli_fetch_array(consulta_directa($Con, "select id_indicador_nivel from indicador_dir_nivel where indicador = '$indicador' and descripcion=''"));
 					$nivel=$id_nivel["id_indicador_nivel"];
 				}
 				?>
@@ -367,18 +367,18 @@ BH_Ayuda('0.4','2');
 				$imagen_nivel="";
 				$imagen_archivo="";
 				$imagen_reporte="";
-				$img_ind=@mysql_fetch_array(mysql_query("select tipo_tendencia from indicador_dir where indicador='$indicador'"));
+				$img_ind=@mysqli_fetch_array(consulta_directa($Con, "select tipo_tendencia from indicador_dir where indicador='$indicador'"));
 				if($img_ind["tipo_tendencia"]=="1" || $img_ind["tipo_tendencia"]=="2" || $img_ind["tipo_tendencia"]=="3")
 					$imagen_indice="T".$img_ind["tipo_tendencia"].".png";
-				$img_niv=@mysql_fetch_array(mysql_query("select semaforo, tendencia from indicador_dir_archivo where anio='20"."$anio' and mes='".intval($mes)."' and id_indicador_nivel='$nivel'"));
+				$img_niv=@mysqli_fetch_array(consulta_directa($Con, "select semaforo, tendencia from indicador_dir_archivo where anio='20"."$anio' and mes='".intval($mes)."' and id_indicador_nivel='$nivel'"));
 				if(($img_niv["tendencia"]=="1" || $img_niv["tendencia"]=="2" || $img_niv["tendencia"]=="3") && ($img_niv["semaforo"]=="A" || $img_niv["semaforo"]=="R" || $img_niv["semaforo"]=="V"))
 					$imagen_nivel="S".$img_niv["semaforo"]."T".$img_niv["tendencia"].".png";
-				$imagen_archivo=@mysql_fetch_array(mysql_query("select prefijo_archivo from indicador_dir_nivel where id_indicador_nivel = '$nivel'"));
+				$imagen_archivo=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_archivo from indicador_dir_nivel where id_indicador_nivel = '$nivel'"));
 				if($imagen_archivo["prefijo_archivo"]!="")
 				{
 					$cad2=$anio.$mes;
 					if(file_exists($Dir."/Archivos_Indicadores_Direccion/$cad2/".$imagen_archivo["prefijo_archivo"].".jpg"))
-					{	
+					{
 						$imagen_reporte=$imagen_archivo["prefijo_archivo"];
 					}
 					else
@@ -425,7 +425,7 @@ BH_Ayuda('0.4','2');
 <br />
 <div id="comentarios_reporte"></div>
 <input type="hidden" id="fecha_comentario" value="" />
-<script language="javascript">	
+<script language="javascript">
 	var indicador="<?php echo $indicador; ?>";
 	var nivel="<?php echo $nivel; ?>";
 </script>
@@ -433,6 +433,6 @@ BH_Ayuda('0.4','2');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

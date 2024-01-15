@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -37,12 +37,12 @@ if(!isset($_SESSION["tipo"]) )
 
 BarraHerramientas();
 
-BH_Ayuda('0.4.52','6'); 
+BH_Ayuda('0.4.52','6');
 ?>
 </body>
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

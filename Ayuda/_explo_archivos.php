@@ -1,8 +1,8 @@
-<?php 
+<?php
 session_start();
 
 
-include("apoyo.php"); 
+include("apoyo.php");
 
 $Con=Conectar();
 $proyecto=PostString("proyecto").Get("proyecto");
@@ -22,20 +22,20 @@ $ruta=addslashes(PostString("ruta").Get("ruta"));
 		var tipo=$('tipo'+numero).value;
 		var valor=$('valor'+numero).value;
 		if(tipo=="carpeta")
-		{	
+		{
 			location.href='_explo_archivos.php?ruta='+valor+'&proyecto=<?php echo $proyecto; ?>';
 		}
 		else if(tipo=="archivo")
 		{
-			
+
 			var proyecto=parseInt('<?php echo $proyecto; ?>');
 			if(isNaN(proyecto)) proyecto=0;
 			valor=valor.substring(25);
 			var arch_open='_para_descargas.php?archivo='+valor;
 			archivo="archivo"+parseInt((Math.random()*1000));
 			window.open(arch_open,archivo);
-			
-			
+
+
 		}
 	}
 </script>
@@ -43,11 +43,11 @@ $ruta=addslashes(PostString("ruta").Get("ruta"));
 
 <body>
 <strong><?php echo substr($ruta,strlen($Dir."Archivos_Planes/"),strlen($ruta)); ?></strong><hr />
-<?php 
+<?php
 
-if ($handle = @opendir(addslashes($ruta))) 
+if ($handle = @opendir(addslashes($ruta)))
 {
-	while (($file = readdir($handle))) 
+	while (($file = readdir($handle)))
 	{
 		if($file!=".." && $file!="." && !is_file($file))
 		{
@@ -56,7 +56,7 @@ if ($handle = @opendir(addslashes($ruta)))
     }
 	closedir($handle);
 }
-if(@count($archivos_fechas)>0) 
+if(@count($archivos_fechas)>0)
 {
 	$x=0;
 	foreach($archivos_fechas as $direct)
@@ -64,33 +64,33 @@ if(@count($archivos_fechas)>0)
 		$x++;
 		?>
 		<div align="left" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';" ondblclick="Abrir(<?php echo $x; ?>)">
-		<?
+		<?php
 		if(is_dir("$ruta/$direct"))
 		{
 			?>
 			<img src="Imagenes/carpeta.JPG" align="absmiddle" border="0" />
 			<input type="hidden" name="tipo<?php echo $x; ?>" id="tipo<?php echo $x; ?>" value="carpeta" />
 			<input type="hidden" name="valor<?php echo $x; ?>" id="valor<?php echo $x; ?>" value="<?php echo "$ruta/$direct"; ?>" />
-			<?
+			<?php
 		}
 		else if(is_file("$ruta/$direct"))
 		{
 			$inf=pathinfo("$ruta/$direct");
 			if($inf["extension"]=="txt" || $inf["extension"]=="doc" || $inf["extension"]=="ppt" || $inf["extension"]=="rar" || $inf["extension"]=="tar" || $inf["extension"]=="pps" || $inf["extension"]=="html" || $inf["extension"]=="xls" || $inf["extension"]=="pdf" || $inf["extension"]=="mht" || $inf["extension"]=="zip" || $inf["extension"]=="odp" || $inf["extension"]=="htm" || $inf["extension"]=="odt" || $inf["extension"]=="pub")
-			{ 
+			{
 				?>
-				<img src="Imagenes/extencion/<?php echo $inf["extension"]; ?>.bmp" align="absmiddle" border="0" />		
+				<img src="Imagenes/extencion/<?php echo $inf["extension"]; ?>.bmp" align="absmiddle" border="0" />
 				<input type="hidden" name="tipo<?php echo $x; ?>" id="tipo<?php echo $x; ?>" value="archivo" />
 				<input type="hidden" name="valor<?php echo $x; ?>" id="valor<?php echo $x; ?>" value="<?php echo "$ruta/$direct"; ?>" />
-				<?
+				<?php
 			}
 			else
-			{ 
+			{
 				?>
-				<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" />					
+				<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" />
 				<input type="hidden" name="tipo<?php echo $x; ?>" id="tipo<?php echo $x; ?>" value="archivo" />
 				<input type="hidden" name="valor<?php echo $x; ?>" id="valor<?php echo $x; ?>" value="<?php echo "$ruta/$direct"; ?>" />
-				<?
+				<?php
 			}
 		}
 		echo $direct;
@@ -106,4 +106,4 @@ if(@count($archivos_fechas)>0)
 
 </body>
 </html>
-<?php mysql_close($Con); ?>
+<?php mysqli_close($Con); ?>

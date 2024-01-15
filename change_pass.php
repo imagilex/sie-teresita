@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -19,10 +19,10 @@ $newp=PostString("newp").Get("newp");
 if($newp!="")
 {
 	$query="update usuario set password = '$newp' where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'";
-	mysql_query($query);
+	consulta_directa($Con, $query);
 }
 
-$actual=@mysql_fetch_array(mysql_query("select password from usuario where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'"));
+$actual=@mysqli_fetch_array(consulta_directa($Con, "select password from usuario where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'"));
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -43,17 +43,17 @@ $actual=@mysql_fetch_array(mysql_query("select password from usuario where clave
 	{
 		if($('newp').value=="<?php echo $actual["password"]; ?>")
 		{
-			alert("Debe ingresar una contraseña diferente a la actual");
+			alert("Debe ingresar una contraseÃ±a diferente a la actual");
 			return false;
 		}
 		else if($('newp').value=="")
 		{
-			alert("Debe ingresar una contraseña");
+			alert("Debe ingresar una contraseÃ±a");
 			return false;
 		}
 		else if($('newp').value!=$('confirm').value)
 		{
-			alert("La contraseña y su confirmacion no coinciden");
+			alert("La contraseÃ±a y su confirmacion no coinciden");
 			return false;
 		}
 		return true
@@ -67,7 +67,7 @@ $actual=@mysql_fetch_array(mysql_query("select password from usuario where clave
 B_reportes();
 
 ?>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 <form method="post" action="change_pass.php" name="formulario" onsubmit="return evaluacion();">
@@ -91,6 +91,6 @@ BH_Ayuda('','');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

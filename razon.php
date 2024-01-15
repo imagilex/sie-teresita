@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -21,13 +21,13 @@ if($ira=="")
 	$ira="1";
 
 if($ira=="1")
-	$archivo=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
 else if($ira=="2")
-	$archivo=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
 else if($ira=="3")
-	$archivo=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
 else if($ira=="4")
-	$archivo=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
+	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
 
 
 ?>
@@ -58,7 +58,7 @@ else if($ira=="4")
         <td></td>
       </tr>
     </table></td>
-    <td width="31%"><div align='center'><strong>Razón de ser</strong></div></td>
+    <td width="31%"><div align='center'><strong>RazÃ³n de ser</strong></div></td>
     <td width="34%"><table border='0' align='right' cellpadding='0' cellspacing='0'>
       <tr>
         <td>&nbsp;</td>
@@ -73,7 +73,7 @@ else if($ira=="4")
 ?>
 <div align="right">
 <form name="menu1" action="quienes_somos.php" method="post">
-		Secci&oacute;n: 
+		Secci&oacute;n:
 		  <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
             <?php menu_items($_SESSION["tipo"],'0.4.5'); ?>
           </select>
@@ -82,13 +82,13 @@ else if($ira=="4")
 		  </script>
 </form>
 </div>
-<?php 
+<?php
 BH_Ayuda('0.4',$ira);
 ?>
 <table align="center" border="0" width="65%">
 	<tr>
 		<td align="center">
-			<?php 
+			<?php
 				MostrarArchivo(dirname(__FILE__)."/Archivos_Secciones/".$archivo["valor"]);
 			?>
 		</td>
@@ -97,5 +97,5 @@ BH_Ayuda('0.4',$ira);
 </body>
 </html>
 <?php
-mysql_close($Con);
+mysqli_close($Con);
 ?>

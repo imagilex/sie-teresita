@@ -1,6 +1,6 @@
 <?php
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -34,7 +34,7 @@ $Con=Conectar();
 	var ruta="<?php echo addslashes(dirname(__FILE__));?>/Archivos_Muestras";
 	var revisar=<?php
 	$query="select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'";
-	$permiso=mysql_fetch_array(mysql_query($query));
+	$permiso=mysqli_fetch_array(consulta_directa($Con, $query));
 	if($permiso["revisar_documentos"]=="si")
 		echo "true";
 	else
@@ -216,7 +216,7 @@ $Con=Conectar();
 		}
 		else
 		{
-			alert('Ya no existen más Documentos');
+			alert('Ya no existen mÃ¡s Documentos');
 		}
 	}
 	function GoRef(cuantos)
@@ -228,11 +228,11 @@ $Con=Conectar();
 		}
 		else
 		{
-			alert('Ya no existen más Registros');
+			alert('Ya no existen mÃ¡s Registros');
 		}
 	}
 	function Revisar()
-	{		
+	{
 		obj=new Ajax.Request("util_dir/archs_rev.php",{
 			postBody: "pattern="+$F('referencia')+"&directorio="+ruta+"/"+$F('fecha')+"/"+$F('doctos')+"/",
 			onSuccess: function(xhr)
@@ -272,7 +272,7 @@ $Con=Conectar();
 <?php
 //B_reportes();
 ?>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 <table border="0" align="center">
@@ -299,6 +299,6 @@ BH_Ayuda('','');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

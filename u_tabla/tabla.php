@@ -40,11 +40,11 @@ class tabla
 		else if($param=="encabezados")
 		{
 			$this->encabezados=$val;
-		}	
+		}
 		else if($param=="style_tabla")
 		{
 			$this->style_tabla=$val;
-		}	
+		}
 		else if($param=="style_encabezado")
 		{
 			$this->style_encabezado=$val;
@@ -79,11 +79,11 @@ class tabla
 		else if($param=="encabezados")
 		{
 			return $this->encabezados;
-		}	
+		}
 		else if($param=="style_tabla")
 		{
 			return $this->style_tabla;
-		}	
+		}
 		else if($param=="style_encabezado")
 		{
 			return $this->style_encabezado;
@@ -119,9 +119,9 @@ class tabla
 <script type="text/javascript" src="<?php echo $this->ruta_yui; ?>/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="<?php echo $this->ruta_yui; ?>/element.js"></script>
 <script type="text/javascript" src="<?php echo $this->ruta_yui; ?>/datasource.js">
-</script><script type="text/javascript" src="<?php echo $this->ruta_yui; ?>/datatable.js"></script>			
+</script><script type="text/javascript" src="<?php echo $this->ruta_yui; ?>/datatable.js"></script>
 <script type="text/javascript">
-YAHOO.example.Data = {regs: {registros: [<?
+YAHOO.example.Data = {regs: {registros: [<?php
 $registros="";
 foreach($this->celdas as $x => $val)
 {
@@ -144,7 +144,7 @@ foreach($this->celdas as $x => $val)
 		else if($this->isNum($cadena))
 		{
 			$cadena=$cadena;
-		}		
+		}
 		else if($cadena=='""')
 		{
 			$cadena=$cadena;
@@ -159,7 +159,7 @@ foreach($this->celdas as $x => $val)
 		}
 		$linea.="campo$y: $cadena,";
 	}
-	$registros.=substr($linea,0,strlen($linea)-1)."},";	
+	$registros.=substr($linea,0,strlen($linea)-1)."},";
 }
 echo substr($registros,0,strlen($registros)-1);
 ?>]}};YAHOO.util.Event.addListener(window, "load", function() {YAHOO.example.Scrolling = function() {var myColumnDefs = [<?php
@@ -169,7 +169,7 @@ foreach($this->encabezados as $y=> $val)
 	$cadena=', formatter:"date"';
 	$linea.="\n".'{key:"campo'.($y).'", label:"'.$this->encabezados[$y].'", sortable:true'.$cadena.'},';
 }
-echo substr($linea,0,strlen($linea)-1);	
+echo substr($linea,0,strlen($linea)-1);
 ?>];var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.regs);myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;myDataSource.responseSchema = {resultsList: "registros",campos: [<?php
 $linea="";
 foreach($this->encabezados as $y=> $val)
@@ -177,7 +177,7 @@ foreach($this->encabezados as $y=> $val)
 	$cadena=', formatter:"date"';
 	$linea.="\n".'{key:"campo'.($y).'"'.$cadena.'},';
 }
-echo substr($linea,0,strlen($linea)-1);	
+echo substr($linea,0,strlen($linea)-1);
 ?>]};var myDataTableXY = new YAHOO.widget.ScrollingDataTable("<?php echo $this->div; ?>", myColumnDefs, myDataSource, {width:"<?php echo $this->ancho; ?>", height:"<?php echo $this->alto; ?>"});return {oDS: myDataSource, oDTXY: myDataTableXY};}();});</script><?php
 		}
 	}
@@ -315,7 +315,7 @@ echo substr($linea,0,strlen($linea)-1);
 					if($car=="0" || $car=="9") $estado=11;
 					else $estado=99;
 					break;
-				case 11:					
+				case 11:
 					if($car=="0" || $car=="1" || $car=="2" || $car=="3" || $car=="4" || $car=="5" || $car=="6" || $car=="7" || $car=="8" || $car=="9") $estado=12;
 					else $estado=99;
 					break;

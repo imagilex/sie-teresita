@@ -9,13 +9,13 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 $dato=PostString("pto").Get("pto");
 
 if($dato=="") exit();
 
-$pto=@mysql_fetch_array($db->consulta("select puesto.clave as cla, puesto.descripcion as des, cg.descripcion as are, dep.descripcion as dep, puesto.proposito as pro from puesto inner join codigos_generales as cg on cg.campo='area' and cg.valor=puesto.area left join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where puesto.clave='$dato'"));
+$pto=@mysqli_fetch_array($db->consulta("select puesto.clave as cla, puesto.descripcion as des, cg.descripcion as are, dep.descripcion as dep, puesto.proposito as pro from puesto inner join codigos_generales as cg on cg.campo='area' and cg.valor=puesto.area left join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where puesto.clave='$dato'"));
 ?>
 <table border="0" align="left">
 	<tr><td align="right">Clave:</td><td align="left"><?php echo htmlentities($pto["cla"]); ?></td></tr>

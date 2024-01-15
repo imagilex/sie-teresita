@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -77,7 +77,7 @@ $meses=0;
 		border-width:1px;
 		border-color:#000000;
 	}
-	.data_normal, .data_normal_1, .data_normal_2, .data_foot, .data_foot_1, .data_foot_2 
+	.data_normal, .data_normal_1, .data_normal_2, .data_foot, .data_foot_1, .data_foot_2
 	{
 		color:#000000;
 		text-align:center;
@@ -112,7 +112,7 @@ $meses=0;
 BarraHerramientas();
 
 ?>
-<?php 
+<?php
 BH_Ayuda('0.4','');
 ?>
 <form name="data_control" action="_vista_explo_01.php" method="post">
@@ -122,9 +122,9 @@ BH_Ayuda('0.4','');
 		<td>
 			<select name="plan" onchange="javascript: location.href='_vista_explo_01.php?proyecto='+this.value">
 				<?php
-				if($proys_db=mysql_query("select proyecto, nombre from proyecto order by nombre"))
+				if($proys_db=consulta_directa($Con, "select proyecto, nombre from proyecto order by nombre"))
 				{
-					while($proy_db=mysql_fetch_array($proys_db))
+					while($proy_db=mysqli_fetch_array($proys_db))
 					{
 						?>
 						<option value="<?php echo $proy_db["proyecto"]; ?>"><?php echo $proy_db["nombre"]; ?></option>
@@ -151,7 +151,7 @@ BH_Ayuda('0.4','');
 </table>
 </form>
 <?php
-$data_1=@mysql_fetch_array(mysql_query("select nombre, lider from proyecto where proyecto='$proyecto'"));
+$data_1=@mysqli_fetch_array(consulta_directa($Con, "select nombre, lider from proyecto where proyecto='$proyecto'"));
 ?>
 <h1 class="proyecto"><?php echo $data_1["nombre"]; ?> (<?php echo $data_1["lider"]; ?>)</h1>
 <table cellpadding="0" cellspacing="0" align="center">
@@ -159,11 +159,11 @@ $data_1=@mysql_fetch_array(mysql_query("select nombre, lider from proyecto where
 		<td class="data_title_1">Entregable</td>
 		<td class="data_title">Estatus</td>
 	</tr>
-	<?
-	if($data_1_1_db=mysql_query("select fase, descripcion from proyecto_fase where proyecto = '$proyecto' order by fase"))
+	<?php
+	if($data_1_1_db=consulta_directa($Con, "select fase, descripcion from proyecto_fase where proyecto = '$proyecto' order by fase"))
 	{
 		$x=0;
-		while($data_1_1=mysql_fetch_array($data_1_1_db))
+		while($data_1_1=mysqli_fetch_array($data_1_1_db))
 		{
 			$x++
 			?>
@@ -171,9 +171,9 @@ $data_1=@mysql_fetch_array(mysql_query("select nombre, lider from proyecto where
 				<td class="data_fase" colspan="<?php echo intval($meses+2); ?>">FASE <?php echo $x ;?>: <?php echo $data_1_1["descripcion"]; ?></td>
 			</tr>
 			<?php
-			if($data_1_2_db=mysql_query("select entregable, descripcion from proyecto_fase_entregable where proyecto = '$proyecto' and fase = '".$data_1_1["fase"]."' order by entregable, descripcion"))
+			if($data_1_2_db=consulta_directa($Con, "select entregable, descripcion from proyecto_fase_entregable where proyecto = '$proyecto' and fase = '".$data_1_1["fase"]."' order by entregable, descripcion"))
 			{
-				while($data_1_2=mysql_fetch_array($data_1_2_db))
+				while($data_1_2=mysqli_fetch_array($data_1_2_db))
 				{
 					?>
 					<tr>
@@ -186,7 +186,7 @@ $data_1=@mysql_fetch_array(mysql_query("select nombre, lider from proyecto where
 					<tr>
 						<td class="data_normal_2">Tiempo</td>
 					</tr>
-					<?
+					<?php
 				}
 			}
 		}
@@ -207,6 +207,6 @@ $data_1=@mysql_fetch_array(mysql_query("select nombre, lider from proyecto where
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

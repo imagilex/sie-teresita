@@ -19,13 +19,14 @@ if(file_exists($Archivo))
 			fclose($Arch);
 			?></pre><?php
 		}
+		else {trigger_error("Archivo no encontrado: $Archivo");}
 	}
 	else if($info["extension"]=="jpg" || $info["extension"]=="png" || $info["extension"]=="bmp" || $info["extension"]=="wmf" || $info["extension"]=="gif")
 	{
-		?><img border="0" src="<?php echo Get("archivo"); ?>" /><?
+		?><img border="0" src="<?php echo Get("archivo"); ?>" /><?php
 	}
 }
 
-mysql_close($Con);
+mysqli_close($Con);
 
 ?>

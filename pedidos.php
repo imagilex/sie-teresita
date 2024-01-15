@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -27,15 +27,15 @@ if(!isset($_SESSION["tipo"]) )
 <script language="javascript" src="u_yui/container_core.js"></script>
 <script language="javascript" src="u_yui/menu.js"></script>
 <script type="text/javascript">
-	YAHOO.util.Event.onContentReady("barra_menu", function () 
+	YAHOO.util.Event.onContentReady("barra_menu", function ()
 		{
-			var oMenuBar = new YAHOO.widget.MenuBar("barra_menu", 
+			var oMenuBar = new YAHOO.widget.MenuBar("barra_menu",
 				{autosubmenudisplay: true,hidedelay: 5000,lazyload: true });
 			oMenuBar.render();
 		});
-	YAHOO.util.Event.onContentReady("menu_opciones", function () 
+	YAHOO.util.Event.onContentReady("menu_opciones", function ()
 		{
-			var oMenuBar = new YAHOO.widget.MenuBar("menu_opciones", 
+			var oMenuBar = new YAHOO.widget.MenuBar("menu_opciones",
 				{autosubmenudisplay: true,hidedelay: 5000,lazyload: true });
 			oMenuBar.render();
 		});
@@ -53,7 +53,7 @@ if(!isset($_SESSION["tipo"]) )
 <script language="javascript">
 	var ruta="<?php echo addslashes(dirname(__FILE__));?>/Archivos_Pedidos";
 	var revisar=<?php
-	$permiso=mysql_fetch_array(mysql_query("select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'"));
+	$permiso=mysqli_fetch_array(consulta_directa($Con, "select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'"));
 	if($permiso["revisar_documentos"]=="si")
 		echo "true";
 	else
@@ -235,7 +235,7 @@ if(!isset($_SESSION["tipo"]) )
 		}
 		else
 		{
-			alert('Ya no existen más Documentos');
+			alert('Ya no existen mÃ¡s Documentos');
 		}
 	}
 	function GoRef(cuantos)
@@ -247,11 +247,11 @@ if(!isset($_SESSION["tipo"]) )
 		}
 		else
 		{
-			alert('Ya no existen más Registros');
+			alert('Ya no existen mÃ¡s Registros');
 		}
 	}
 	function Revisar()
-	{	
+	{
 		if(!revisar) return false;
 		if($('revision') && !$('revision').checked) return false;
 		obj=new Ajax.Request("util_dir/archs_rev.php",{
@@ -293,7 +293,7 @@ if(!isset($_SESSION["tipo"]) )
 <?php
 //B_reportes();
 ?>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 
@@ -317,6 +317,6 @@ BH_Ayuda('','');
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

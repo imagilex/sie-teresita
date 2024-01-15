@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -84,15 +84,15 @@ function MM_swapImage() { //v3.0
 <?php
 if($actsublist!="") $aux="select lista_nivel from lista where lista = '$actsublist'";
 else $aux="select lista_nivel from lista where lista = '$lista'";
-$nivel_lista=@mysql_fetch_array(mysql_query($aux));
+$nivel_lista=@mysqli_fetch_array(consulta_directa($Con, $aux));
 $cad_nombres="";
 if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 {
-	if($regs=mysql_query($qsl))
+	if($regs=consulta_directa($Con, $qsl))
 	{
-		while($reg=mysql_fetch_array($regs))
+		while($reg=mysqli_fetch_array($regs))
 		{
-			$cad_nombres .=  "'Listas/Imagen/L".$reg["lista"].".jpg',"; 
+			$cad_nombres .=  "'Listas/Imagen/L".$reg["lista"].".jpg',";
 		}
 		$cad_nombres = substr($cad_nombres,0,strlen($cad_nombres)-1);
 	}
@@ -132,12 +132,12 @@ if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 				<div style="overflow:auto; width:200px; height:300px;">
 					<table border="0" align="center">
 						<?php
-						if($regs=mysql_query($qsl))
+						if($regs=consulta_directa($Con, $qsl))
 						{
-							while($reg=mysql_fetch_array($regs))
+							while($reg=mysqli_fetch_array($regs))
 							{
 								?>
-								<tr>	
+								<tr>
 									<td width="195" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF'; MM_swapImgRestore();" onclick="Open('<?php echo $reg["lista"]; ?>')" onmouseover="MM_swapImage('Image1','','Listas/Imagen/L<?php echo $reg["lista"]; ?>.jpg',1)">
 										<?php echo $reg["nombre"]; ?>
 									</td>
@@ -148,7 +148,7 @@ if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 						?>
 					</table>
 				</div>
-			</td>				
+			</td>
 		</tr>
 	</table>
 </div>
@@ -156,7 +156,7 @@ if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 }
 else if($nivel_lista["lista_nivel"]=="A")
 {
-	if($regs=mysql_query("SELECT concat(mid(producto, 6), '-', mid(valor_atributo, 8)) as img, mid(producto, 6) as producto, valor_atributo FROM lista_atributo where lista='$actsublist' order by producto, valor_atributo"))
+	if($regs=consulta_directa($Con, "SELECT concat(mid(producto, 6), '-', mid(valor_atributo, 8)) as img, mid(producto, 6) as producto, valor_atributo FROM lista_atributo where lista='$actsublist' order by producto, valor_atributo"))
 	{
 		?>
 		<form name="dataset" method="post">
@@ -168,7 +168,7 @@ else if($nivel_lista["lista_nivel"]=="A")
 							<td width="20">&nbsp;</td>
 							<td class="encabezado_tabla_reporte" width="200" valign="middle" style="vertical-align:middle;">Imagen</td>
 							<td class="encabezado_tabla_reporte" width="140">Producto<br /><input type="text" maxlength="250" value="" size="15" /></td>
-							<td class="encabezado_tabla_reporte" width="140">Descripci髇<br /><input type="text" maxlength="250" value="" size="15" /></td>
+							<td class="encabezado_tabla_reporte" width="140">Descripci贸n<br /><input type="text" maxlength="250" value="" size="15" /></td>
 							<td class="encabezado_tabla_reporte" width="140">Color<br /><input type="text" maxlength="250" value="" size="15" /></td>
 						</tr>
 					</table>
@@ -180,20 +180,20 @@ else if($nivel_lista["lista_nivel"]=="A")
 					<table class="clase_tabla" cellpadding="0" cellspacing="0">
 					<?php
 					$x=0;
-					while($reg=mysql_fetch_array($regs))
+					while($reg=mysqli_fetch_array($regs))
 					{
-						if($pantalla=="C骴igos")
+						if($pantalla=="C贸digos")
 						{
-							$cad_sql = "select concat(nombre,'&nbsp;') as nombre, concat(producto.descripcion,'&nbsp;') as descripcion, imagen, concat(codigos_generales.descripcion,'&nbsp;') as color, mid(imagen,1,5) as prod, mid(imagen,7,3) as val from producto inner join codigos_generales on valor = '".substr($reg["img"],6)."' and campo='color' where clave='".$reg["producto"]."'";	
+							$cad_sql = "select concat(nombre,'&nbsp;') as nombre, concat(producto.descripcion,'&nbsp;') as descripcion, imagen, concat(codigos_generales.descripcion,'&nbsp;') as color, mid(imagen,1,5) as prod, mid(imagen,7,3) as val from producto inner join codigos_generales on valor = '".substr($reg["img"],6)."' and campo='color' where clave='".$reg["producto"]."'";
 						}
 						else
 						{
-							$cad_sql = "select clave, concat(mid(clave,6),'&nbsp;') as nombre, concat(producto.descripcion,'&nbsp;') as descripcion, imagen, concat(codigos_generales.descripcion,'&nbsp;') as color, mid(imagen,1,5) as prod, mid(imagen,7,3) as val from producto inner join codigos_generales on valor = '".substr($reg["img"],6)."' and campo='color' where clave='".$reg["producto"]."'";	
+							$cad_sql = "select clave, concat(mid(clave,6),'&nbsp;') as nombre, concat(producto.descripcion,'&nbsp;') as descripcion, imagen, concat(codigos_generales.descripcion,'&nbsp;') as color, mid(imagen,1,5) as prod, mid(imagen,7,3) as val from producto inner join codigos_generales on valor = '".substr($reg["img"],6)."' and campo='color' where clave='".$reg["producto"]."'";
 						}
 						//echo $cad_sql;
-						if($info_db=mysql_query($cad_sql)) 
+						if($info_db=consulta_directa($Con, $cad_sql))
 						{
-							$info=mysql_fetch_array($info_db);
+							$info=mysqli_fetch_array($info_db);
 							$x++;
 							?>
 							<tr>
@@ -204,7 +204,7 @@ else if($nivel_lista["lista_nivel"]=="A")
 								<td align="center" valign="middle" width="140" class="cuerpo_tabla_reporte"><?php echo $info["color"]; ?>&nbsp;</td>
 							</tr>
 							<?php
-						}			
+						}
 					}
 					?>
 					</table>
@@ -221,8 +221,8 @@ else if($nivel_lista["lista_nivel"]=="A")
 else if($nivel_lista["lista_nivel"]=="P")
 {
 	$aux="select producto from lista_producto where lista='$actsublist' order by posicion";
-	if($regs=mysql_query($aux))
-	{	
+	if($regs=consulta_directa($Con, $aux))
+	{
 		$ones="";
 		?>
 			<form name="dataset" method="post">
@@ -234,7 +234,7 @@ else if($nivel_lista["lista_nivel"]=="P")
 								<td width="20">&nbsp;</td>
 								<td class="encabezado_tabla_reporte" width="200" valign="middle" style="vertical-align:middle;">Imagen</td>
 								<td class="encabezado_tabla_reporte" width="140">Producto<br /><input type="text" maxlength="250" value="" size="15" /></td>
-								<td class="encabezado_tabla_reporte" width="140">Descripci髇<br /><input type="text" maxlength="250" value="" size="15" /></td>
+								<td class="encabezado_tabla_reporte" width="140">Descripci贸n<br /><input type="text" maxlength="250" value="" size="15" /></td>
 								<td class="encabezado_tabla_reporte" width="140">Color<br /><input type="text" maxlength="250" value="" size="15" /></td>
 							</tr>
 						</table>
@@ -246,21 +246,21 @@ else if($nivel_lista["lista_nivel"]=="P")
 						<table class="clase_tabla" cellpadding="0" cellspacing="0">
 							<?php
 							$x=0;
-							while($reg=mysql_fetch_array($regs))
+							while($reg=mysqli_fetch_array($regs))
 							{
-								if($pantalla=="C骴igos")
+								if($pantalla=="C贸digos")
 								{
-									$cad_sql = "select concat(nombre,'&nbsp;') as nombre, concat(producto.descripcion,' ') as descripcion, concat(codigos_generales.descripcion,' ') as color, producto_atributo.imagen as imagen, mid(producto_atributo.valor, 8, 3), producto_atributo.producto as pap, producto_atributo.valor as pav from producto inner join producto_atributo on producto.clave = producto_atributo.producto and producto_atributo.atributo = 1 and producto_atributo.estatus = 'L' inner join codigos_generales on codigos_generales.valor = mid(producto_atributo.valor, 8, 3) and campo='color' where clave='".$reg["producto"]."'";	
+									$cad_sql = "select concat(nombre,'&nbsp;') as nombre, concat(producto.descripcion,' ') as descripcion, concat(codigos_generales.descripcion,' ') as color, producto_atributo.imagen as imagen, mid(producto_atributo.valor, 8, 3), producto_atributo.producto as pap, producto_atributo.valor as pav from producto inner join producto_atributo on producto.clave = producto_atributo.producto and producto_atributo.atributo = 1 and producto_atributo.estatus = 'L' inner join codigos_generales on codigos_generales.valor = mid(producto_atributo.valor, 8, 3) and campo='color' where clave='".$reg["producto"]."'";
 								}
 								else
 								{
-									$cad_sql = "select concat(mid(clave,6),'&nbsp;') as nombre, concat(producto.descripcion,' ') as descripcion, concat(codigos_generales.descripcion,' ') as color, producto_atributo.imagen as imagen, mid(producto_atributo.valor, 8, 3), producto_atributo.producto as pap, producto_atributo.valor as pav from producto inner join producto_atributo on producto.clave = producto_atributo.producto and producto_atributo.atributo = 1 and producto_atributo.estatus = 'L' inner join codigos_generales on codigos_generales.valor = mid(producto_atributo.valor, 8, 3) and campo='color' where clave='".$reg["producto"]."'";		
+									$cad_sql = "select concat(mid(clave,6),'&nbsp;') as nombre, concat(producto.descripcion,' ') as descripcion, concat(codigos_generales.descripcion,' ') as color, producto_atributo.imagen as imagen, mid(producto_atributo.valor, 8, 3), producto_atributo.producto as pap, producto_atributo.valor as pav from producto inner join producto_atributo on producto.clave = producto_atributo.producto and producto_atributo.atributo = 1 and producto_atributo.estatus = 'L' inner join codigos_generales on codigos_generales.valor = mid(producto_atributo.valor, 8, 3) and campo='color' where clave='".$reg["producto"]."'";
 								}
 								//echo $cad_sql;
-								$ones .=  "<br />union <br />$cad_sql";				
-								if($info_db=mysql_query($cad_sql)) 
+								$ones .=  "<br />union <br />$cad_sql";
+								if($info_db=consulta_directa($Con, $cad_sql))
 								{
-									while($info=mysql_fetch_array($info_db))
+									while($info=mysqli_fetch_array($info_db))
 									{
 										$x++;
 										?>
@@ -274,7 +274,7 @@ else if($nivel_lista["lista_nivel"]=="P")
 										<?php
 									}
 								}
-							}	
+							}
 							?>
 						</table>
 						</div>
@@ -293,6 +293,6 @@ else if($nivel_lista["lista_nivel"]=="P")
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

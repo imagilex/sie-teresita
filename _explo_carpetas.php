@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 
 header("Expires: Mon, 22 Sep 1997 09:00:00 GMT");
@@ -7,7 +7,7 @@ header("Cache-Control: no-store,no-cache,must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 
-include("apoyo.php"); 
+include("apoyo.php");
 
 $Con=Conectar();
 $proyecto=PostString("proyecto").Get("proyecto");
@@ -39,14 +39,14 @@ $raiz=PostString("raiz").Get("raiz");
 <?php
 function MuestraDirs($ruta, $directorio,$espacio="")
 {
-	
+
 	?>
 	<div align="left" style="padding-left:20px;" ondblclick="return GoTo('<?php echo $ruta.(($espacio=="")?("/"):("")).$directorio; ?>');" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';"><?php echo $espacio; ?><img src="Imagenes/carpeta.JPG" border="0" align="middle" /> <?php echo (($directorio!="")?($directorio):($ruta)); ?></div>
 		<?php
 		$raiz=str_replace("\\","/",$ruta)."/".$directorio."/";
-		if ($handle = @opendir($raiz)) 
+		if ($handle = @opendir($raiz))
 		{
-			while (($file = readdir($handle))) 
+			while (($file = readdir($handle)))
 			{
 				if($file!=".." && $file!="." && is_file($file)===false)
 				{
@@ -57,7 +57,7 @@ function MuestraDirs($ruta, $directorio,$espacio="")
 		    }
 			closedir($handle);
 		}
-		if(@count($archivos_fechas)>0) 
+		if(@count($archivos_fechas)>0)
 		{
 			foreach($archivos_fechas as $direct)
 			{
@@ -72,4 +72,4 @@ function MuestraDirs($ruta, $directorio,$espacio="")
 ?>
 </body>
 </html>
-<?php mysql_close($Con); ?>
+<?php mysqli_close($Con); ?>

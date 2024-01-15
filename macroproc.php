@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 include "util_dir/directorio.php";
 
 $Con=Conectar();
@@ -10,7 +10,7 @@ $Con=Conectar();
 $tipo_reporte=PostString("tipo_rep").Get("tipo_rep");
 if($tipo_reporte=="") $tipo_reporte="RH";
 
-$carp=@mysql_fetch_array(mysql_query("select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
+$carp=@mysqli_fetch_array(consulta_directa($Con, "select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
 $carpeta=$carp["otro"];
 
 if(!isset($_SESSION["tipo"]) )
@@ -28,8 +28,8 @@ $btn_sig=((PostString("sig_rep")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
-	$reps=mysql_query("select reporte from reportes where tipo = '$tipo_reporte' and reporte in (select distinct reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion");
-	while($rep=mysql_fetch_array($reps))
+	$reps=consulta_directa($Con, "select reporte from reportes where tipo = '$tipo_reporte' and reporte in (select distinct reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion");
+	while($rep=mysqli_fetch_array($reps))
 		$reportes[]=$rep["reporte"];
 	$ya=false;
 	$x=0;
@@ -43,18 +43,18 @@ if($btn_ant || $btn_sig)
 		$x++;
 	}
 	if($btn_ant)
-	{		
+	{
 		if($x>0)
 			$x--;
 		else
-			Alert("¡Ya no existen más reportes!");
+			Alert("Â¡Ya no existen mÃ¡s reportes!");
 	}
 	else if($btn_sig)
 	{
 		if($x<count($reportes)-1)
 			$x++;
 		else
-			Alert("¡Ya no existen más reportes!");
+			Alert("Â¡Ya no existen mÃ¡s reportes!");
 	}
 	$nivel="";
 	$id_reporte=$reportes[$x];
@@ -78,7 +78,7 @@ if(PostString("reporte_actual")!=$id_reporte)
 <link href="estilos.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
-<script language="javascript">	
+<script language="javascript">
 	var petHttp;
 	var petHttp02;
 	var max_ancho=-32000;
@@ -86,14 +86,14 @@ if(PostString("reporte_actual")!=$id_reporte)
 	{
 		var comentario=(($('comentario')==null)?(""):($('comentario').value));
 		var id_usuario="<?php echo $_SESSION["id_usr"]; ?>";
-		if(id_reporte=="") 
+		if(id_reporte=="")
 		{
 			alert("No hay reporte seleccionado");
 			return false;
 		}
 		if(id_usuario=="")
 		{
-			alert("No hay usuario en sesión");
+			alert("No hay usuario en sesiÃ³n");
 			return false;
 		}
 		var query='comentario='+comentario+'&id_reporte='+id_reporte+'&id_usuario='+id_usuario+"&noCache="+Math.random()+'&fecha='+($('fecha_comentario').value)+"&fecha_reporte=20"+$('fecha_reporte').value;
@@ -102,7 +102,7 @@ if(PostString("reporte_actual")!=$id_reporte)
 		if(petHttp!="")
 		{
 			petHttp.onreadystatechange = mostrarComentarios;
-			
+
 			petHttp.open('POST', '_add_comentario_frep_diar.php', true);
 			petHttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			petHttp.send(query);
@@ -142,14 +142,14 @@ if(PostString("reporte_actual")!=$id_reporte)
 	function AddCommentSpace(fecha)
 	{
 		var id_usuario="<?php echo $_SESSION["id_usr"]; ?>";
-		if(id_reporte=="") 
+		if(id_reporte=="")
 		{
 			alert("No hay reporte seleccionado");
 			return false;
 		}
 		if(id_usuario=="")
 		{
-			alert("No hay usuario en sesión");
+			alert("No hay usuario en sesiÃ³n");
 			return false;
 		}
 		var query='id_reporte='+id_reporte+'&id_usuario='+id_usuario+"&noCache="+Math.random()+'&fecha='+fecha+"&fecha_reporte=20"+$('fecha_reporte').value;
@@ -175,7 +175,7 @@ if(PostString("reporte_actual")!=$id_reporte)
 							$('elComentario').innerHTML='<div style="padding:0px; margin:0px"><textarea name="comentario" id="comentario" rows="6" cols="150"></textarea><br /><input name="button" type="button" value="Guardar" onclick="Comentar();" class="btn_normal" /></div>';
 						}
 					}
-				};			
+				};
 			petHttp02.open('POST', '_ver_comentario_rep_diar_hoy.php', true);
 			petHttp02.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			petHttp02.send(query);
@@ -282,9 +282,9 @@ if(PostString("reporte_actual")!=$id_reporte)
 			Fecha:
 			<select name="fecha_reporte" onchange="javascript: document.rep_di.submit();">
 				<?php
-					if ($handle = opendir($Dir."/$carpeta")) 
+					if ($handle = opendir($Dir."/$carpeta"))
 					{
-    					while (false !== ($file = readdir($handle))) 
+    					while (false !== ($file = readdir($handle)))
 						{
 							if(intval($file)>0)
 							{
@@ -318,8 +318,8 @@ if(PostString("reporte_actual")!=$id_reporte)
 				<option value=""></option>
 				<?php
 				$query="select reporte,nombre from reportes where tipo = '$tipo_reporte' and reporte in (select reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion, nombre";
-				if($reps_bd=mysql_query($query))
-					while($rep_bd=mysql_fetch_array($reps_bd))
+				if($reps_bd=consulta_directa($Con, $query))
+					while($rep_bd=mysqli_fetch_array($reps_bd))
 					{
 						?>
 						<option value="<?php echo $rep_bd["reporte"]; ?>"><?php echo $rep_bd["nombre"]; ?></option>
@@ -343,9 +343,9 @@ if(PostString("reporte_actual")!=$id_reporte)
 			?>
 			<select name="nivel" onchange="javascript: document.rep_di.submit();">
 			<?php
-				if($niveles_bd=mysql_query($quer))
+				if($niveles_bd=consulta_directa($Con, $quer))
 				{
-					while($nivel_bd=mysql_fetch_array($niveles_bd))
+					while($nivel_bd=mysqli_fetch_array($niveles_bd))
 					{
 						?>
 						<option value="<?php echo $nivel_bd["id_reporte"]; ?>"><?php echo $nivel_bd["descripcion"]; ?></option>
@@ -366,10 +366,10 @@ if(PostString("reporte_actual")!=$id_reporte)
 </form>
 <?php
 
-$arch_1=@mysql_fetch_array(mysql_query("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_A'"));
-$arch_2=@mysql_fetch_array(mysql_query("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_B'"));
-$arch_3=@mysql_fetch_array(mysql_query("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_A'"));
-$arch_4=@mysql_fetch_array(mysql_query("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_B'"));
+$arch_1=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_A'"));
+$arch_2=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_B'"));
+$arch_3=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_A'"));
+$arch_4=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_B'"));
 if($arch_1["prefijo_reporte"]!="" && $arch_2["prefijo_reporte"]!="" && $arch_3["prefijo_reporte"]!="" && $arch_4["prefijo_reporte"]!="")
 {
 	$pref_1=$Dir."/$carpeta/$fecha/";
@@ -445,6 +445,7 @@ if($arch_1["prefijo_reporte"]!="" && $arch_2["prefijo_reporte"]!="" && $arch_3["
 						?><img src="<?php echo substr($archivo1, strlen($Dir)+1); ?>" border="0" id="objeto_base" /><?php
 					}
 				}
+				else {trigger_error("Archivo no encontrado: $archivo1");}
 				?></td>
 			<td width="99%" valign="bottom"><iframe id="parte12" name="parte12" width="100%" height="75" scrolling="no" frameborder="0" marginheight="0" marginwidth="0" src="_muestra_archivo_rf.php?archivo=<?php echo substr($archivo2,strlen($Dir)); ?>"></iframe></td>
 			<td></td>
@@ -465,17 +466,17 @@ if($arch_1["prefijo_reporte"]!="" && $arch_2["prefijo_reporte"]!="" && $arch_3["
 			<td></td>
 		</tr>
 	</table>
-	<?
+	<?php
 	}
 else
 {
 ?>
 <table id="tbl_reporte" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:11px;"><tr><td style="padding:0px; margin:0px;">
 <?php
-if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reportes_secciones where id_reporte='$nivel' order by posicion"))
-{	
+if($secciones=consulta_directa($Con, "select prefijo_reporte, nombre,extension from reportes_secciones where id_reporte='$nivel' order by posicion"))
+{
 	$maximo=-32000;
-	while($seccion=mysql_fetch_array($secciones))
+	while($seccion=mysqli_fetch_array($secciones))
 	{
 		?>
 		<!--<tr><td style="padding:0px; margin:0px;">-->
@@ -502,8 +503,8 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 			else
 			{
 			?>
-			<div style="margin:0px; padding:0px;" ><pre><?php 
-			$maxi=MostrarArchivo($sf_archivo,""); 
+			<div style="margin:0px; padding:0px;" ><pre><?php
+			$maxi=MostrarArchivo($sf_archivo,"");
 			if($maxi>$maximo)
 				$maximo=$maxi;
 			?></pre></div>
@@ -514,7 +515,7 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 		{
 			$info=pathinfo($sf_archivo_comun);
 			if($info["extension"]=="jpg" ||$info["extension"]=="png" ||$info["extension"]=="gif")
-			{				
+			{
 				?>
 				<div style="margin:0px; padding:0px;" >
 					<center><img src="<?php echo $sf_archivo_comun_sd; ?>" border="0" /><font color="#FFFFFF">.......</font></center>
@@ -524,8 +525,8 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 			else
 			{
 			?>
-			<div style="margin:0px; padding:0px;" ><pre><?php 
-			$maxi=MostrarArchivo($sf_archivo_comun,""); 
+			<div style="margin:0px; padding:0px;" ><pre><?php
+			$maxi=MostrarArchivo($sf_archivo_comun,"");
 			if($maxi>$maximo)
 				$maximo=$maxi;
 			?></pre></div>
@@ -536,7 +537,7 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 		{
 			?>
 			<iframe src="lolo.php?archivo=<?php echo "$carpeta/$fecha/".$seccion["prefijo_reporte"].".".$seccion["extension"] ?>" frameborder="0" id="detalle" height="450" width="100%" marginheight="0" marginwidth="0"></iframe>
-			<?
+			<?php
 		}
 		else if(file_exists($archivo) && $seccion["nombre"]!="Detalle")
 		{
@@ -554,8 +555,8 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 			else
 			{
 			?>
-			<div style="margin:0px; padding:0px;" ><pre><?php 
-			$maxi=MostrarArchivo($archivo,""); 
+			<div style="margin:0px; padding:0px;" ><pre><?php
+			$maxi=MostrarArchivo($archivo,"");
 			if($maxi>$maximo)
 				$maximo=$maxi;
 			?></pre></div>
@@ -566,7 +567,7 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 		{
 			$info=pathinfo($archivo_comun);
 			if($info["extension"]=="jpg" ||$info["extension"]=="png" ||$info["extension"]=="gif")
-			{				
+			{
 				?>
 				<div style="margin:0px; padding:0px;" >
 					<center><img src="<?php echo $archivo_comun_sd; ?>" border="0" /><font color="#FFFFFF">.......</font></center>
@@ -576,8 +577,8 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 			else
 			{
 			?>
-			<div style="margin:0px; padding:0px;" ><pre><?php 
-			$maxi=MostrarArchivo($archivo_comun,""); 
+			<div style="margin:0px; padding:0px;" ><pre><?php
+			$maxi=MostrarArchivo($archivo_comun,"");
 			if($maxi>$maximo)
 				$maximo=$maxi;
 			?></pre></div>
@@ -586,7 +587,7 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 		}
 		else if(file_exists($archivo) && $seccion["nombre"]=="Detalle")
 		{
-			?><iframe src="_mostrar_archivo.php?archivo=<?php echo "$carpeta/$fecha/".$seccion["prefijo_reporte"]."-".$fecha.".".$seccion["extension"] ?>" frameborder="0" id="detalle" height="400" width="100%" marginheight="0" marginwidth="0"></iframe><?
+			?><iframe src="_mostrar_archivo.php?archivo=<?php echo "$carpeta/$fecha/".$seccion["prefijo_reporte"]."-".$fecha.".".$seccion["extension"] ?>" frameborder="0" id="detalle" height="400" width="100%" marginheight="0" marginwidth="0"></iframe><?php
 		}
 		?>
 		<!--</td></tr>-->
@@ -609,6 +610,6 @@ if($secciones=mysql_query("select prefijo_reporte, nombre,extension from reporte
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

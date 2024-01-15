@@ -13,17 +13,17 @@ $fecha=$date_actual["year"]."-".$date_actual["mon"]."-".$date_actual["mday"];
 
 if($comentario != "" && $id_reporte != "" && $id_usuario != "")
 {
-	mysql_query("insert into reporte_comentarios (id_reporte, id_usuario, fecha, comentario) values ('$id_reporte', '$id_usuario', '$fecha', '$comentario')");
+	consulta_directa($Con, "insert into reporte_comentarios (id_reporte, id_usuario, fecha, comentario) values ('$id_reporte', '$id_usuario', '$fecha', '$comentario')");
 }
 
-if($id_reporte!="" && $comentarios=mysql_query("select fecha, comentario, nombre, apaterno from reporte_comentarios, usuario where id_reporte='$id_reporte' and reporte_comentarios.id_usuario=usuario.id_usuario order by nombre, apaterno, fecha"))
+if($id_reporte!="" && $comentarios=consulta_directa($Con, "select fecha, comentario, nombre, apaterno from reporte_comentarios, usuario where id_reporte='$id_reporte' and reporte_comentarios.id_usuario=usuario.id_usuario order by nombre, apaterno, fecha"))
 {
 	$nombre="";
 	$primero=true;
 	?>
-	
+
 	<?php
-	while($comentario=mysql_fetch_array($comentarios))
+	while($comentario=mysqli_fetch_array($comentarios))
 	{
 		if($primero==true)
 		{
@@ -51,6 +51,6 @@ if($id_reporte!="" && $comentarios=mysql_query("select fecha, comentario, nombre
 	<?php
 }
 
-mysql_close($Con);
+mysqli_close($Con);
 
 ?>

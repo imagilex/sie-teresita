@@ -24,9 +24,9 @@
 	}
 </script>
 <body>
-<?php 
+<?php
 
-include("apoyo.php"); 
+include("apoyo.php");
 
 $Con=Conectar();
 
@@ -44,6 +44,7 @@ if($archivo!="" && file_exists($archivo) && isset($informacion["extension"]))
 			fclose($Arch);
 			?></pre><?php
 		}
+		else {trigger_error("Archivo no encontrado: $archivo");}
 	}
 	else if($informacion["extension"]=="jpg" || $informacion["extension"]=="png" || $informacion["extension"]=="bmp" || $informacion["extension"]=="gif")
 	{
@@ -52,8 +53,9 @@ if($archivo!="" && file_exists($archivo) && isset($informacion["extension"]))
 		<?php
 	}
 }
+else {trigger_error("Archivo no encontrado: $archivo");}
 
-mysql_close($Con);
+mysqli_close($Con);
 
 ?>
 </body>

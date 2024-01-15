@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -41,7 +41,7 @@ if(!isset($_SESSION["tipo"]) )
 	var ruta="<?php echo addslashes(dirname(__FILE__));?>/Archivos_Estrategia";
 	var revisar=<?php
 	$query="select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'";
-	$permiso=mysql_fetch_array(mysql_query($query));
+	$permiso=mysqli_fetch_array(consulta_directa($Con, $query));
 	if($permiso["revisar_documentos"]=="si")
 		echo "true";
 	else
@@ -204,7 +204,7 @@ if(!isset($_SESSION["tipo"]) )
 		}
 		else
 		{
-			alert('Ya no existen más Documentos');
+			alert('Ya no existen mÃ¡s Documentos');
 		}
 	}
 	function GoRef(cuantos)
@@ -216,11 +216,11 @@ if(!isset($_SESSION["tipo"]) )
 		}
 		else
 		{
-			alert('Ya no existen más Registros');
+			alert('Ya no existen mÃ¡s Registros');
 		}
 	}
 	function Revisar()
-	{		
+	{
 		obj=new Ajax.Request("util_dir/archs_rev.php",{
 			postBody: "pattern="+$F('referencia')+"&directorio="+ruta+"/"+$F('fecha')+"/"+$F('doctos')+"/",
 			onSuccess: function(xhr)
@@ -267,7 +267,7 @@ window.frames["frame3"].location=compleeto+"-3.jpg";
         <td></td>
       </tr>
     </table></td>
-    <td width="31%"><div align='center'><strong>Reportes Estratégicos</strong></div></td>
+    <td width="31%"><div align='center'><strong>Reportes EstratÃ©gicos</strong></div></td>
     <td width="34%"><table border='0' align='right' cellpadding='0' cellspacing='0'>
       <tr>
         <td>&nbsp;</td>
@@ -280,7 +280,7 @@ window.frames["frame3"].location=compleeto+"-3.jpg";
 <?php
 //B_reportes();
 ?>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 <table border="0" align="center">
@@ -308,5 +308,5 @@ BH_Ayuda('','');
 </body>
 </html>
 <?php
-mysql_close();
+mysqli_close($Con);
 ?>

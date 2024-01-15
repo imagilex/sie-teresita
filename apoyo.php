@@ -2,10 +2,13 @@
 
 $Dir = dirname(__FILE__);
 include_once("util_base_datos/mysql/mysql_data_base.php");
-define("BD_HOST","10.5.0.5");
-define("BD_USR","root");
-define("BD_PASS","password123");
-define("BD_BD","teresita_intranet");
+include_once "__access_data.php";
+
+function consulta_directa($mysqli, $query, $modo = MYSQLI_STORE_RESULT) {
+	$excep = new Exception();
+	trigger_error("CONSULTA SQL: \n$query;\n en \n" . $excep->getTraceAsString());
+	return mysqli_query($mysqli, $query, $modo);
+}
 
 function Conectar()
 {
@@ -36,22 +39,22 @@ function Get($Variable)
 function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 {
 	$mysqli = Conectar();
-	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
 	ErrorMySQLAlert($mysqli);
-	$boton_salir=$regs["valor"];
-	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+	$boton_salir = isset($regs["valor"]) ? $regs["valor"] : "";
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 	ErrorMySQLAlert($mysqli);
-	$Logo=$regs["valor"];
-	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
+	$Logo = isset($regs["valor"]) ? $regs["valor"] : "";
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
 	ErrorMySQLAlert($mysqli);
-	$linea1=$regs["valor"];
-	$regs=mysqli_fetch_array(mysqli_query($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
+	$linea1 = isset($regs["valor"]) ? $regs["valor"] : "";
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
 	ErrorMySQLAlert($mysqli);
-	$linea2=$regs["valor"];
+	$linea2 = isset($regs["valor"]) ? $regs["valor"] : "";
 	?>
 <div id="div_menu" style=" border:top:3px; left:92%; width:336px; height:28px; position:absolute; z-index:200; vertical-align:middle; text-align:center; margin-left:-330px; visibility:hidden;" ><?php
 		$prefijo_actual='0.4';
-		$tipo_usuario_actual=$_SESSION["tipo"];
+		$tipo_usuario_actual = isset($_SESSION["tipo"]) ? $_SESSION["tipo"] : "";
 		$tmenu=CTabla("menu");
 		$itemsq=$tmenu->query("select menu.opcion, menu.descripcion, menu_agrupador.agrupador, menu_agrupador.icono from menu inner join menu_agrupador on menu.agrupador=menu_agrupador.id_agrupador where menu.prefijo_menu='$prefijo_actual' and concat(prefijo_menu,'.',opcion) in (select concat(prefijo_menu,'.',opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) order by menu_agrupador.posicion, menu.posicion");
 
@@ -164,7 +167,7 @@ function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 				}
 				function AddFav()
 				{
-					var nombre = (prompt("Nombre del v�nculo")) || "favorito";
+					var nombre = (prompt("Nombre del vínculo")) || "favorito";
 					if(nombre=="favorito")
 						return false;
 					var url_request = location.pathname;
@@ -215,9 +218,9 @@ function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 					<table border="0" align="left" width="100%" onmousemove="MuestraFav()">
 						<tr><td align="right"><input type="button" value="Eliminar" style="width:75px; height:25px;" onclick="DelFav();" /></td></tr>
 						<?php
-						if($favs=mysql_query("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
+						if($favs=consulta_directa($mysqli, "select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
 						{
-							while($fav=mysql_fetch_array($favs))
+							while($fav=mysqli_fetch_array($favs))
 							{
 								?>
 								<tr onmousemove="MuestraFav()"><td onmousemove="javascript: this.style.background='#FFFFFF'; MuestraFav();" onmouseout="javascript: this.style.background='#EEEEEE';" ondblclick="javascript: location.href='<?php echo $fav["url_request"]."?".$fav["parametros_url"]; ?>'">
@@ -274,26 +277,40 @@ function MostrarArchivo($Archivo,$fin="<br />")
 			fclose($Arch);
 		}
 		else
+		{
 			echo "";
+			trigger_error("Archivo no encontrado: $Archivo");
+		}
 	}
 	else
+	{
 		echo "";
+		trigger_error("Archivo no encontrado: $Archivo");
+	}
 	unset($Arch);
 	return $maximo;
 }
 function CboCG($Campo)
 {
+	$mysqli = Conectar();
 	$Cad="";
-	if($Regs=mysql_query("select valor,descripcion from codigos_generales where campo='$Campo' order by posicion,descripcion"))
-		while($Reg=mysql_fetch_array($Regs))
+	$qry = "select valor,descripcion from codigos_generales where campo='$Campo' order by posicion,descripcion";
+	if($Regs=consulta_directa($mysqli, $qry))
+		while($Reg=mysqli_fetch_array($Regs))
 		{
-			$descr=ereg_replace('�',"&aacute;",$Reg["descripcion"]);$descr=ereg_replace('�','&eacute;',$descr);
-			$descr=ereg_replace('�','&iacute;',$descr);$descr=ereg_replace('�','&oacute;',$descr);
-			$descr=ereg_replace('�','&uacute;',$descr);$descr=ereg_replace('�','&Aacute;',$descr);
-			$descr=ereg_replace('�','&Eacute;',$descr);$descr=ereg_replace('�','&Iacute;',$descr);
-			$descr=ereg_replace('�','&Oacute;',$descr);$descr=ereg_replace('�','&Uacute;',$descr);
-			$descr=ereg_replace('�','&Ntilde;',$descr);
-			$descr=ereg_replace('�','&ntilde;',$descr);
+			// $descr=preg_replace('á',"&aacute;",$Reg["descripcion"]);
+			// $descr=preg_replace('é','&eacute;',$descr);
+			// $descr=preg_replace('í','&iacute;',$descr);
+			// $descr=preg_replace('ó','&oacute;',$descr);
+			// $descr=preg_replace('ú','&uacute;',$descr);
+			// $descr=preg_replace('Á','&Aacute;',$descr);
+			// $descr=preg_replace('É','&Eacute;',$descr);
+			// $descr=preg_replace('Í','&Iacute;',$descr);
+			// $descr=preg_replace('Ó','&Oacute;',$descr);
+			// $descr=preg_replace('Ú','&Uacute;',$descr);
+			// $descr=preg_replace('Ñ','&Ntilde;',$descr);
+			// $descr=preg_replace('ñ','&ntilde;',$descr);
+			$descr = $Reg["descripcion"];
 			$Cad=$Cad."\n<option value=\"".$Reg["valor"]."\">".$descr."</option>";
 		}
 	return $Cad;
@@ -335,7 +352,7 @@ function FormFecha($Variable)
 	$Mes=$Mes."<option value=\"11\">Nov</option>";
 	$Mes=$Mes."<option value=\"12\">Dic</option>";
 	$Mes=$Mes."</select>";
-	$Anio="<input type=\"text\" maxlength=\"4\" size=\"4\" name=\"$Variable"."_a\" onblur=\"javascript: if(document.getElementById('$Variable"."_a').value.length!=4) alert('El a�o debe ser de cuatro digitos');\" />";
+	$Anio="<input type=\"text\" maxlength=\"4\" size=\"4\" name=\"$Variable"."_a\" onblur=\"javascript: if(document.getElementById('$Variable"."_a').value.length!=4) alert('El año debe ser de cuatro digitos');\" />";
 	return $Dia." / ".$Mes." / ".$Anio;
 }
 function PostDate($Variable)
@@ -360,38 +377,39 @@ function FormComboNum($Variable,$Inicio,$Fin,$Incremento)
 function NoAcute($cad)
 {
 	$cadena=$cad;
-	$cadena=str_replace("�","&aacute;",$cadena);
-	$cadena=str_replace("�","&eacute;",$cadena);
-	$cadena=str_replace("�","&iacute;",$cadena);
-	$cadena=str_replace("�","&oacute;",$cadena);
-	$cadena=str_replace("�","&uacute;",$cadena);
-	$cadena=str_replace("�","&Aacute;",$cadena);
-	$cadena=str_replace("�","&Eacute;",$cadena);
-	$cadena=str_replace("�","&Iacute;",$cadena);
-	$cadena=str_replace("�","&Oacute;",$cadena);
-	$cadena=str_replace("�","&Uacute;",$cadena);
-	$cadena=str_replace("�","&ntilde;",$cadena);
-	$cadena=str_replace("�","&Ntilde;",$cadena);
+	$cadena=str_replace("á","&aacute;",$cadena);
+	$cadena=str_replace("é","&eacute;",$cadena);
+	$cadena=str_replace("í","&iacute;",$cadena);
+	$cadena=str_replace("ó","&oacute;",$cadena);
+	$cadena=str_replace("ú","&uacute;",$cadena);
+	$cadena=str_replace("Á","&Aacute;",$cadena);
+	$cadena=str_replace("É","&Eacute;",$cadena);
+	$cadena=str_replace("í","&Iacute;",$cadena);
+	$cadena=str_replace("Ó","&Oacute;",$cadena);
+	$cadena=str_replace("Ú","&Uacute;",$cadena);
+	$cadena=str_replace("ñ","&ntilde;",$cadena);
+	$cadena=str_replace("Ñ","&Ntilde;",$cadena);
 	return $cadena;
 }
 function menu_items($tipo_usuario_actual, $prefijo_actual)
 {
-	$cuantos=mysql_fetch_array(mysql_query("select count(distinct(agrupador)) as n from menu where prefijo_menu='$prefijo_actual'"));
+	$mysqli = Conectar();
+	$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(distinct(agrupador)) as n from menu where prefijo_menu='$prefijo_actual'"));
 	$cad="";
 	if(intval($cuantos["n"])>1)
 	{
-		if($agrupadores=mysql_query("select distinct(agrupador) as gpo from menu where prefijo_menu='$prefijo_actual'"))
+		if($agrupadores=consulta_directa($mysqli, "select distinct(agrupador) as gpo from menu where prefijo_menu='$prefijo_actual'"))
 		{
-			while($agrupador=mysql_fetch_array($agrupadores))
+			while($agrupador=mysqli_fetch_array($agrupadores))
 			{
-				$contador=mysql_fetch_array(mysql_query("select count(*) as n from (select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion) as tbl01"));
+				$contador=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from (select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion) as tbl01"));
 				if(intval($contador["n"])>0)
 				{
 					$cad.='<optgroup label="'.$agrupador["gpo"].'">';
 				}
-				if($items=mysql_query("select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion"))
+				if($items=consulta_directa($mysqli, "select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion"))
 				{
-					while($item=mysql_fetch_array($items))
+					while($item=mysqli_fetch_array($items))
 					{
 						$cad.='<option value="'.$item["opcion"].'">'.NoAcute($item["descripcion"]).'</option>';
 					}
@@ -405,9 +423,9 @@ function menu_items($tipo_usuario_actual, $prefijo_actual)
 	}
 	else
 	{
-		if($items=mysql_query("select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' order by posicion"))
+		if($items=consulta_directa($mysqli, "select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' order by posicion"))
 		{
-			while($item=mysql_fetch_array($items))
+			while($item=mysqli_fetch_array($items))
 			{
 				$cad.='<option value="'.$item["opcion"].'">'.NoAcute($item["descripcion"]).'</option>';
 			}
@@ -417,9 +435,10 @@ function menu_items($tipo_usuario_actual, $prefijo_actual)
 }
 function BH_Ayuda($prefijo,$opcion)
 {
+	$mysqli = Conectar();
 	$query="select descripcion, archivo from pantalla_ayuda inner join ayuda on pantalla_ayuda.ayuda = ayuda.ayuda where prefijo_menu='$prefijo' and opcion = '$opcion' order by posicion, descripcion";
-	$cuantos=mysql_fetch_array(mysql_query("select count(*) as n from ($query) as tbl_01"));
-	if(intval($cuantos["n"])>0 && $items=mysql_query($query))
+	$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from ($query) as tbl_01"));
+	if(intval($cuantos["n"])>0 && $items=consulta_directa($mysqli, $query))
 	{
 		?>
 		<script language="javascript">
@@ -438,7 +457,7 @@ function BH_Ayuda($prefijo,$opcion)
 					<select name="ayuda_bh" id="ayuda_bh" onchange="Ayuda_en_BH(this.value)">
 						<option value=""></option>
 						<?php
-						while($item=mysql_fetch_array($items))
+						while($item=mysqli_fetch_array($items))
 						{
 							?>
 							<option value="<?php echo $item["archivo"]; ?>">
@@ -501,9 +520,9 @@ function DisplaySQLD3($lista,$usuar)
 {
 	$Con=Conectar();
 	$columnas=array();
-	if($regs=mysql_query("select docto3_columnas.columna, docto3_columnas_alias.tabla, docto3_columnas.orden, docto3_columnas.etiqueta from docto3_columnas inner join docto3_columnas_alias on docto3_columnas.columna=docto3_columnas_alias.columna where docto3_columnas.usuario='$usuar' order by docto3_columnas.posicion"))
+	if($regs=consulta_directa($Con, "select docto3_columnas.columna, docto3_columnas_alias.tabla, docto3_columnas.orden, docto3_columnas.etiqueta from docto3_columnas inner join docto3_columnas_alias on docto3_columnas.columna=docto3_columnas_alias.columna where docto3_columnas.usuario='$usuar' order by docto3_columnas.posicion"))
 	{
-		while($reg=mysql_fetch_array($regs,MYSQL_ASSOC))
+		while($reg=mysqli_fetch_array($regs,MYSQLI_ASSOC))
 		{
 			$columnas[]=$reg;
 		}
@@ -781,17 +800,18 @@ function BH_Plan()
 }
 function BH2()
 {
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
-	ErrorMySQLAlert();
+	$mysqli = Conectar();
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
+	ErrorMySQLAlert($mysqli);
 	$boton_salir=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+	ErrorMySQLAlert($mysqli);
 	$Logo=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
+	ErrorMySQLAlert($mysqli);
 	$linea1=$regs["valor"];
-	$regs=mysql_fetch_array(mysql_query("select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
-	ErrorMySQLAlert();
+	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
+	ErrorMySQLAlert($mysqli);
 	$linea2=$regs["valor"];
 	$favoritos=true;
 	?>
@@ -829,7 +849,7 @@ function BH2()
 							}
 							function AddFav()
 							{
-								var nombre = (prompt("Nombre del v�nculo")) || "favorito";
+								var nombre = (prompt("Nombre del vínculo")) || "favorito";
 								if(nombre=="favorito")
 									return false;
 								var url_request = location.pathname;
@@ -884,9 +904,9 @@ function BH2()
 											</td>
 										</tr>
 										<?php
-										if($favs=mysql_query("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
+										if($favs=consulta_directa($mysqli, "select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
 										{
-											while($fav=mysql_fetch_array($favs))
+											while($fav=mysqli_fetch_array($favs))
 											{
 												$url_fav = $fav["url_request"]."?".$fav["parametros_url"];
 												?>

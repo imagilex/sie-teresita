@@ -6,7 +6,7 @@ include "apoyo.php";
 
 include_once("u_db/data_base.php");
 
-$db=new data_base("root", "10.5.0.5", "password123", "teresita_intranet");
+$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
 $Con=Conectar();
 
@@ -36,7 +36,7 @@ else if($accion=="del_docto")
 	$docto=PostString("docto").Get("docto");
 	if($docto!="")
 	{
-		$arch=mysql_fetch_array($db->consulta("select archivo from documento where id_docto='$docto'"));
+		$arch=mysqli_fetch_array($db->consulta("select archivo from documento where id_docto='$docto'"));
 		@unlink("$Dir/documentos/".$arch["archivo"]);
 		$db->consulta("delete from documento where id_docto='$docto'");
 	}
@@ -340,11 +340,11 @@ BH_Ayuda('','');
 			if($doctos=$db->consulta("select id_docto, nombre, archivo from documento where propietario='$pto' and tipo_propietario=2"))
 			{
 				$x=0;
-				while($docto=mysql_fetch_array($doctos))
+				while($docto=mysqli_fetch_array($doctos))
 				{
 					$x++;
-					$cuantos=@mysql_fetch_array(mysql_query("select count(*) as n from archivos where archivo='".basename($docto["archivo"])."'"));
-					echo mysql_error();
+					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($docto["archivo"])."'"));
+					echo $Con->error;
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';
 					?>
@@ -364,6 +364,6 @@ BH_Ayuda('','');
 
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

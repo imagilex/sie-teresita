@@ -2,7 +2,7 @@
 
 session_start();
 
-include "apoyo.php"; 
+include "apoyo.php";
 
 $Con=Conectar();
 
@@ -79,7 +79,7 @@ if($ira!="")
 ?>
 <div align="right">
 <form name="menu1" action="herramientas.php" method="post">
-		Secci&oacute;n: 
+		Secci&oacute;n:
 		  <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
             <?php menu_items($_SESSION["tipo"],'0.4.52'); ?>
           </select>
@@ -88,13 +88,13 @@ if($ira!="")
 		  </script>
 </form>
 </div>
-<?php 
+<?php
 BH_Ayuda('','');
 ?>
 </body>
 </html>
 <?php
 
-mysql_close();
+mysqli_close($Con);
 
 ?>

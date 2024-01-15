@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 
 header("Expires: Mon, 22 Sep 1997 09:00:00 GMT");
@@ -7,7 +7,7 @@ header("Cache-Control: no-store,no-cache,must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 
-include("apoyo.php"); 
+include("apoyo.php");
 include_once("u_tabla/tabla.php");
 include "libreria/funciones_ger.php";
 
@@ -24,12 +24,12 @@ if($accion!="")
 {
 	if($accion=="add_files")
 	{
-	
+
 		$archivos=PostString("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
-		
+
 			/*foreach($archivos as $arch			{)*/
 
 			//echo "file: ".$arch."<br>";
@@ -39,18 +39,18 @@ if($accion!="")
 				$arch_upl2=str_replace("-","_",str_replace(".",".",str_replace(" ","_",$arch)));
 				//cho "kke ".$arch_upl2;
 			//echo "<br>";
-			
+
 			//echo $_FILES[$arch_upl]["name"];
 				if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
 				{
-					$datos=@mysql_fetch_array(mysql_query("select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
+					$datos=@mysqli_fetch_array(consulta_directa($Con, "select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
 					$noarchivo=$datos["archivo"];
 		//			echo "original= ".  $noarchivo."<br>";
 		//			echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
 					if ($noarchivo == basename( $_FILES[$arch_upl]['name']))
 					{
 					$original=str_replace("\\","/",$Dir)."/".$datos["ruta"];
-					
+
 					$Pnewfile = explode("/",$datos["ruta"]);
 					$PVdir=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/";
 					echo $original."<br>";
@@ -64,7 +64,7 @@ if($accion!="")
 
           /* This is the correct way to loop over the directory. */
             while (false !== ($file = readdir($handle))) {
-            
+
         //    echo "$file\n";
             $DirfileNAE= explode(".",$file);
             $DirfileNA= explode("-V",$DirfileNAE[0]);
@@ -75,8 +75,8 @@ if($accion!="")
             {
             $countersas = $countersas+1;
             }
-            
-            
+
+
           }
 //echo $countersas;
 
@@ -86,7 +86,7 @@ case 0:
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Filname."-V1.".$filexp[1];
         break;
     case 1:
-        //echo "Existe Versión -V1, Generando -V2";
+        //echo "Existe VersiÃ³n -V1, Generando -V2";
         //$archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Filname."-V2.".$filexp[1];
         break;
@@ -103,20 +103,20 @@ case 0:
         unlink($elimina);
         $archivo2=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
         $archivo21=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V2.".$DirfileNAE[1];
-        
+
        // echo $archivo2 ."<br>";
         //echo $Nelimina ."<br>";
          rename($archivo2,$Nelimina);
-         
+
         $archivoparacopiarNR= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$DirfileN."-V3.".$DirfileNAE[1];
         $archivoparacopiarN= $DirfileN."-V3.".$DirfileNAE[1];
         //echo $archivo21;
          //echo ($archivoparacopiar ."<br>".$archivo21);
          rename($archivoparacopiarNR,$archivo21);
-         
+
         //$archivoparacopiar= $DirfileN."-V".$countersas.".".$DirfileNAE[1];
-        
-        
+
+
         break;
 }
 
@@ -125,20 +125,20 @@ case 0:
 
 				//	$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Pnewfile[3];
 					$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/". $archivoparacopiar;
-          
-          
-          
-					
+
+
+
+
 				//	if (!copy($original, $PFnewfile)) {
 					if (!copy($original, $archivoparacopiarNR)) {
           echo "copia fallida $original";
           }
 //echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-					
+
 					if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
 					{
 					//echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-						mysql_query("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
+						consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
 					}
 				}
 				else
@@ -162,7 +162,7 @@ case 0:
 			foreach($archivos as $arch)
 			{
 				$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				mysql_query("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
+				consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 				//echo ("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 			}
 		}
@@ -172,7 +172,7 @@ case 0:
 		$Carpeta=PostString("Carpeta");
 		if($Carpeta!="")
 		{
-		rmdir($Carpeta); 
+		rmdir($Carpeta);
 
 		}
 	}
@@ -181,7 +181,7 @@ case 0:
 		$Carpeta=PostString("Carpeta");
 		if($Carpeta!="")
 		{
-		unlink($Carpeta); 
+		unlink($Carpeta);
 
 		}
 	}
@@ -206,7 +206,7 @@ else
 <!-- Dependencies -->
 		<script src="jquery.js" type="text/javascript"></script>
 		<script src="jquery.ui.draggable.js" type="text/javascript"></script>
-		
+
 		<!-- Core files -->
 		<script src="jquery.alerts.js" type="text/javascript"></script>
 		<link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
@@ -341,7 +341,7 @@ function haz(param)
 		{
 			///alert("Quieres borrar la carpeta: "+valor);
 			//return false;
-			var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>¿Esta seguro de eliminar la carpeta?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" onclick="javascript: window.frames.frame_archivos.borracarpeta(\''+valor+'\');" type="button" value="Aceptar" /> </td> <td align="center"> <input onclick="FACancel2();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
+			var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>Â¿Esta seguro de eliminar la carpeta?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" onclick="javascript: window.frames.frame_archivos.borracarpeta(\''+valor+'\');" type="button" value="Aceptar" /> </td> <td align="center"> <input onclick="FACancel2();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
 				var titulo='Eliminar carpeta';
 window.parent.Error_Mail(mensaje,titulo);
 				return false;
@@ -358,7 +358,7 @@ window.parent.Error_Mail(mensaje,titulo);
 		else
 		{
 var titulo='Error';
-var mensaje=' <table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> &nbsp;</td> <td> 				&nbsp;</td> </tr> <tr> <td> &nbsp;&nbsp;&nbsp;<img src="http://teresita.com.mx/imagesJQ/important.gif" width="32" height="32" /></td> <td>La instrucción no corresponde al elemento seleccionado</td> </tr> <tr> <td> 				&nbsp;</td> <td>&nbsp;</td> </tr> </table>';
+var mensaje=' <table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> &nbsp;</td> <td> 				&nbsp;</td> </tr> <tr> <td> &nbsp;&nbsp;&nbsp;<img src="http://teresita.com.mx/imagesJQ/important.gif" width="32" height="32" /></td> <td>La instrucciÃ³n no corresponde al elemento seleccionado</td> </tr> <tr> <td> 				&nbsp;</td> <td>&nbsp;</td> </tr> </table>';
 //var mensaje='no se puede';
 window.parent.Error_Mail(mensaje,titulo);
  return false;
@@ -376,11 +376,11 @@ window.parent.Error_Mail(mensaje,titulo);
 		else
 		{
 				string_valor = valor.split('/');
-				string_lenght = string_valor.length; 
+				string_lenght = string_valor.length;
 				string_lenght=string_lenght-1;
 				nombre_archivo=string_valor[string_lenght];
-			//	var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>¿Esta seguro de eliminar el archivo: '+nombre_archivo+' ?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.borraarchivo(\''+valor+'\');"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.highlight('+numero+');FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
-				var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center><center>Esta acción borrara también las versiones del archivo<br> ¿Esta seguro?</center></center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.borraarchivo(\''+valor+'\');"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.highlight('+numero+');FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
+			//	var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>Â¿Esta seguro de eliminar el archivo: '+nombre_archivo+' ?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.borraarchivo(\''+valor+'\');"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.highlight('+numero+');FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
+				var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center><center>Esta acciÃ³n borrara tambiÃ©n las versiones del archivo<br> Â¿Esta seguro?</center></center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.borraarchivo(\''+valor+'\');"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.highlight('+numero+');FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
 				var titulo='Borrar Archivo: '+nombre_archivo;
 window.parent.Error_Mail34(mensaje,titulo);
 //alert('quieres borrar el archivo '+ nombre_archivo);
@@ -389,7 +389,7 @@ window.parent.Error_Mail34(mensaje,titulo);
 		}
 		else
 		{
-		
+
 		if(tipo=="archivo" && param=="desbloquea")
 		{
 			var edicion=$('edicion'+numero).value;
@@ -398,42 +398,42 @@ window.parent.Error_Mail34(mensaje,titulo);
 		{
     highlight(numero);
     var mensaje='<table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> &nbsp;</td> <td> 				&nbsp;</td> </tr> <tr> <td> &nbsp;&nbsp;&nbsp;<img src="http://teresita.com.mx/imagesJQ/important.gif" width="32" height="32" /></td> <td>No puede desbloquear los archivos de otros usuarios</td> </tr> <tr> <td> 				&nbsp;</td> <td>&nbsp;</td> </tr> </table>';
-				var titulo='¡Acción incorrecta!';
+				var titulo='Â¡AcciÃ³n incorrecta!';
 window.parent.Error_Mail34(mensaje,titulo);
 		}
 		else
 		{
-   var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>¿Esta seguro de liberar sus bloqueados?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.desbloquea();"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.;FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
+   var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>Â¿Esta seguro de liberar sus bloqueados?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" type="button" value="Aceptar" onclick="javascript: window.frames.frame_archivos.desbloquea();"/> </td> <td align="center"> <input onclick="window.frames.frame_archivos.;FACancel2w();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
 				var titulo='Desbloquear';
 window.parent.Error_Mail34(mensaje,titulo);
 				}
-		
+
 		}
 		else
 		{
-		
+
 		if(tipo=="archivo" && param=="envia_mail")
 		{
-		
+
 			var bloco=$('bloq'+numero).value ;
-			
-			
+
+
 			var blo = blo + bloco + ",";
         //$('bloq'+numero).value + ","
-			
+
 			//var file=$('file'+numero).value;
-		
+
 		//alert(blo);
 		}
-		
+
 		}
-		
+
 		}
-		
-		
-   
-   
-   
+
+
+
+
+
    /// acaba bucle
      }
     if (blo !="")
@@ -448,7 +448,7 @@ window.parent.Error_Mail34(mensaje,titulo);
     }
     //acaba if apborrar
     }
-  
+
 }
 
 Array.prototype.unique = function () {
@@ -469,9 +469,9 @@ Array.prototype.unique = function () {
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	//desbloquea
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//borracarpeta
 	function borracarpeta(valor)
@@ -480,12 +480,12 @@ Array.prototype.unique = function () {
 
 		document.getElementById('Carpeta').value =valor;
 		document.getElementById('accion').value ='BorraCarpeta';
-		
+
 $('form_arch').submit();
-	
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//desbloquea
 	function desbloquea()
@@ -494,13 +494,13 @@ $('form_arch').submit();
 
 	//	document.getElementById('Carpeta').value =valor;
 		document.getElementById('accion').value ='free_files';
-		
+
 $('form_arch').submit();
-	
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
+
+
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//borraarchivo
 	function borraarchivo(valor)
@@ -509,19 +509,19 @@ $('form_arch').submit();
 
 		document.getElementById('Carpeta').value =valor;
 		document.getElementById('accion').value ='BorraArchivo';
-		
+
 $('form_arch').submit();
-	
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	
-	
-	
-	
+
+
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// accion
-	
+
 	function EjecutaAccion(accion)
 	{
 		$('sel_accion').value="";
@@ -551,16 +551,16 @@ $('form_arch').submit();
 		}
 		if(accion=="1")
 		{
-		
-			
+
+
 			if(personas=="")
 			{
 				 var mensaje='<center>!Seleccione por lo menos un archivo!</center>';
 				 var titulo='Error';
 				 Error_Mail(mensaje,titulo);
 				return false;
-				
-				
+
+
 			}
 			open("envia_mail.php?to="+personas.substr(0,personas.length-1));
 		}
@@ -576,30 +576,30 @@ $('form_arch').submit();
 				if(checks[x].checked && hiddens[x].value!="<?php echo $_SESSION["id_persona_usr"]; ?>")
 				{
 
-					alert("¡Accion incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
+					alert("Â¡AcciÃ³n incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
 					//var bleer4=' <table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> </td> <td>No puede desbloquear los archivos de otros usuarios</td> </tr> </table>';
 									var bleer4=' <table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> &nbsp;</td> <td> 				&nbsp;</td> </tr> <tr> <td> &nbsp;&nbsp;&nbsp;<img src="http://teresita.com.mx/imagesJQ/important.gif" width="32" height="32" /></td> <td>No puede desbloquear los archivos de otros usuarios</td> </tr> <tr> <td> 				&nbsp;</td> <td>&nbsp;</td> </tr> </table>';
- 
-					
-					
+
+
+
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
-YAHOO.example.container.panel1.setHeader("¡Acción incorrecta!");
+YAHOO.example.container.panel1.setHeader("Â¡AcciÃ³n incorrecta!");
 YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
-					
-					
-					
-					
-					
-					
-					
-					
-return false;					
-					
-					
-					
+
+
+
+
+
+
+
+
+return false;
+
+
+
 				}
 				if(checks[x].checked)
 				{
@@ -610,46 +610,46 @@ return false;
 			alert(num);
 			if(y>0)
 			{
-			
+
 /*
-jConfirm('¿Esta seguro de liberar sus \nbloqueados?', 'Desbloquear', function(r) {
-					
+jConfirm('Â¿Esta seguro de liberar sus \nbloqueados?', 'Desbloquear', function(r) {
+
 				    if( r ) {
-				    
+
 				    $('accion').value='free_files';
 					$('form_arch').submit();
 					return true;
-					
+
 					}
 					});
 			*/
-			
-				if(confirm("¿Esta seguro?"))
+
+				if(confirm("Â¿Esta seguro?"))
 				{
 					$('accion').value='free_files';
 					$('form_arch').submit();
 					return true;
 				}
-				
-				var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>¿Esta seguro de liberar sus bloqueados?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" onclick="javascript: desbloquea_ach();" type="button" value="Aceptar" /> </td> <td align="center"> <input onclick="javascript: FACancel();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
+
+				var mensaje='<table style="width: 100%"> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center>Â¿Esta seguro de liberar sus bloqueados?</center></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> <tr> <td colspan="2"><center> </center></td> </tr><tr> <td colspan="2"><center> </center></td> </tr><tr> <td align="center"> <input name="Aceptar" onclick="javascript: desbloquea_ach();" type="button" value="Aceptar" /> </td> <td align="center"> <input onclick="javascript: FACancel();" name="Cancelar" type="button" value="Cancelar" /></td> </tr> <tr> <td colspan="2"><center>&nbsp;</center></td> </tr> </table>';
 				var titulo='Desbloquear';
           Error_Mail(mensaje,titulo);
 				return false;
-				
-				
-				
-				
+
+
+
+
 			}
 			else
 			{
 				//alert("No hay datos seleccionados");
 				var bleer4=' <table style="width: 100%" cellspacing="0" cellpadding="0"> <tr> <td> &nbsp;</td> <td> 				&nbsp;</td> </tr> <tr> <td> &nbsp;&nbsp;&nbsp;<img src="http://teresita.com.mx/imagesJQ/important.gif" width="32" height="32" /></td> <td>No hay datos seleccionados</td> </tr> <tr> <td> 				&nbsp;</td> <td>&nbsp;</td> </tr> </table>';
-					
- 
-					
-					
+
+
+
+
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
-YAHOO.example.container.panel1.setHeader("¡Acción incorrecta!");
+YAHOO.example.container.panel1.setHeader("Â¡AcciÃ³n incorrecta!");
 YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
@@ -657,14 +657,14 @@ YAHOO.example.container.panel1.show();
 				return false;
 			}
 		}
-		
+
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function Abrir(numero)
 	{
 		var tipo=$('tipo'+numero).value;
 		var valor=$('valor'+numero).value;
-		
+
 		if(tipo=="carpeta")
 		{
 		var rutaabsoluta='<?php echo $ruta?>';
@@ -674,7 +674,7 @@ YAHOO.example.container.panel1.show();
 		//carpeta=', '+carpeta;
 		//carpeta=', '+carpeta;
 	   parent.cambiatitulo(carpeta);
-	   
+
 			//location.href='_explo_archivos.php?ruta='+valor+'&proyecto=<?php echo $proyecto; ?>';
 			//parent.location.href='_explorador.php?raiz='+valor+'&proyecto=<?php echo $proyecto; ?>&carpetaa='+carpeta+'&carpetas='<?php echo $carpetas; ?>';
 			parent.location.href='_explorador.php?raiz='+valor+'&proyecto=<?php echo $proyecto; ?>&carpetaa='+carpeta+'&CarpetaR=<?php echo $CarpetaR ?>';
@@ -683,7 +683,7 @@ YAHOO.example.container.panel1.show();
 		{
 			var edicion=$('edicion'+numero).value;
 			var file=$('file'+numero).value;
-			
+
 			//alert(valor+"-"+edicion+"-"+file);
 			DownloadFile(valor,edicion,file)
 		return false;
@@ -696,21 +696,21 @@ YAHOO.example.container.panel1.show();
 			archivo="archivo"+parseInt((Math.random()*1000));
 			window.open(arch_open,archivo);
 			*/
-			
-			
+
+
 		}
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	function details(directorio,nproy)
 	{
-/*	
+/*
 	var Arr_Archivo = directorio.split("/");
-	
+
 	dir=directorio;
 	var bleer2= '<iframe  frameborder="0" ID="Frame1" style="height: 200px; width: 340px" SRC="Ldir.php?dir='+dir+'">';
 	var bleer3='</iframe>';
@@ -733,14 +733,14 @@ YAHOO.example.container.panel1.render("FormCarpeta");
 function CargaArch(archivo,file)
 {
 	files=file;
-	
+
 	var URLI = archivo;
 	var temp = new Array();
 temp = URLI.split('/');
-for (i=0;i<temp.length;i++){ 
+for (i=0;i<temp.length;i++){
     var lolo= temp[i];
-   
-} 
+
+}
 
 
 upo=lolo;
@@ -756,34 +756,34 @@ file='file:///C://WT//'+upo;
 	var bleer3= '</td></tr><TR> <TD> &nbsp;</TD> <TD> &nbsp;</TD></TR> <TR></table>';
 	//var bleer3= '</td><td></center><input type="button" value=" Publicar " onClick="parent.CargaArch();"></center></td></tr></table>';
 	var bleer4 = bleer + bleer2 + bleer3
-	
+
 	*/
-	
-	
+
+
 //	var bleer= '<table style="width: 100%" cellspacing="2" cellpadding="4"><tr><td><center><input type="button" value="   Leer   " onClick="window.open(\''+URLI+'\');"/>';
 	var bleer= '<table style="width: 100%" cellspacing="2" cellpadding="4"><TR> <TD> &nbsp;</TD> <TD> &nbsp;</TD></TR> <TR><tr><td><center>';
 	var bleer2= '<input type="button" value=" Publicar " onClick="parent.ActivaVFile(\''+upo+'\');">';
 	//var bleer3= '</center></td><td><center><input type="button" value=" Publicar " onClick="parent.CargaArch();"></center></td></tr></table>';
 	var bleer3= '</td><td><center><input type="button" value=" Modificar" onClick="window.open(\'PTabrelocal.php?file='+file+'&archivo='+archivo+'\&user=<?php echo $_SESSION["id_usr"];?>\');parent.ActivaVFile(\''+upo+'\');"/></td></tr><TR> <TD> &nbsp;</TD> <TD> &nbsp;</TD></TR> <TR></table>';
 	var bleer4 = bleer + bleer2 + bleer3
-		
+
 		parent.YAHOO.example.container.FormCarpeta.setHeader(upo);
 		parent.YAHOO.example.container.FormCarpeta.setBody(bleer4);
 		parent.YAHOO.example.container.FormCarpeta.center();
 		parent.YAHOO.example.container.FormCarpeta.show();
 	}
-	
-	
+
+
 	function CargaArchger(archivo)
 	{
-	
-	//var bleer= '<img src="http://localhost/Teresita/Imagenes/iconografia/UserIcon.gif" onClick="window.open(\'http://google.com.mx\');"/>';	
+
+	//var bleer= '<img src="http://localhost/Teresita/Imagenes/iconografia/UserIcon.gif" onClick="window.open(\'http://google.com.mx\');"/>';
 	var URLI = archivo;
 				string_valor = URLI.split('/');
-				string_lenght = string_valor.length; 
+				string_lenght = string_valor.length;
 				string_lenght=string_lenght-1;
 				nombre_archivo=string_valor[string_lenght];
-				
+
 				if(nombre_archivo.length>14)
 {
 var ancho = ((nombre_archivo.length*96)/14)+54;
@@ -792,40 +792,40 @@ else
 {
 var ancho=150;
 }
-				
-				
+
+
 				//alert(nombre_archivo);
 	var bleer= '<table align="center"> <tr><td align="left">&nbsp;</td></tr> <tr><td align="center"><center><input type="button" value="Leer" onClick="window.open(\''+URLI+'\');window.parent.HFleerBO();"/></center></td></tr> <tr><td align="center">&nbsp;</td></tr> </table>';
-	
+
 	/*
 	parent.YAHOO.example.container.FormCarpeta.setHeader("Acci&oacute;n");
 		parent.YAHOO.example.container.FormCarpeta.setBody(bleer);
-		
+
 		parent.YAHOO.example.container.FormCarpeta.center();
-		
+
 		parent.YAHOO.example.container.FormCarpeta.show();
 		*/
-		
+
 			var titulo =nombre_archivo;
 		window.parent.FleerBO(bleer,titulo,ancho);
 	}
-	
-	
+
+
 	function CargaArchgerF(archivo,file)
 {
 	files=file;
-	
+
 	var URLI = archivo;
 				string_valor = URLI.split('/');
-				string_lenght = string_valor.length; 
+				string_lenght = string_valor.length;
 				string_lenght=string_lenght-1;
 				nombre_archivo=string_valor[string_lenght];
 file='file:///C://WT//'+nombre_archivo;
 	//alert (file);
 
 	var ir_a= 'PTabrelocall.php?file='+file+'&archivo='+archivo+'\&user=<?php echo $_SESSION["id_usr"];?>';
-	
-	
+
+
 	var bleer= '<table style="width: 100%" cellspacing="2" cellpadding="4"><TR> <TD> &nbsp;</TD> <TD> &nbsp;</TD></TR> <TR><tr><td><center><input type="button" value="   Leer   " onClick="window.open(\''+URLI+'\');window.parent.FCCancel();"/>';
 	//var bleer= '<table style="width: 100%" cellspacing="2" cellpadding="4"><tr>';
 	//var bleer2= '<td><center><input type="button" value="Modificar" onClick="window.open(\''+URLI+'\');"/>';
@@ -834,15 +834,15 @@ file='file:///C://WT//'+nombre_archivo;
 	var bleer3= '</td></tr><TR> <TD> &nbsp;</TD> <TD> &nbsp;</TD></TR> <TR></table>';
 	//var bleer3= '</td><td></center><input type="button" value=" Publicar " onClick="parent.CargaArch();"></center></td></tr></table>';
 	var bleer4 = bleer + bleer2 + bleer3
-		
+
 		        parent.YAHOO.example.container.FormCarpeta.setHeader(nombre_archivo);
 				parent.YAHOO.example.container.FormCarpeta.setBody(bleer4);
 		parent.YAHOO.example.container.FormCarpeta.center();
-		
+
 		parent.YAHOO.example.container.FormCarpeta.show();
 	}
-	
-	
+
+
 
 
 
@@ -882,7 +882,7 @@ function getElementsByValue(value, tag, node) {
 	{
 	search[i].checked=false;
 	}
-	
+
 
 	}
 	else
@@ -891,8 +891,8 @@ function getElementsByValue(value, tag, node) {
 	{
 	search[i].checked='true'
 	}
-	
-	
+
+
 	}
 	values.push(search[i]);
 	}
@@ -975,7 +975,7 @@ function mouseout(obj) {
 		objetoh.className='';
 		objetoi.className='';
 	}
- 
+
 }
 function highlight(obj) {
 if(typeof(objet) != "undefined")
@@ -1027,23 +1027,23 @@ var tipo=$('tipo'+obj);
 	if (select == ''||select=='mover')
 	{
 		seleccionado.value="siesta";
-		
-		
-		
+
+
+
 		if(tipo.value=="carpeta")
-		{	
-			
+		{
+
 		}
-		else 
+		else
 		{
 		if (tipo.value=="archivo")
 		{
 		getElementsByValue(valor.value);
 		}
 		}
-		
-		
-		
+
+
+
 
 		objeto.className='select';
 		objetoa.className='select';
@@ -1062,8 +1062,8 @@ var tipo=$('tipo'+obj);
 	{
 			seleccionado.value="noesta";
 if(tipo.value=="carpeta")
-		{	
-			
+		{
+
 		}
 		else
 		{
@@ -1111,23 +1111,23 @@ obje=obj;
 	if (select == ''||select=='mover')
 	{
 		seleccionado.value="siesta";
-		
-		
-		
+
+
+
 		if(tipo.value=="carpeta")
-		{	
-			
+		{
+
 		}
-		else 
+		else
 		{
 		if (tipo.value=="archivo")
 		{
 		getElementsByValue(valor.value);
 		}
 		}
-		
-		
-		
+
+
+
 
 		objeto.className='select';
 		objetoa.className='select';
@@ -1146,8 +1146,8 @@ obje=obj;
 	{
 			seleccionado.value="noesta";
 if(tipo.value=="carpeta")
-		{	
-			
+		{
+
 		}
 		else
 		{
@@ -1175,7 +1175,7 @@ function getElementsById(id)
 {
    var divs = document.getElementsByTagName("div");
    var arr = new Array();
-   
+
    for (var i=0; i < divs.length; i++)
    {
        if (divs[i].id == id)
@@ -1187,22 +1187,22 @@ function getElementsById(id)
 }
 	function ActivaFile(obj)
 	{
-	
+
 	getElementsByValue(obj);
 	//alert(obj);
 		if($(obj).disabled)
 		{ $(obj).disabled=false;
-		
- 
+
+
 		}
 		else
 		{
 		$(obj).disabled = true;
 		}
- 
+
 	}
-	
-	
+
+
 		YAHOO.namespace("example.container");
 	YAHOO.util.Event.onDOMReady(function(){
 		YAHOO.example.container.FormArchivo = new YAHOO.widget.Panel("FormArchivo",{
@@ -1228,7 +1228,7 @@ $enc=array(
 		addslashes("<div align='center' style='width:110; vertical-align:top;'>Bloqueado por</div>"),
 		addslashes("<div align='center' style='width:25; vertical-align:top;'></div>"),
 		addslashes("<div align='left' style='width:600px;  vertical-align:top;'>    Nombre</div>"),
-		
+
 		"D&iacute;as Bloqueado",
 		"",
 		addslashes("<div align='center' style='width:25; vertical-align:top;'>Versiones</div>"),
@@ -1241,7 +1241,7 @@ $enc=array(
 		addslashes("<div align='center' style='width:30; vertical-align:top;'></div>"),
 		addslashes("<div align='left' style='width:390px;  vertical-align:top;'>    Nombre</div>"),
 		addslashes("<div align='center' style='vertical-align:top;'>&nbsp;</div>"),//dias bloqueado
-		//"Días Bloqueado",
+		//"DÃ­as Bloqueado",
 		"",
 		addslashes("<div align='center' style='width:25; vertical-align:top;'>Versiones</div>"),
 		addslashes("<div align='center' style='width:25; vertical-align:top;'></div>")
@@ -1252,11 +1252,11 @@ $cue=array();
 .select {
 				background-color: #ccccff;
 				}
-				
+
 			.mover {
 				background-color: #F2F2F2;
-				}	
-				
+				}
+
 				.encabezadodetalle {
 				font-size: 9pt;
 				font-family: Arial, Helvetica, sans-serif;
@@ -1270,9 +1270,9 @@ $cue=array();
 <body style="margin: 0;cursor:default"  >
 <?php
 
-if ($handle = @opendir(addslashes($ruta))) 
+if ($handle = @opendir(addslashes($ruta)))
 {
-	while (($file = readdir($handle))) 
+	while (($file = readdir($handle)))
 	{
 		if($file!=".." && $file!="." && !is_file($file))
 		{
@@ -1281,15 +1281,15 @@ if ($handle = @opendir(addslashes($ruta)))
     }
 	closedir($handle);
 }
-if(@count($archivos_fechas)>0) 
+if(@count($archivos_fechas)>0)
 {
 	$x=0;
 	foreach($archivos_fechas as $direct)
 	{
 		$x++;
 		$contador=$x;
-		
-		
+
+
 		$inicio1='<div id="a'.$x.'" ondblclick="Abrir('.$x.')" onclick="check_all(\'form_arch\', this); highlight('.$contador.');" onmousemove="javascript:mouseovert('.$contador.');" onmouseout="javascript:mouseout('.$contador.');" >';
 		$inicio2='<div id="b'.$x.'" ondblclick="Abrir('.$x.')" onclick="check_all(\'form_arch\', this);highlight('.$contador.');" onmousemove="javascript:mouseovert('.$contador.');" onmouseout="javascript:mouseout('.$contador.');" >';
 		$inicio3='<div id="c'.$x.'" ondblclick="Abrir('.$x.')" onclick="check_all(\'form_arch\', this);highlight('.$contador.');" onmousemove="javascript:mouseovert('.$contador.');" onmouseout="javascript:mouseout('.$contador.');" >';
@@ -1306,31 +1306,31 @@ $edicion="F";
 		$archivo=$ruta."/".$direct;
 		$query="select *,DATE_FORMAT(inicio_edicion, '%d/%m/%Y') AS modificado,(DAYOFYEAR(CURDATE())- DAYOFYEAR(archivos.inicio_edicion)) as dias_editado,archivos.usuario, concat(persona.nombre, ' ') as nomb, archivos.ruta AS ruta,persona.clave from archivos inner join usuario on archivos.usuario=usuario.clave inner join persona on persona.clave=usuario.persona where archivos.usuario like '%$txt_usuario%' and concat(persona.nombre, ' ') like '%$txt_nombre%' and archivos.ruta = '$archivo' order by archivos.usuario, archivos.archivo";
 //echo $txt_usuario."<br>";
-if($regs=mysql_query($query))
+if($regs=consulta_directa($Con, $query))
 {
 
-while(@$reg=mysql_fetch_array($regs))
+while(@$reg=mysqli_fetch_array($regs))
 	{
 	$usr=$reg["usuario"];
 	if($usr==$_SESSION["id_usr"])
 	{$edicion="BI";}
 	else
 	{$edicion="BO";}
-	
+
 	$jiji = leeDir($reg["ruta"]);
 	//<img onclick="getElementsByValue(\''.$reg["archivo"].'\',\'input\');highlight('.$contador.');'.$activacion.';return EjecutaAccion(2);" src="Imagenes/iconografia/unlock.png"  title="'.$reg["nomb"].'" />
 	$Bloqueado_por=addslashes('<input type="hidden" id="bloq'.$x.'" value="'.$reg["clave"].'" /><DIV id="b'.$x.'" align="center" ><img src="Imagenes/iconografia/unlock.png"  title="'.$reg["nomb"].'"  onclick="haz(\'desbloquea\');"/>');
 	//$Bloqueado_por=addslashes('<input type="hidden" id="bloq'.$x.'" value="'.$reg["clave"].'" /><DIV id="b'.$x.'" align="center" >'.$reg["nomb"]);
 	$dias_editado=$reg["dias_editado"];
 	$idea="";
-	@mysql_free_result($reg);
-	@mysql_free_result($regs);
+	@mysqli_free_result($reg);
+	@mysqli_free_result($regs);
 	}
-		@mysql_free_result($reg);
-	@mysql_free_result($regs);
+		@mysqli_free_result($reg);
+	@mysqli_free_result($regs);
 }
-	@mysql_free_result($reg);
-	@mysql_free_result($regs);
+	@mysqli_free_result($reg);
+	@mysqli_free_result($regs);
 
 		if(is_dir("$ruta/$direct"))
 		{
@@ -1343,7 +1343,7 @@ while(@$reg=mysql_fetch_array($regs))
 		//$inicio1=$inicio1.'<input style="visibility:hidden;" type="checkbox" name="archivo[]" value="'.$direct.'" />';
 		$inicio1=$inicio1.'<input style="visibility:hidden;"   type="checkbox" name="archivo[]" value="'.$direct.'" />';
 		$imagen_archivo='<img src="Imagenes/carpeta.JPG" align="absmiddle" border="0" /><input type="hidden" name="selection'.$x.'" id="selection'.$x.'" value="noesta" /><input type="hidden" name="tipo'.$x.'" id="tipo'.$x.'" value="carpeta" /><input type="hidden" name="vacia'.$x.'" id="vacia'.$x.'" value="'.$jojo.'" /><input type="hidden" name="valor'.$x.'" id="valor'.$x.'" value="'.$ruta.'/'.$direct.'" />';
-		
+
 		$idea="c&nbsp;";
 		}
 		else if(is_file("$ruta/$direct"))
@@ -1361,12 +1361,12 @@ while(@$reg=mysql_fetch_array($regs))
 		//$idea='a<input style="visibility:hidden;"  type="checkbox" name="archivo[]" value="'.$direct.'" onclick="'.$activacion.'" /><input type="hidden" name="" value="'.$reg["clave"].'" />';
 			}
 			else
-			{ 
+			{
 		//		$imagen_archivo='<input type="checkbox" style="visibility:hidden;width: 1px;height: 1px;padding: 0 0 0 0;" name="archivo[]"  name="archivo[]" value="'.$direct.'" /><img src="Imagenes/archivo.JPG"><input type="hidden" name="selection'.$x.'" id="selection'.$x.'" value="noesta" /><input type="hidden" name="tipo'.$x.'" id="tipo'.$x.'" value="archivo" /><input type="hidden" name="valor'.$x.'" id="valor'.$x.'" value="'.$ruta.'/'.$direct.'" /><input type="hidden" name="edicion'.$x.'" id="edicion'.$x.'" value="'.$edicion.'" /><input type="hidden" name="file'.$x.'" id="file'.$x.'" value="'.$direct.'" />';
 				$inicio1=$inicio1.'<input style="visibility:hidden;"  type="checkbox"  name="archivo[]"  name="archivo[]" value="'.$direct.'" />';
 				//$inicio1=$inicio1.'<input type="checkbox" style="visibility:hidden;" name="archivo[]"  name="archivo[]" value="'.$direct.'" />';
 				$imagen_archivo='<input type="hidden" name="selection'.$x.'" id="selection'.$x.'" value="noesta" /><input type="hidden" name="tipo'.$x.'" id="tipo'.$x.'" value="archivo" /><input type="hidden" name="valor'.$x.'" id="valor'.$x.'" value="'.$ruta.'/'.$direct.'" /><input type="hidden" name="edicion'.$x.'" id="edicion'.$x.'" value="'.$edicion.'" /><input type="hidden" name="file'.$x.'" id="file'.$x.'" value="'.$direct.'" />';
-//	$imagen_archivo='<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" /><input type="hidden" name="tipo'.$x.'" id="tipo'.$x.'" value="archivo" /><input type="hidden" name="valor'.$x.'" id="valor'.$x.'" value="'.$ruta/$direct.'" /> 
+//	$imagen_archivo='<img src="Imagenes/archivo.JPG" align="absmiddle" border="0" /><input type="hidden" name="tipo'.$x.'" id="tipo'.$x.'" value="archivo" /><input type="hidden" name="valor'.$x.'" id="valor'.$x.'" value="'.$ruta/$direct.'" />
 			}
 		}
 		//echo $direct;
@@ -1378,7 +1378,7 @@ while(@$reg=mysql_fetch_array($regs))
 		{
 		$dias_editado="&nbsp;";
 		}
-		
+
 		$cue[]=array(
 	addslashes($inicio1.'<!--1&nbsp;-->'.$fin),
 	addslashes($inicio2.'<!--2&nbsp;-->'.addslashes($fin)),
@@ -1392,7 +1392,7 @@ while(@$reg=mysql_fetch_array($regs))
 	);
 		?></div><?php
 	}
-	
+
 }
 $tbl = new tabla();
 
@@ -1420,4 +1420,4 @@ $tbl = new tabla();
 </form>
 </body>
 </html>
-<?php mysql_close($Con); ?>
+<?php mysqli_close($Con); ?>
