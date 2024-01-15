@@ -1,0 +1,8 @@
+<!ELEMENT raiz (documento*)>
+<!ELEMENT documento (id_documento, fase, consecutivo, mes, avance, tiempo)>
+<!ELEMENT id_documento (#PCDATA)>
+<!ELEMENT fase (#PCDATA)>
+<!ELEMENT consecutivo (#PCDATA)>
+<!ELEMENT mes (#PCDATA)>
+<!ELEMENT avance (#PCDATA)>
+<!ELEMENT tiempo (#PCDATA)>

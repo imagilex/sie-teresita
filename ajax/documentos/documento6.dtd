@@ -1,0 +1,6 @@
+<!ELEMENT raiz (documento*)>
+<!ELEMENT documento (id_documento, posicion, responsable, estatus)>
+<!ELEMENT id_documento (#PCDATA)>
+<!ELEMENT posicion (#PCDATA)>
+<!ELEMENT responsable (#PCDATA)>
+<!ELEMENT estatus (#PCDATA)>

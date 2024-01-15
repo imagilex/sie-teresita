@@ -1,0 +1,16 @@
+* {
+margin: 0;
+}
+html, body {
+height: 100%;
+}
+.wrapper {
+min-height: 94.8%;
+height: auto !important;
+height: 94.8%;
+margin: 0 auto -1.25em;
+}
+.footer, .push {
+height: 1.25em;
+}
+

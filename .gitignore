@@ -1,0 +1,24 @@
+**/Archivos_Documento
+**/Archivos_Estados_Financieros
+**/Archivos_Estrategia
+**/Archivos_Indicadores_Direccion
+**/Archivos_Pedidos
+**/Archivos_RH
+**/Archivos_Reportes_Bancarios
+**/Archivos_Reportes_Diarios
+**/Archivos_Reportes_Especiales
+**/Archivos_Reportes_Financieros
+**/Docu
+**/Febrero 24
+**/img_mapas
+**/img_personas
+**/Indicadores
+**/Reportes_Diarios
+
+__access_data.php
+
+/*.txt
+/*.xlsx
+
+error_log
+Thumbs.db

@@ -1,0 +1,6 @@
+<!ELEMENT raiz (documento*)>
+<!ELEMENT documento (id_documento, consecutivo, tipo, referencia)>
+<!ELEMENT id_documento (#PCDATA)>
+<!ELEMENT consecutivo (#PCDATA)>
+<!ELEMENT tipo (#PCDATA)>
+<!ELEMENT referencia (#PCDATA)>
