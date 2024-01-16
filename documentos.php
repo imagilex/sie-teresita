@@ -53,7 +53,7 @@ if(!isset($_SESSION["tipo"]) )
 <script language="javascript">
 	var ruta="<?php echo addslashes(dirname(__FILE__));?>/Archivos_Documento";
 	var revisar=<?php
-	$permiso=mysqli_fetch_array(consulta_directa($Con, "select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'"));
+	$permiso=mysqli_fetch_array(consulta_directa("select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'"));
 	if($permiso["revisar_documentos"]=="si")
 		echo "true";
 	else

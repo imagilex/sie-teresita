@@ -74,12 +74,12 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 {
 	$total=intval(PostString("total"));
 	if($total>0)
-		consulta_directa($Con, "delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
+		consulta_directa("delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
 	for($x=1;$x<=$total;$x++)
 	{
 		$dato=PostString("Reg$x");
 		if($dato!="")
-			consulta_directa($Con, "insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
+			consulta_directa("insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
 	}
 }
 ?>
@@ -103,13 +103,13 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 			</td>
 		</tr>
 		<?php
-		if($funciones=consulta_directa($Con, "select valor,descripcion from codigos_generales where campo='funcion' order by posicion"))
+		if($funciones=consulta_directa("select valor,descripcion from codigos_generales where campo='funcion' order by posicion"))
 		{
 			$x=0;
 			while($func=mysqli_fetch_array($funciones))
 			{
 				$x++;
-				$cuantos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from tipo_usuario_funcion where tipo_usuario='$tipo_usr' and funcion='".$func["valor"]."'"));
+				$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from tipo_usuario_funcion where tipo_usuario='$tipo_usr' and funcion='".$func["valor"]."'"));
 				if(intval($cuantos["n"])>0)
 					$chec=" checked='checked'";
 				else

@@ -30,7 +30,7 @@ $btn_sig=((PostString("sig_ind")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
-	$indicadores=consulta_directa($Con, "select indicador_dir.indicador as ind from indicador_dir,codigos_generales where campo = 'indicador_tipo' and tipo = valor order by codigos_generales.posicion,indicador_dir.posicion");
+	$indicadores=consulta_directa("select indicador_dir.indicador as ind from indicador_dir,codigos_generales where campo = 'indicador_tipo' and tipo = valor order by codigos_generales.posicion,indicador_dir.posicion");
 	while($indica=mysqli_fetch_array($indicadores))
 	{
 		$ind[]=$indica["ind"];
@@ -288,14 +288,14 @@ BH_Ayuda('0.4','2');
 				<select name="indicador" onchange="javascript: document.datos.nivel.value=''; document.datos.submit();">
 					<?php
 						$x=1;
-						if($tipos_indicadores=consulta_directa($Con, "select valor, descripcion from codigos_generales where campo ='indicador_tipo' order by posicion, descripcion"))
+						if($tipos_indicadores=consulta_directa("select valor, descripcion from codigos_generales where campo ='indicador_tipo' order by posicion, descripcion"))
 						{
 							while($tipo_indicador=mysqli_fetch_array($tipos_indicadores))
 							{
 								?>
 								<optgroup label="<?php echo $tipo_indicador["descripcion"]; ?>">
 									<?php
-									if($indicadores_bd=consulta_directa($Con, "select indicador, nombre from indicador_dir where tipo='".$tipo_indicador["valor"]."' order by posicion"))
+									if($indicadores_bd=consulta_directa("select indicador, nombre from indicador_dir where tipo='".$tipo_indicador["valor"]."' order by posicion"))
 									{
 										while($indicador_bd=mysqli_fetch_array($indicadores_bd))
 										{
@@ -330,7 +330,7 @@ BH_Ayuda('0.4','2');
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nivel:
 				<select name="nivel" onchange="javascript: document.datos.submit();">
 					<?php
-						if($niveles_bd=consulta_directa($Con, "select id_indicador_nivel, descripcion from indicador_dir_nivel where indicador = '$indicador' order by posicion, descripcion"))
+						if($niveles_bd=consulta_directa("select id_indicador_nivel, descripcion from indicador_dir_nivel where indicador = '$indicador' order by posicion, descripcion"))
 						{
 							$x=1;
 							while($nivel_bd=mysqli_fetch_array($niveles_bd))
@@ -358,7 +358,7 @@ BH_Ayuda('0.4','2');
 				}
 				else
 				{
-					$id_nivel=mysqli_fetch_array(consulta_directa($Con, "select id_indicador_nivel from indicador_dir_nivel where indicador = '$indicador' and descripcion=''"));
+					$id_nivel=mysqli_fetch_array(consulta_directa("select id_indicador_nivel from indicador_dir_nivel where indicador = '$indicador' and descripcion=''"));
 					$nivel=$id_nivel["id_indicador_nivel"];
 				}
 				?>
@@ -367,13 +367,13 @@ BH_Ayuda('0.4','2');
 				$imagen_nivel="";
 				$imagen_archivo="";
 				$imagen_reporte="";
-				$img_ind=@mysqli_fetch_array(consulta_directa($Con, "select tipo_tendencia from indicador_dir where indicador='$indicador'"));
+				$img_ind=@mysqli_fetch_array(consulta_directa("select tipo_tendencia from indicador_dir where indicador='$indicador'"));
 				if($img_ind["tipo_tendencia"]=="1" || $img_ind["tipo_tendencia"]=="2" || $img_ind["tipo_tendencia"]=="3")
 					$imagen_indice="T".$img_ind["tipo_tendencia"].".png";
-				$img_niv=@mysqli_fetch_array(consulta_directa($Con, "select semaforo, tendencia from indicador_dir_archivo where anio='20"."$anio' and mes='".intval($mes)."' and id_indicador_nivel='$nivel'"));
+				$img_niv=@mysqli_fetch_array(consulta_directa("select semaforo, tendencia from indicador_dir_archivo where anio='20"."$anio' and mes='".intval($mes)."' and id_indicador_nivel='$nivel'"));
 				if(($img_niv["tendencia"]=="1" || $img_niv["tendencia"]=="2" || $img_niv["tendencia"]=="3") && ($img_niv["semaforo"]=="A" || $img_niv["semaforo"]=="R" || $img_niv["semaforo"]=="V"))
 					$imagen_nivel="S".$img_niv["semaforo"]."T".$img_niv["tendencia"].".png";
-				$imagen_archivo=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_archivo from indicador_dir_nivel where id_indicador_nivel = '$nivel'"));
+				$imagen_archivo=@mysqli_fetch_array(consulta_directa("select prefijo_archivo from indicador_dir_nivel where id_indicador_nivel = '$nivel'"));
 				if($imagen_archivo["prefijo_archivo"]!="")
 				{
 					$cad2=$anio.$mes;

@@ -16,6 +16,7 @@
 **/Reportes_Diarios
 
 __access_data.php
+__settings.php
 
 /*.txt
 /*.xlsx

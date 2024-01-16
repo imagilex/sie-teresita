@@ -5,7 +5,7 @@ $Con=Conectar();
 
 $id_reporte=PostString("reporte");
 
-if($id_reporte!="" && $comentarios=consulta_directa($Con, "select fecha, comentario, concat(nombre,' ', apaterno) as nombre from reporte_comentarios, usuario where id_reporte='$id_reporte' and reporte_comentarios.id_usuario=usuario.id_usuario order by nombre,fecha"))
+if($id_reporte!="" && $comentarios=consulta_directa("select fecha, comentario, concat(nombre,' ', apaterno) as nombre from reporte_comentarios, usuario where id_reporte='$id_reporte' and reporte_comentarios.id_usuario=usuario.id_usuario order by nombre,fecha"))
 {
 	?>
 	<dl>

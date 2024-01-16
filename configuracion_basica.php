@@ -30,7 +30,7 @@ if($datos!="")
 		{
 			//Eliminar el archivo anterior
 			$query="select valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'";
-			if($Regs=consulta_directa($Con, $query))
+			if($Regs=consulta_directa($query))
 			{
 				$Reg=mysqli_fetch_array($Regs);
 				$photo=$Dir."/Archivos_Secciones/".$Reg["valor"];
@@ -42,7 +42,7 @@ if($datos!="")
 			$foto=$Dir."/Archivos_Secciones/".$photo["basename"];
 			move_uploaded_file($_FILES["valor"]["tmp_name"],$foto);
 			$fotografia=basename($foto);
-			consulta_directa($Con, "update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa("update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
 		}
 	}
 	else if($tipo_contenido=="imagen")
@@ -51,7 +51,7 @@ if($datos!="")
 		{
 			//Eliminar la imagen anterior
 			$query="select valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'";
-			if($Regs=consulta_directa($Con, $query))
+			if($Regs=consulta_directa($query))
 			{
 				$Reg=mysqli_fetch_array($Regs);
 				$photo=$Dir."/Archivos_Secciones/".$Reg["valor"];
@@ -63,13 +63,13 @@ if($datos!="")
 			$foto=$Dir."/Archivos_Secciones/".$photo["basename"];
 			move_uploaded_file($_FILES["valor"]["tmp_name"],$foto);
 			$fotografia=basename($foto);
-			consulta_directa($Con, "update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa("update seccion set valor='$fotografia' where id_seccion='$id_seccion' and elemento='$elemento'");
 		}
 	}
 	else if($tipo_contenido=="texto")
 	{
 		if(PostString("valor")!="")
-			consulta_directa($Con, "update seccion set valor='".PostString("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
+			consulta_directa("update seccion set valor='".PostString("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
 	}
 ?>
 
@@ -114,14 +114,14 @@ BH_Ayuda('0.4.51','3');
 		<td valign="top">Secciones:<br />
 			<select name="datos" size="9" onchange="javascript: document.DataConfig.submit();">
 				<?php
-				if($secciones=consulta_directa($Con, "select distinct(id_seccion) as secc from seccion order by id_seccion"))
+				if($secciones=consulta_directa("select distinct(id_seccion) as secc from seccion order by id_seccion"))
 				{
 					while($seccion_actual=mysqli_fetch_array($secciones))
 					{
 						?>
 						<optgroup label="<?php echo $seccion_actual["secc"]; ?>">
 						<?php
-						if($elementos=consulta_directa($Con, "select elemento, tipo, valor from seccion where id_seccion='".$seccion_actual["secc"]."'"))
+						if($elementos=consulta_directa("select elemento, tipo, valor from seccion where id_seccion='".$seccion_actual["secc"]."'"))
 						{
 							while($elemento_actual=mysqli_fetch_array($elementos))
 							{
@@ -164,7 +164,7 @@ BH_Ayuda('0.4.51','3');
 						$valor="";
 						if($id_seccion!="" && $elemento!="")
 						{
-							$Reg=mysqli_fetch_array(consulta_directa($Con, "select tipo,valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'"));
+							$Reg=mysqli_fetch_array(consulta_directa("select tipo,valor from seccion where id_seccion='$id_seccion' and elemento='$elemento'"));
 							$tipo_elem=$Reg["tipo"];
 							$valor=$Reg["valor"];
 							if($tipo_elem=="texto")

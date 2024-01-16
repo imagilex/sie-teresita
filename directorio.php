@@ -64,7 +64,7 @@ $enc=array("","","Nombre".addslashes(' <br /><input type="text" size="10" name="
 $cue=array();
 $query="select persona.clave as clav, concat(persona.nombre, ' ', persona.apaterno) as nomb, puesto.descripcion as pues, cg.descripcion as area, persona.imagen as imag
 from persona inner join puesto on puesto.clave=persona.puesto_actual left join codigos_generales as cg on cg.campo='area' and cg.valor=puesto.area where persona.clave in ( select persona from lista_persona where lista='$lista' ) and concat(persona.nombre, ' ', persona.apaterno) like '%$txt_nombre%' and (cg.descripcion like '%$txt_area%' or cg.descripcion is null) and (puesto.descripcion like '%$txt_puesto%' or puesto.descripcion is null) order by concat(persona.nombre, ' ', persona.apaterno, ' ', persona.amaterno)";
-if($regs=consulta_directa($Con, $query))
+if($regs=consulta_directa($query))
 {
 	while($reg=mysqli_fetch_array($regs))
 	{

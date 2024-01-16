@@ -34,7 +34,7 @@ if(!isset($_SESSION["tipo"]) )
 </style>
 </head>
 <?php
-$regs=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 $Logo=$regs["valor"];
 $pto=PostString("pto").Get("pto");
 $persona=PostString("persona").Get("persona");
@@ -50,7 +50,7 @@ if($persona=="" && $pto!="")
 else if($persona!="" && $pto=="")
 {
 	$query="select distinct puesto_actual as p from persona where clave in ('".str_replace(",","','",$persona)."')";
-	$ps=consulta_directa($Con, $query);
+	$ps=consulta_directa($query);
 	while($p=mysqli_fetch_array($ps)) { $puestos[]=$p["p"]; }
 }
 else
@@ -61,11 +61,11 @@ $aux=0;
 foreach($puestos as $pto)
 {
 $aux++;
-$puesto=@mysqli_fetch_array(consulta_directa($Con, "select puesto.clave as clave, puesto.descripcion as descripcion, are.descripcion as area, dep.descripcion as departamento, proposito from puesto inner join codigos_generales as are on are.campo='area' and are.valor=puesto.area inner join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where clave='$pto'"));
+$puesto=@mysqli_fetch_array(consulta_directa("select puesto.clave as clave, puesto.descripcion as descripcion, are.descripcion as area, dep.descripcion as departamento, proposito from puesto inner join codigos_generales as are on are.campo='area' and are.valor=puesto.area inner join codigos_generales as dep on dep.campo='departamento' and dep.valor=puesto.departamento where clave='$pto'"));
 $query="select descripcion from puesto where clave in (select puesto_padre from organigrama where puesto_hijo='$pto')";
-$jefe=@mysqli_fetch_array(consulta_directa($Con, $query));
+$jefe=@mysqli_fetch_array(consulta_directa($query));
 $query="select descripcion from puesto where clave in (select puesto_hijo from organigrama where puesto_padre='$pto') order by descripcion";
-$subditos=consulta_directa($Con, $query);
+$subditos=consulta_directa($query);
 ?>
 <table border="0" align="center" width="800">
 	<tr>
@@ -90,7 +90,7 @@ $subditos=consulta_directa($Con, $query);
 	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr><td colspan="2" align="left"><strong>Es responsable de:</strong></td></tr>
 	<tr><td colspan="2" align="left"><?php
-		if($regs=consulta_directa($Con, "select responsabilidad from puesto_responsabilidad where puesto='$pto' order by secuencia"))
+		if($regs=consulta_directa("select responsabilidad from puesto_responsabilidad where puesto='$pto' order by secuencia"))
 		{
 			?><ol type="1"><?php
 			while($reg=mysqli_fetch_array($regs))
@@ -101,7 +101,7 @@ $subditos=consulta_directa($Con, $query);
 		}
 	?></td></tr>
 	<?php
-	if($datos=consulta_directa($Con, "select distinct indicador.nombre as nomb from persona inner join indicador_responsable on clave=responsable inner join indicador_nivel on id_indicador=id_indicador_nivel inner join indicador on indicador_nivel.indicador=indicador.indicador where puesto_actual='$pto'"))
+	if($datos=consulta_directa("select distinct indicador.nombre as nomb from persona inner join indicador_responsable on clave=responsable inner join indicador_nivel on id_indicador=id_indicador_nivel inner join indicador on indicador_nivel.indicador=indicador.indicador where puesto_actual='$pto'"))
 	{
 		$x=0;
 		while($dato=mysqli_fetch_array($datos))
@@ -111,7 +111,7 @@ $subditos=consulta_directa($Con, $query);
 		}
 		if($x>0) { echo '</ol></td></tr>'; }
 	}
-	if($datos=consulta_directa($Con, "select distinct reportes.nombre as nomb from persona inner join reportes_responsable on persona.clave=reportes_responsable.responsable inner join reporte_nivel on reportes_responsable.id_reporte=reporte_nivel.id_reporte inner join reportes on reporte_nivel.reporte=reportes.reporte where puesto_actual='$pto'"))
+	if($datos=consulta_directa("select distinct reportes.nombre as nomb from persona inner join reportes_responsable on persona.clave=reportes_responsable.responsable inner join reporte_nivel on reportes_responsable.id_reporte=reporte_nivel.id_reporte inner join reportes on reporte_nivel.reporte=reportes.reporte where puesto_actual='$pto'"))
 	{
 		$x=0;
 		while($dato=mysqli_fetch_array($datos))

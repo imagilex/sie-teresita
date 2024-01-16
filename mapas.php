@@ -69,7 +69,7 @@ $docto=PostString("docto").Get("docto");
 $superiores= array();
 $inferiores="";
 
-if($regs=consulta_directa($Con, "select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
+if($regs=consulta_directa("select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
 {
 	$inferiores='<optgroup label="Inferior">';
 	while($reg=mysqli_fetch_array($regs))

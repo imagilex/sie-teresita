@@ -45,7 +45,7 @@ if($accion!="")
 			//echo $_FILES[$arch_upl]["name"];
 				if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
 				{
-					$datos=@mysqli_fetch_array(consulta_directa($Con, "select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
+					$datos=@mysqli_fetch_array(consulta_directa("select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
 					$noarchivo=$datos["archivo"];
 			//		echo "original= ".  $noarchivo."<br>";
 			//		echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
@@ -140,7 +140,7 @@ case 0:
 					if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
 					{
 					//echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-						consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
+						consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
 					}
 				}
 				else
@@ -164,7 +164,7 @@ case 0:
 			foreach($archivos as $arch)
 			{
 				$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
+				consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 			}
 		}
 	}
@@ -209,7 +209,7 @@ case "Definicion":
     default:
       $carpeta=$carpetaaa;
 }
-		$nombre_p=@mysqli_fetch_array(consulta_directa($Con, "select nombre from docto_general where id_documento='$proyecto'"));
+		$nombre_p=@mysqli_fetch_array(consulta_directa("select nombre from docto_general where id_documento='$proyecto'"));
 ?>
 var titulooriginal='<?php echo $carpeta ; ?>'
 var titulo=document.getElementById('notifica').innerHTML;

@@ -25,7 +25,7 @@ $proyecto=PostString("proyecto").Get("proyecto");
 
 if($proyecto=="")
 {
-	$proys_db=mysqli_fetch_array(consulta_directa($Con, "select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre limit 1"));
+	$proys_db=mysqli_fetch_array(consulta_directa("select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre limit 1"));
 	$proyecto=$proys_db["proyecto"];
 }
 
@@ -220,7 +220,7 @@ $ruta_relativa=substr($ruta,$longi);
 		<td>
 			<select name="plan" onchange="javascript: location.href='_vista_explo_01.php?proyecto='+this.value">
 				<?php
-				if($proys_db=consulta_directa($Con, "select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre"))
+				if($proys_db=consulta_directa("select id_documento as proyecto, nombre from docto_general where tipo_documento='2' order by nombre"))
 				{
 					while($proy_db=mysqli_fetch_array($proys_db))
 					{
@@ -297,7 +297,7 @@ $ruta_relativa=substr($ruta,$longi);
 				{
 					?>
 					<tr><td width="145" height="55" background="Imagenes/explo_archivos.jpg" align="center" valign="middle" ondblclick="AbrirArchivo('<?php echo "$ruta_relativa/".$dir_arch["real"]."/".$dir_arch["mostrar"]; ?>','<?php
-					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($dir_arch["mostrar"])."'"));
+					$cuantos=@mysqli_fetch_array(consulta_directa("select count(*) as n from archivos where archivo='".basename($dir_arch["mostrar"])."'"));
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';
 					echo $edicion;
@@ -350,7 +350,7 @@ $ruta_relativa=substr($ruta,$longi);
 					$x++;
 					?>
 					<div align="left" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';" ondblclick="AbrirArchivo('<?php echo "$ruta_relativa/$arch"; ?>','<?php
-					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($arch)."'"));
+					$cuantos=@mysqli_fetch_array(consulta_directa("select count(*) as n from archivos where archivo='".basename($arch)."'"));
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';
 					echo $edicion;

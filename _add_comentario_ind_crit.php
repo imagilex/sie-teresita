@@ -18,23 +18,23 @@ $fecha=Get("fecha").PostString("fecha");
 
 if($comentario != "" && $indicador != "" && $id_indicador_nivel != "" && $id_usuario != "")
 {
-	$usr=mysqli_fetch_array(consulta_directa($Con, "select clave as `usuario` from usuario where clave='$id_usuario'"));
+	$usr=mysqli_fetch_array(consulta_directa("select clave as `usuario` from usuario where clave='$id_usuario'"));
 	$usuario=$usr["usuario"];
-	$niv=mysqli_fetch_array(consulta_directa($Con, "select nivel from indicador_nivel where id_indicador_nivel='$id_indicador_nivel'"));
+	$niv=mysqli_fetch_array(consulta_directa("select nivel from indicador_nivel where id_indicador_nivel='$id_indicador_nivel'"));
 	$nivel=$niv["nivel"];
-	$posicion=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes'"));
+	$posicion=mysqli_fetch_array(consulta_directa("select count(*) as n from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes'"));
 	$pos=intval($posicion["n"])+1;
 	if($fecha=="")
-		consulta_directa($Con, "insert into indicador_comentario (anio, mes, indicador, pos, usuario, comentario, nivel, fecha) values ('$anio', '$mes', '$indicador', '$pos', '$usuario', '$comentario', '$nivel', curdate())");
+		consulta_directa("insert into indicador_comentario (anio, mes, indicador, pos, usuario, comentario, nivel, fecha) values ('$anio', '$mes', '$indicador', '$pos', '$usuario', '$comentario', '$nivel', curdate())");
 	else
-		consulta_directa($Con, "insert into indicador_comentario (anio, mes, indicador, pos, usuario, comentario, nivel, fecha) values ('$anio', '$mes', '$indicador', '$pos', '$usuario', '$comentario', '$nivel', '$fecha')");
+		consulta_directa("insert into indicador_comentario (anio, mes, indicador, pos, usuario, comentario, nivel, fecha) values ('$anio', '$mes', '$indicador', '$pos', '$usuario', '$comentario', '$nivel', '$fecha')");
 }
 
 if($indicador != "" && $id_indicador_nivel != "")
 {
-	$niv=mysqli_fetch_array(consulta_directa($Con, "select nivel from indicador_nivel where id_indicador_nivel='$id_indicador_nivel'"));
+	$niv=mysqli_fetch_array(consulta_directa("select nivel from indicador_nivel where id_indicador_nivel='$id_indicador_nivel'"));
 	$nivel=$niv["nivel"];
-	if($usuarios=consulta_directa($Con, "select nombre, clave from persona where clave in (select distinct(persona) from usuario where clave in (select distinct(usuario) from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes'))"))
+	if($usuarios=consulta_directa("select nombre, clave from persona where clave in (select distinct(persona) from usuario where clave in (select distinct(usuario) from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes'))"))
 	{
 		while($usr=mysqli_fetch_array($usuarios))
 		{
@@ -43,7 +43,7 @@ if($indicador != "" && $id_indicador_nivel != "")
 					<legend>
 						<?php echo NoAcute($usr["nombre"]); ?>:
 						<?php
-							if($data_usr=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from persona where clave='".$usr["clave"]."' and clave in (select persona from usuario where clave = '".$_SESSION["id_usr"]."')")))
+							if($data_usr=mysqli_fetch_array(consulta_directa("select count(*) as n from persona where clave='".$usr["clave"]."' and clave in (select persona from usuario where clave = '".$_SESSION["id_usr"]."')")))
 								if(intval($data_usr["n"])>0)
 								{
 									$esta=true;
@@ -55,7 +55,7 @@ if($indicador != "" && $id_indicador_nivel != "")
 					</legend>
 					<ul type="circle">
 						<?php
-						if($comentarios=consulta_directa($Con, "select comentario, fecha, usuario from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes' and usuario in (select clave from usuario where persona = '".$usr["clave"]."') order by fecha"))
+						if($comentarios=consulta_directa("select comentario, fecha, usuario from indicador_comentario where indicador='$indicador' and nivel='$nivel' and anio = '$anio' and mes='$mes' and usuario in (select clave from usuario where persona = '".$usr["clave"]."') order by fecha"))
 						{
 							while($coment=mysqli_fetch_array($comentarios))
 							{

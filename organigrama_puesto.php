@@ -343,7 +343,7 @@ BH_Ayuda('','');
 				while($docto=mysqli_fetch_array($doctos))
 				{
 					$x++;
-					$cuantos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from archivos where archivo='".basename($docto["archivo"])."'"));
+					$cuantos=@mysqli_fetch_array(consulta_directa("select count(*) as n from archivos where archivo='".basename($docto["archivo"])."'"));
 					echo $Con->error;
 					if(intval($cuantos["n"])>0) $edicion='false';
 					else $edicion='true';

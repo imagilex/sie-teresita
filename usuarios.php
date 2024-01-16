@@ -28,24 +28,24 @@ if(PostString("Guardar")!="")
 	$fecha_alta=PostDate("fecha_alta");
 	if(PostString("add")=="yes" && $clave!="")
 	{
-		consulta_directa($Con, "insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
-		consulta_directa($Con, "insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
-		consulta_directa($Con, "insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Seleccionados', 'A', '$clave', curdate(), '2', 'A')");
-		consulta_directa($Con, "insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Favoritos', 'A', '$clave', curdate(), '3', 'A')");
-		$lp=mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = '$persona' and usuario = '$clave'"));
-		$ls=mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = 'Seleccionados' and usuario = '$clave'"));
-		$lf=mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = 'Favoritos' and usuario = '$clave'"));
-		consulta_directa($Con, "insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$ls["lista"]."', '1')");
-		consulta_directa($Con, "insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$lf["lista"]."', '2')");
+		consulta_directa("insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
+		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
+		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Seleccionados', 'A', '$clave', curdate(), '2', 'A')");
+		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Favoritos', 'A', '$clave', curdate(), '3', 'A')");
+		$lp=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$persona' and usuario = '$clave'"));
+		$ls=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Seleccionados' and usuario = '$clave'"));
+		$lf=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Favoritos' and usuario = '$clave'"));
+		consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$ls["lista"]."', '1')");
+		consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$lf["lista"]."', '2')");
 	}
 	else if($clave!="")
 	{
-		consulta_directa($Con, "update usuario set password='$password', estatus='$estatus', tipo_usuario='$tipo_usuario', persona='$persona', fecha_alta='$fecha_alta' where clave='$clave'");
+		consulta_directa("update usuario set password='$password', estatus='$estatus', tipo_usuario='$tipo_usuario', persona='$persona', fecha_alta='$fecha_alta' where clave='$clave'");
 	}
 	$usuario_form=$clave;
 }
 
-$datos=@mysqli_fetch_array(consulta_directa($Con, "select * from usuario where clave='$usuario_form'"));
+$datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='$usuario_form'"));
 
 ?>
 
@@ -131,7 +131,7 @@ if(PostString("Nuevo")=="")
 			<select name="usuario" onchange="javascript: document.datos.submit();">
 				<option value=""></option>
 				<?php
-				if($usuarios=consulta_directa($Con, "select clave from usuario order by clave"))
+				if($usuarios=consulta_directa("select clave from usuario order by clave"))
 				{
 					while($usuario=mysqli_fetch_array($usuarios))
 					{
@@ -167,7 +167,7 @@ if(PostString("Nuevo")=="")
 			<select name="persona">
 				<option value=""></option>
 				<?php
-				if($personas=consulta_directa($Con, "select nombre, clave from persona order by nombre"))
+				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
 				{
 					while($persona=mysqli_fetch_array($personas))
 					{
@@ -238,7 +238,7 @@ else
 			<select name="persona">
 				<option value=""></option>
 				<?php
-				if($personas=consulta_directa($Con, "select nombre, clave from persona order by nombre"))
+				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
 				{
 					while($persona=mysqli_fetch_array($personas))
 					{

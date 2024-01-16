@@ -21,13 +21,13 @@ if($ira=="")
 	$ira="1";
 
 if($ira=="1")
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
 else if($ira=="2")
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
 else if($ira=="3")
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
 else if($ira=="4")
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
 
 ?>
 

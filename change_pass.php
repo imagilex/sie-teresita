@@ -19,10 +19,10 @@ $newp=PostString("newp").Get("newp");
 if($newp!="")
 {
 	$query="update usuario set password = '$newp' where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'";
-	consulta_directa($Con, $query);
+	consulta_directa($query);
 }
 
-$actual=@mysqli_fetch_array(consulta_directa($Con, "select password from usuario where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'"));
+$actual=@mysqli_fetch_array(consulta_directa("select password from usuario where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'"));
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

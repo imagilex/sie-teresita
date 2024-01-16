@@ -84,11 +84,11 @@ function MM_swapImage() { //v3.0
 <?php
 if($actsublist!="") $aux="select lista_nivel from lista where lista = '$actsublist'";
 else $aux="select lista_nivel from lista where lista = '$lista'";
-$nivel_lista=@mysqli_fetch_array(consulta_directa($Con, $aux));
+$nivel_lista=@mysqli_fetch_array(consulta_directa($aux));
 $cad_nombres="";
 if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 {
-	if($regs=consulta_directa($Con, $qsl))
+	if($regs=consulta_directa($qsl))
 	{
 		while($reg=mysqli_fetch_array($regs))
 		{
@@ -132,7 +132,7 @@ if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 				<div style="overflow:auto; width:200px; height:300px;">
 					<table border="0" align="center">
 						<?php
-						if($regs=consulta_directa($Con, $qsl))
+						if($regs=consulta_directa($qsl))
 						{
 							while($reg=mysqli_fetch_array($regs))
 							{
@@ -156,7 +156,7 @@ if($nivel_lista["lista_nivel"]=="C" || $nivel_lista["lista_nivel"]=="L")
 }
 else if($nivel_lista["lista_nivel"]=="A")
 {
-	if($regs=consulta_directa($Con, "SELECT concat(mid(producto, 6), '-', mid(valor_atributo, 8)) as img, mid(producto, 6) as producto, valor_atributo FROM lista_atributo where lista='$actsublist' order by producto, valor_atributo"))
+	if($regs=consulta_directa("SELECT concat(mid(producto, 6), '-', mid(valor_atributo, 8)) as img, mid(producto, 6) as producto, valor_atributo FROM lista_atributo where lista='$actsublist' order by producto, valor_atributo"))
 	{
 		?>
 		<form name="dataset" method="post">
@@ -191,7 +191,7 @@ else if($nivel_lista["lista_nivel"]=="A")
 							$cad_sql = "select clave, concat(mid(clave,6),'&nbsp;') as nombre, concat(producto.descripcion,'&nbsp;') as descripcion, imagen, concat(codigos_generales.descripcion,'&nbsp;') as color, mid(imagen,1,5) as prod, mid(imagen,7,3) as val from producto inner join codigos_generales on valor = '".substr($reg["img"],6)."' and campo='color' where clave='".$reg["producto"]."'";
 						}
 						//echo $cad_sql;
-						if($info_db=consulta_directa($Con, $cad_sql))
+						if($info_db=consulta_directa($cad_sql))
 						{
 							$info=mysqli_fetch_array($info_db);
 							$x++;
@@ -221,7 +221,7 @@ else if($nivel_lista["lista_nivel"]=="A")
 else if($nivel_lista["lista_nivel"]=="P")
 {
 	$aux="select producto from lista_producto where lista='$actsublist' order by posicion";
-	if($regs=consulta_directa($Con, $aux))
+	if($regs=consulta_directa($aux))
 	{
 		$ones="";
 		?>
@@ -258,7 +258,7 @@ else if($nivel_lista["lista_nivel"]=="P")
 								}
 								//echo $cad_sql;
 								$ones .=  "<br />union <br />$cad_sql";
-								if($info_db=consulta_directa($Con, $cad_sql))
+								if($info_db=consulta_directa($cad_sql))
 								{
 									while($info=mysqli_fetch_array($info_db))
 									{

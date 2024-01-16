@@ -39,7 +39,7 @@ if($activity!="")
 	}
 	else if($activity=="change_name" && $sublista!="" && $new_name!="")
 	{
-   		$nom_actual=@mysqli_fetch_array(consulta_directa($Con, "select nombre from lista where lista='$sublista'"));
+   		$nom_actual=@mysqli_fetch_array(consulta_directa("select nombre from lista where lista='$sublista'"));
     	if($nom_actual["nombre"]=='Seleccionados')
        		$generar="Seleccionados";
 		else if($nom_actual["nombre"]=="Favoritos")
@@ -50,14 +50,14 @@ if($activity!="")
 		{
 		    if($generar!="")
 			{
-		   		consulta_directa($Con, "insert into lista (usuario, fecha, nombre, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario', curdate(), '$generar', 'A', 'A', '1', '1', 'CS')");
-				$lista_padre=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
-				$lista_hijo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = '$generar' and fecha = curdate() and usuario = '$sid_usuario'"));
+		   		consulta_directa("insert into lista (usuario, fecha, nombre, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario', curdate(), '$generar', 'A', 'A', '1', '1', 'CS')");
+				$lista_padre=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
+				$lista_hijo=@mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$generar' and fecha = curdate() and usuario = '$sid_usuario'"));
 				if($lista_padre["lista"]!="" && $lista_hijo["lista"]!="")
 				{
-					$posicion=@mysqli_fetch_array(consulta_directa($Con, "select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
+					$posicion=@mysqli_fetch_array(consulta_directa("select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
 
-					consulta_directa($Con, "insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
+					consulta_directa("insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
 				}
 				ErrorMySQLAlert();
 			}
@@ -70,16 +70,16 @@ if($activity!="")
 	}
 	else if(($activity=="send_to") && $list_name!="" && $sublista!="")
 	{
-		$id_list=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre='$list_name' and usuario = '$sid_usuario'"));
+		$id_list=@mysqli_fetch_array(consulta_directa("select lista from lista where nombre='$list_name' and usuario = '$sid_usuario'"));
 		if($id_list["lista"]=="")
 		{
-			consulta_directa($Con, "insert into lista (usuario, nombre, fecha, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario','$list_name', curdate(), 'A', 'A', '1', '1', 'CS')");
-			$lista_padre=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
-			$lista_hijo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = '$list_name' and fecha = curdate() and usuario = '$sid_usuario'"));
+			consulta_directa("insert into lista (usuario, nombre, fecha, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario','$list_name', curdate(), 'A', 'A', '1', '1', 'CS')");
+			$lista_padre=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
+			$lista_hijo=@mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$list_name' and fecha = curdate() and usuario = '$sid_usuario'"));
 			if($lista_padre["lista"]!="" && $lista_hijo["lista"]!="")
 			{
-				$posicion=@mysqli_fetch_array(consulta_directa($Con, "select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
-				consulta_directa($Con, "insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
+				$posicion=@mysqli_fetch_array(consulta_directa("select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
+				consulta_directa("insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
 			}
 			$id_list=$lista_hijo["lista"];
 		}
@@ -93,17 +93,17 @@ if($activity!="")
 	else if(($activity=="copy_to") && $list_name!="" && $lista!="")
 	{
 		$query="select lista from lista where nombre='$list_name' and usuario = '$sid_usuario'";
-		$id_list=@mysqli_fetch_array(consulta_directa($Con, $query));
+		$id_list=@mysqli_fetch_array(consulta_directa($query));
 		if($id_list["lista"]=="")
 		{
 			$query="insert into lista (usuario, nombre, fecha, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario','$list_name', curdate(), 'A', 'A', '1', '1', 'CS')";
-			consulta_directa($Con, $query);
-			$lista_padre=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
-			$lista_hijo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista where nombre = '$list_name' and fecha = curdate() and usuario = '$sid_usuario'"));
+			consulta_directa($query);
+			$lista_padre=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')"));
+			$lista_hijo=@mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$list_name' and fecha = curdate() and usuario = '$sid_usuario'"));
 			if($lista_padre["lista"]!="" && $lista_hijo["lista"]!="")
 			{
-				$posicion=@mysqli_fetch_array(consulta_directa($Con, "select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
-				consulta_directa($Con, "insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
+				$posicion=@mysqli_fetch_array(consulta_directa("select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'"));
+				consulta_directa("insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
 			}
 			$id_list=$lista_hijo["lista"];
 		}
@@ -117,20 +117,20 @@ if($activity!="")
 	else if(($activity=="save_as") && $list_name!="")
 	{
 		$query="select lista from lista where nombre='$list_name' and usuario = '$sid_usuario'";
-		$id_list=@mysqli_fetch_array(consulta_directa($Con, $query));
+		$id_list=@mysqli_fetch_array(consulta_directa($query));
 		if($id_list["lista"]=="")
 		{
-			consulta_directa($Con, "insert into lista (usuario, nombre, fecha, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario','$list_name', curdate(), 'A', 'A', '1', '1', 'CS')");
+			consulta_directa("insert into lista (usuario, nombre, fecha, lista_nivel, estatus, pantalla1, pantalla2, tipo) values ('$sid_usuario','$list_name', curdate(), 'A', 'A', '1', '1', 'CS')");
 			$query="select lista from lista_asociada where lista_asociada = (select lista from lista where nombre = 'Seleccionados' and usuario = '$sid_usuario')";
-			$lista_padre=@mysqli_fetch_array(consulta_directa($Con, $query));
+			$lista_padre=@mysqli_fetch_array(consulta_directa($query));
 			$query="select lista from lista where nombre = '$list_name' and fecha = curdate() and usuario = '$sid_usuario'";
-			$lista_hijo=@mysqli_fetch_array(consulta_directa($Con, $query));
+			$lista_hijo=@mysqli_fetch_array(consulta_directa($query));
 			if($lista_padre["lista"]!="" && $lista_hijo["lista"]!="")
 			{
 				$query="select count(*)+1 as n from lista_asociada where lista = '".$lista_padre["lista"]."'";
-				$posicion=@mysqli_fetch_array(consulta_directa($Con, $query));
+				$posicion=@mysqli_fetch_array(consulta_directa($query));
 				$query="insert into lista_asociada(lista, lista_asociada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')";
-				consulta_directa($Con, $query);
+				consulta_directa($query);
 			}
 			$id_lista=$lista_hijo["lista"];
 		}
@@ -144,7 +144,7 @@ if($activity!="")
 	}
 	else if(($activity=="delete_list") && $sublista!="")
 	{
-		$duenio=@mysqli_fetch_array(consulta_directa($Con, "select usuario, nombre from lista where lista = '$sublista'"));
+		$duenio=@mysqli_fetch_array(consulta_directa("select usuario, nombre from lista where lista = '$sublista'"));
 		if($_SESSION["id_usr"]==$duenio["usuario"] && $duenio["nombre"] != "Seleccionados" && $duenio["nombre"] != "Favoritos")
 			Del_list($sublista);
 	}
@@ -205,19 +205,19 @@ if($accion=="")
 }
 else if($accion=="mov_list")
 {
-	$hijos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from lista_asociada where lista='$lista' and lista_asociada in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+	$hijos=@mysqli_fetch_array(consulta_directa("select count(*) as n from lista_asociada where lista='$lista' and lista_asociada in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 	if(intval($hijos["n"])>0 && $lista!="")
 	{
 		$query_list=$ql;
 	}
 	else if(intval($hijos["n"])==0 && $lista!="")
 	{
-		$papa=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+		$papa=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 		if($papa["lista"]!="")
 		{
 			$sublista=$lista;
 			$lista=$papa["lista"];
-			$abuelo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+			$abuelo=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 			if($abuelo["lista"]!="")
 			{
 				$query_list="select lista, nombre from lista where lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."') and lista in ( select distinct(lista_asociada) from lista_asociada where lista = '".$abuelo["lista"]."' ) order by posicion, lista.lista";
@@ -235,12 +235,12 @@ else if($accion=="mov_list")
 	}
 	else if($lista=="")
 	{
-		$papa=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$actlist' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+		$papa=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$actlist' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 		if($papa["lista"]!="")
 		{
 			$sublista=$lista;
 			$lista=$papa["lista"];
-			$abuelo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+			$abuelo=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 			if($abuelo["lista"]!="")
 			{
 				$query_list="select lista, nombre from lista where lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."') and lista in ( select distinct(lista_asociada) from lista_asociada where lista = '".$abuelo["lista"]."' ) order by posicion, lista.lista";
@@ -261,7 +261,7 @@ else if($accion=="mov_sublist")
 {
 	if($sublista!="")
 	{
-		$hijos=@mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from lista_asociada where lista='$sublista' and lista_asociada in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+		$hijos=@mysqli_fetch_array(consulta_directa("select count(*) as n from lista_asociada where lista='$sublista' and lista_asociada in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 		if(intval($hijos["n"])>0 && $sublista!="")
 		{
 			$lista=$sublista;
@@ -276,12 +276,12 @@ else if($accion=="mov_sublist")
 	}
 	else
 	{
-		$papa=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+		$papa=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 		if($papa["lista"]!="")
 		{
 			$sublista=$lista;
 			$lista=$papa["lista"];
-			$abuelo=@mysqli_fetch_array(consulta_directa($Con, "select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
+			$abuelo=@mysqli_fetch_array(consulta_directa("select lista from lista_asociada where lista_asociada = '$lista' and lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."')"));
 			if($abuelo["lista"]!="")
 			{
 				$query_list="select lista, nombre from lista where lista in (select lista from lista where usuario = '".$_SESSION["id_usr"]."' or tipo = 'CP' union select lista from lista_usuario where usuario = '".$_SESSION["id_usr"]."') and lista in ( select distinct(lista_asociada) from lista_asociada where lista = '".$abuelo["lista"]."' ) order by posicion, lista.lista";
@@ -359,7 +359,7 @@ if($lista!="")
 		opc.appendChild(document.createTextNode(''));
 		accion.appendChild(opc);
 		<?php
-		$propiedad=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from lista where lista='$sublista' and usuario = '".$_SESSION["id_usr"]."'"));
+		$propiedad=mysqli_fetch_array(consulta_directa("select count(*) as n from lista where lista='$sublista' and usuario = '".$_SESSION["id_usr"]."'"));
 		if($_SESSION["id_usr"]=="0" || intval($propiedad["n"])==0)
 		{
 			?>
@@ -810,7 +810,7 @@ BH_Ayuda('0.4','6');
 		<select name="lista" id="lista" onchange="javascript: document.data.accion.value='mov_list'; document.data.submit();">
 			<option value=""></option>
 			<?php
-			if($regs=consulta_directa($Con, $query_list))
+			if($regs=consulta_directa($query_list))
 			{
 				while($reg=mysqli_fetch_array($regs))
 				{
@@ -826,7 +826,7 @@ BH_Ayuda('0.4','6');
 		<select name="sublista" id="sublista" onchange="javascript: document.data.accion.value='mov_sublist'; document.data.submit();">
 			<option value=""></option>
 			<?php
-			if($regs=consulta_directa($Con, $query_sublist))
+			if($regs=consulta_directa($query_sublist))
 			{
 				while($reg=mysqli_fetch_array($regs))
 				{
@@ -877,8 +877,8 @@ BH_Ayuda('0.4','6');
 <table align="left" border="0">
   <tr>
     <td align="left" width="600"><?php
-			$lst_name=@mysqli_fetch_array(consulta_directa($Con, "select nombre from lista where lista='$lista'"));
-			$slst_name=@mysqli_fetch_array(consulta_directa($Con, "select nombre from lista where lista='$sublista'"));
+			$lst_name=@mysqli_fetch_array(consulta_directa("select nombre from lista where lista='$lista'"));
+			$slst_name=@mysqli_fetch_array(consulta_directa("select nombre from lista where lista='$sublista'"));
 			?>
       <h3 style="color:#777777;"><?php echo $lst_name["nombre"].(($slst_name["nombre"]!="")?(" - ".$slst_name["nombre"]):("")); ?>
         <?php
@@ -913,7 +913,7 @@ BH_Ayuda('0.4','6');
 			<td align="center">
 				<select name="copiar_contenido" id="copiar_contenido">
 					 <?php
-						if($bdlists=consulta_directa($Con, "select lista, nombre from lista where usuario='$sid_usuario' and estatus='A' and (lista_nivel='A') order by posicion, nombre"))
+						if($bdlists=consulta_directa("select lista, nombre from lista where usuario='$sid_usuario' and estatus='A' and (lista_nivel='A') order by posicion, nombre"))
 	                    {
 							while($bdlist=mysqli_fetch_array($bdlists))
     	    			    {
@@ -943,7 +943,7 @@ BH_Ayuda('0.4','6');
 			<td align="center">
 				<select name="enviar_contenido" id="enviar_contenido">
 					<?php
-						if($bdlists=consulta_directa($Con, "select lista, nombre from lista where usuario='$sid_usuario' and estatus='A' and (lista_nivel='A') order by posicion, nombre"))
+						if($bdlists=consulta_directa("select lista, nombre from lista where usuario='$sid_usuario' and estatus='A' and (lista_nivel='A') order by posicion, nombre"))
 	                    {
 							while($bdlist=mysqli_fetch_array($bdlists))
     	    			    {

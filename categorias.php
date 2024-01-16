@@ -34,7 +34,7 @@ $Con=Conectar();
 	var ruta="<?php echo addslashes(dirname(__FILE__));?>/Archivos_Muestras";
 	var revisar=<?php
 	$query="select revisar_documentos from persona where clave = '".$_SESSION["id_persona_usr"]."'";
-	$permiso=mysqli_fetch_array(consulta_directa($Con, $query));
+	$permiso=mysqli_fetch_array(consulta_directa($query));
 	if($permiso["revisar_documentos"]=="si")
 		echo "true";
 	else

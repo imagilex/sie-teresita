@@ -132,11 +132,11 @@ if($correo=="")
 }
 else
 {
-	$usuario=@mysqli_fetch_array(consulta_directa($con, "select clave as usuario, password as contrasenia from usuario where persona in (select distinct(clave) from persona where email='$correo')"));
+	$usuario=@mysqli_fetch_array(consulta_directa("select clave as usuario, password as contrasenia from usuario where persona in (select distinct(clave) from persona where email='$correo')"));
 	if($usuario["usuario"]!="" && $usuario["contrasenia"]!="")
 	{
 		$email_cuerpo="";
-		$Arch=mysqli_fetch_array(consulta_directa($con, "select valor  from seccion where id_seccion='mail' and elemento='olvido_pass'"));
+		$Arch=mysqli_fetch_array(consulta_directa("select valor  from seccion where id_seccion='mail' and elemento='olvido_pass'"));
 		if(file_exists($Dir."/Archivos_Secciones/".$Arch["valor"]))
 		{
 			if($Arch["valor"]!="" && $Archivo=@fopen($Dir."/Archivos_Secciones/".$Arch["valor"],"r"))

@@ -43,7 +43,7 @@ if($accion!="")
 			//echo $_FILES[$arch_upl]["name"];
 				if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
 				{
-					$datos=@mysqli_fetch_array(consulta_directa($Con, "select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
+					$datos=@mysqli_fetch_array(consulta_directa("select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
 					$noarchivo=$datos["archivo"];
 		//			echo "original= ".  $noarchivo."<br>";
 		//			echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
@@ -138,7 +138,7 @@ case 0:
 					if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
 					{
 					//echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-						consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
+						consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
 					}
 				}
 				else
@@ -162,7 +162,7 @@ case 0:
 			foreach($archivos as $arch)
 			{
 				$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
+				consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 				//echo ("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
 			}
 		}
@@ -1306,7 +1306,7 @@ $edicion="F";
 		$archivo=$ruta."/".$direct;
 		$query="select *,DATE_FORMAT(inicio_edicion, '%d/%m/%Y') AS modificado,(DAYOFYEAR(CURDATE())- DAYOFYEAR(archivos.inicio_edicion)) as dias_editado,archivos.usuario, concat(persona.nombre, ' ') as nomb, archivos.ruta AS ruta,persona.clave from archivos inner join usuario on archivos.usuario=usuario.clave inner join persona on persona.clave=usuario.persona where archivos.usuario like '%$txt_usuario%' and concat(persona.nombre, ' ') like '%$txt_nombre%' and archivos.ruta = '$archivo' order by archivos.usuario, archivos.archivo";
 //echo $txt_usuario."<br>";
-if($regs=consulta_directa($Con, $query))
+if($regs=consulta_directa($query))
 {
 
 while(@$reg=mysqli_fetch_array($regs))

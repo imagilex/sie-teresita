@@ -36,15 +36,15 @@ if(PostString("Guardar")!="" || PostString("save")!="")
 	}
 	if(PostString("add")=="yes" && $clave!="")
 	{
-		consulta_directa($Con, "insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
+		consulta_directa("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
 	}
 	else if($clave!="")
 	{
-		consulta_directa($Con, "update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
+		consulta_directa("update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
 	}
 	$persona_form=$clave;
 }
-$datos=@mysqli_fetch_array(consulta_directa($Con, "select * from persona where clave='$persona_form'"));
+$datos=@mysqli_fetch_array(consulta_directa("select * from persona where clave='$persona_form'"));
 
 $photo_src=(($datos["imagen"]!="")?($datos["imagen"]):("photo.jpg"));
 ?>
@@ -106,7 +106,7 @@ if(PostString("Nuevo")=="")
 			<select name="persona" onchange="javascript: document.datos.submit();">
 				<option value=""></option>
 				<?php
-				if($personas=consulta_directa($Con, "select nombre, clave from persona order by nombre"))
+				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
 				{
 					while($persona=mysqli_fetch_array($personas))
 					{

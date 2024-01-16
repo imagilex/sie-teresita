@@ -105,7 +105,7 @@ if($total>0 && $Campo!="")
 			$pos=PostString("pos$x");
 			$otr=PostString("otr$x");
 			$estatus=PostString("estatus$x");
-			consulta_directa($Con, "update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
+			consulta_directa("update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
 		}
 	}
 
@@ -118,9 +118,9 @@ for($x=1;$x<=10;$x++)
 	$estatus=PostString("estat$x");
 	if($id!="" && $desc!="")
 	{
-		$registros_repetidos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
+		$registros_repetidos=mysqli_fetch_array(consulta_directa("select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
 	if(intval($registros_repetidos["n"])==0)
-		consulta_directa($Con, "insert into codigos_generales (valor,campo,descripcion,estatus,posicion,otro) values ('$id','$Campo','$desc','$estatus','$posi','$otro')");
+		consulta_directa("insert into codigos_generales (valor,campo,descripcion,estatus,posicion,otro) values ('$id','$Campo','$desc','$estatus','$posi','$otro')");
 	}
 }
 
@@ -171,7 +171,7 @@ BH_Ayuda('0.4.51','2');
 	C&oacute;digo general:
 	<select name="campo" onchange="document.DatosCG.submit();"><option></option>
 	<?php
-		if($Regs=consulta_directa($Con, "select distinct(campo) as campo from codigos_generales order by campo"))
+		if($Regs=consulta_directa("select distinct(campo) as campo from codigos_generales order by campo"))
 			while($Reg=mysqli_fetch_array($Regs))
 				echo "<option value=\"".$Reg["campo"]."\">".$Reg["campo"]."</option>";
 	?>
@@ -197,7 +197,7 @@ BH_Ayuda('0.4.51','2');
 		if($Campo!="")
 		{
 			$x=0;
-			if($Regs=consulta_directa($Con, $query))
+			if($Regs=consulta_directa($query))
 				while($Reg=mysqli_fetch_array($Regs))
 				{
 				$x++

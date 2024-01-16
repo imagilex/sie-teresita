@@ -1,21 +1,23 @@
 <?php
 
-$Dir = dirname(__FILE__);
-include_once("util_base_datos/mysql/mysql_data_base.php");
-include_once "__access_data.php";
+include_once "includes/loader.php";
 
-function consulta_directa($mysqli, $query, $modo = MYSQLI_STORE_RESULT) {
-	$excep = new Exception();
-	trigger_error("CONSULTA SQL: \n$query;\n en \n" . $excep->getTraceAsString());
-	return mysqli_query($mysqli, $query, $modo);
+function consulta_directa($query, $modo = MYSQLI_STORE_RESULT) {
+	return MAIN_DB->query($query, $modo);
 }
 
 function Conectar()
 {
-	$bd = new DataBase(BD_HOST, BD_USR, BD_PASS, BD_BD);
-	ErrorMySQLAlert($bd->cnn());
-	return $bd->cnn();
+	try {
+		return MAIN_DB->conectar();
+	} catch (Exception $e) {
+		Alert($e->getMessage());
+	}
 }
+
+$Dir = dirname(__FILE__);
+include_once("util_base_datos/mysql/mysql_data_base.php");
+include_once "__access_data.php";
 
 function CTabla($tabla)
 {
@@ -39,16 +41,16 @@ function Get($Variable)
 function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 {
 	$mysqli = Conectar();
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
 	ErrorMySQLAlert($mysqli);
 	$boton_salir = isset($regs["valor"]) ? $regs["valor"] : "";
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 	ErrorMySQLAlert($mysqli);
 	$Logo = isset($regs["valor"]) ? $regs["valor"] : "";
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
 	ErrorMySQLAlert($mysqli);
 	$linea1 = isset($regs["valor"]) ? $regs["valor"] : "";
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
 	ErrorMySQLAlert($mysqli);
 	$linea2 = isset($regs["valor"]) ? $regs["valor"] : "";
 	?>
@@ -218,7 +220,7 @@ function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 					<table border="0" align="left" width="100%" onmousemove="MuestraFav()">
 						<tr><td align="right"><input type="button" value="Eliminar" style="width:75px; height:25px;" onclick="DelFav();" /></td></tr>
 						<?php
-						if($favs=consulta_directa($mysqli, "select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
+						if($favs=consulta_directa("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
 						{
 							while($fav=mysqli_fetch_array($favs))
 							{
@@ -295,7 +297,7 @@ function CboCG($Campo)
 	$mysqli = Conectar();
 	$Cad="";
 	$qry = "select valor,descripcion from codigos_generales where campo='$Campo' order by posicion,descripcion";
-	if($Regs=consulta_directa($mysqli, $qry))
+	if($Regs=consulta_directa($qry))
 		while($Reg=mysqli_fetch_array($Regs))
 		{
 			// $descr=preg_replace('á',"&aacute;",$Reg["descripcion"]);
@@ -394,20 +396,20 @@ function NoAcute($cad)
 function menu_items($tipo_usuario_actual, $prefijo_actual)
 {
 	$mysqli = Conectar();
-	$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(distinct(agrupador)) as n from menu where prefijo_menu='$prefijo_actual'"));
+	$cuantos=mysqli_fetch_array(consulta_directa("select count(distinct(agrupador)) as n from menu where prefijo_menu='$prefijo_actual'"));
 	$cad="";
 	if(intval($cuantos["n"])>1)
 	{
-		if($agrupadores=consulta_directa($mysqli, "select distinct(agrupador) as gpo from menu where prefijo_menu='$prefijo_actual'"))
+		if($agrupadores=consulta_directa("select distinct(agrupador) as gpo from menu where prefijo_menu='$prefijo_actual'"))
 		{
 			while($agrupador=mysqli_fetch_array($agrupadores))
 			{
-				$contador=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from (select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion) as tbl01"));
+				$contador=mysqli_fetch_array(consulta_directa("select count(*) as n from (select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion) as tbl01"));
 				if(intval($contador["n"])>0)
 				{
 					$cad.='<optgroup label="'.$agrupador["gpo"].'">';
 				}
-				if($items=consulta_directa($mysqli, "select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion"))
+				if($items=consulta_directa("select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' and agrupador='".$agrupador["gpo"]."' order by posicion"))
 				{
 					while($item=mysqli_fetch_array($items))
 					{
@@ -423,7 +425,7 @@ function menu_items($tipo_usuario_actual, $prefijo_actual)
 	}
 	else
 	{
-		if($items=consulta_directa($mysqli, "select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' order by posicion"))
+		if($items=consulta_directa("select descripcion, opcion from menu where concat( prefijo_menu, '.', opcion) in (select concat( prefijo_menu, '.', opcion) from funcion_menu where funcion in (select funcion from tipo_usuario_funcion where tipo_usuario='$tipo_usuario_actual')) and prefijo_menu='$prefijo_actual' order by posicion"))
 		{
 			while($item=mysqli_fetch_array($items))
 			{
@@ -437,8 +439,8 @@ function BH_Ayuda($prefijo,$opcion)
 {
 	$mysqli = Conectar();
 	$query="select descripcion, archivo from pantalla_ayuda inner join ayuda on pantalla_ayuda.ayuda = ayuda.ayuda where prefijo_menu='$prefijo' and opcion = '$opcion' order by posicion, descripcion";
-	$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from ($query) as tbl_01"));
-	if(intval($cuantos["n"])>0 && $items=consulta_directa($mysqli, $query))
+	$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from ($query) as tbl_01"));
+	if(intval($cuantos["n"])>0 && $items=consulta_directa($query))
 	{
 		?>
 		<script language="javascript">
@@ -520,7 +522,7 @@ function DisplaySQLD3($lista,$usuar)
 {
 	$Con=Conectar();
 	$columnas=array();
-	if($regs=consulta_directa($Con, "select docto3_columnas.columna, docto3_columnas_alias.tabla, docto3_columnas.orden, docto3_columnas.etiqueta from docto3_columnas inner join docto3_columnas_alias on docto3_columnas.columna=docto3_columnas_alias.columna where docto3_columnas.usuario='$usuar' order by docto3_columnas.posicion"))
+	if($regs=consulta_directa("select docto3_columnas.columna, docto3_columnas_alias.tabla, docto3_columnas.orden, docto3_columnas.etiqueta from docto3_columnas inner join docto3_columnas_alias on docto3_columnas.columna=docto3_columnas_alias.columna where docto3_columnas.usuario='$usuar' order by docto3_columnas.posicion"))
 	{
 		while($reg=mysqli_fetch_array($regs,MYSQLI_ASSOC))
 		{
@@ -801,16 +803,16 @@ function BH_Plan()
 function BH2()
 {
 	$mysqli = Conectar();
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Btn_salir'"));
 	ErrorMySQLAlert($mysqli);
 	$boton_salir=$regs["valor"];
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 	ErrorMySQLAlert($mysqli);
 	$Logo=$regs["valor"];
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Linea1'"));
 	ErrorMySQLAlert($mysqli);
 	$linea1=$regs["valor"];
-	$regs=mysqli_fetch_array(consulta_directa($mysqli, "select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
+	$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Linea2'"));
 	ErrorMySQLAlert($mysqli);
 	$linea2=$regs["valor"];
 	$favoritos=true;
@@ -904,7 +906,7 @@ function BH2()
 											</td>
 										</tr>
 										<?php
-										if($favs=consulta_directa($mysqli, "select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
+										if($favs=consulta_directa("select nombre, url_request, parametros_url from favoritos where usuario = '".$_SESSION["id_usr"]."' order by nombre, url_request"))
 										{
 											while($fav=mysqli_fetch_array($favs))
 											{
@@ -940,18 +942,5 @@ function BH2()
 		</tr>
 	</table>
 	<?php
-}
-function NombreTabla($s)
-{
-    return $s;
-}
-
-function NombreTablaL($s)
-{
-    return $s;
-}
-function NombreTablaB($s)
-{
-    return 'TB' . $s;
 }
 ?>

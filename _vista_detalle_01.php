@@ -122,7 +122,7 @@ BH_Ayuda('0.4','');
 		<td>
 			<select name="plan" onchange="javascript: location.href='_vista_explo_01.php?proyecto='+this.value">
 				<?php
-				if($proys_db=consulta_directa($Con, "select proyecto, nombre from proyecto order by nombre"))
+				if($proys_db=consulta_directa("select proyecto, nombre from proyecto order by nombre"))
 				{
 					while($proy_db=mysqli_fetch_array($proys_db))
 					{
@@ -151,7 +151,7 @@ BH_Ayuda('0.4','');
 </table>
 </form>
 <?php
-$data_1=@mysqli_fetch_array(consulta_directa($Con, "select nombre, lider from proyecto where proyecto='$proyecto'"));
+$data_1=@mysqli_fetch_array(consulta_directa("select nombre, lider from proyecto where proyecto='$proyecto'"));
 ?>
 <h1 class="proyecto"><?php echo $data_1["nombre"]; ?> (<?php echo $data_1["lider"]; ?>)</h1>
 <table cellpadding="0" cellspacing="0" align="center">
@@ -160,7 +160,7 @@ $data_1=@mysqli_fetch_array(consulta_directa($Con, "select nombre, lider from pr
 		<td class="data_title">Estatus</td>
 	</tr>
 	<?php
-	if($data_1_1_db=consulta_directa($Con, "select fase, descripcion from proyecto_fase where proyecto = '$proyecto' order by fase"))
+	if($data_1_1_db=consulta_directa("select fase, descripcion from proyecto_fase where proyecto = '$proyecto' order by fase"))
 	{
 		$x=0;
 		while($data_1_1=mysqli_fetch_array($data_1_1_db))
@@ -171,7 +171,7 @@ $data_1=@mysqli_fetch_array(consulta_directa($Con, "select nombre, lider from pr
 				<td class="data_fase" colspan="<?php echo intval($meses+2); ?>">FASE <?php echo $x ;?>: <?php echo $data_1_1["descripcion"]; ?></td>
 			</tr>
 			<?php
-			if($data_1_2_db=consulta_directa($Con, "select entregable, descripcion from proyecto_fase_entregable where proyecto = '$proyecto' and fase = '".$data_1_1["fase"]."' order by entregable, descripcion"))
+			if($data_1_2_db=consulta_directa("select entregable, descripcion from proyecto_fase_entregable where proyecto = '$proyecto' and fase = '".$data_1_1["fase"]."' order by entregable, descripcion"))
 			{
 				while($data_1_2=mysqli_fetch_array($data_1_2_db))
 				{

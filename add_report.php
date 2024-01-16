@@ -18,16 +18,16 @@ if(!isset($_SESSION["tipo"])  )
 if(PostString("add")=='yes')
 {
 	$nombre=PostString("nombre");
-	$cuantos=mysqli_fetch_array(consulta_directa($Con, "select count(*) as n from reporte where nombre = '$nombre'"));
+	$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from reporte where nombre = '$nombre'"));
 	if(intval($cuantos["n"])>0)
 	{
 		Alert("Ya existe un reporte con el nombre agregado");
 	}
 	else
 	{
-		consulta_directa($Con, "insert into reporte (nombre) values ('$nombre')");
+		consulta_directa("insert into reporte (nombre) values ('$nombre')");
 		ErrorMySQLAlert();
-		$id=mysqli_fetch_array(consulta_directa($Con, "select id_reporte from reporte where nombre =  '$nombre'"));
+		$id=mysqli_fetch_array(consulta_directa("select id_reporte from reporte where nombre =  '$nombre'"));
 		$id_reporte=$id["id_reporte"];
 		$num_secc=PostString("num_secc");
 		for($x=2;$x<=$num_secc;$x++)
@@ -40,13 +40,13 @@ if(PostString("add")=='yes')
 				$info=pathinfo($Dir."/Archivos_Reportes/".$_FILES["arc$x"]["name"]);
 				$archivo="rep$id_reporte".preg_replace(" ","",$seccion).".".$info["extension"];
 				move_uploaded_file($_FILES["arc$x"]["tmp_name"],$Dir."/Archivos_Reportes/".$archivo);
-				consulta_directa($Con, "insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
+				consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 			}
 		}
 		$seccion=PostString("nom1");
 		$posicion=PostString("pos1");
 		$mostrar=PostString("mos1");
-		consulta_directa($Con, "insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
+		consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 	}
 }
 

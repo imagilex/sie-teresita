@@ -13,7 +13,7 @@ $ira=PostString("ira").Get("ira");;
 $Con=Conectar();
 
 
-if($regs=consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
+if($regs=consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
 	{
 		$registro=$regs->fetch_array();
 		$principal=$registro["valor"];
@@ -96,8 +96,8 @@ fullscreen = window.open(pagina, "fullscreen", 'top=0,left=0,width='+(screen.ava
 
 if($ira=="1") //quienes somos
 {
-	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
+	$titulo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
 	?>
 	<table border="0" align="center" width="65%">
 		<tr>
@@ -116,9 +116,9 @@ if($ira=="1") //quienes somos
 }
 else if($ira=="2") // nuestros productos
 {
-	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
-	$imagen=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
+	$titulo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
+	$imagen=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
 	?>
 	<script language="javascript">
 		//location.href="catalogos_01.php?lista=1&noCache="+parseInt(Math.random()*1000);
@@ -145,7 +145,7 @@ else if($ira=="2") // nuestros productos
 }
 else if($ira=="3") // contactenos
 {
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
 	?>
   <table border="0" align="center" width="65%">
 		<tr>
@@ -167,8 +167,8 @@ else if($ira=="3") // contactenos
 }
 else
 {
-	$txt1=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
-	$txt2=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+	$txt1=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
+	$txt2=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
 	?>
 
 <?php
@@ -195,7 +195,7 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 		</tr>
 		<tr>
 			<td height="100" align="center" valign="middle">
-				<?php $archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+				<?php $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
 	?>
 	<table border="0" align="center" width="100%">
 		<tr><td></td>

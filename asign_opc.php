@@ -19,9 +19,9 @@ function TieneHijos($prefijo,$opcion)
 {
 	$mysqli = Conectar();
 	if($prefijo!="")
-		$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from menu where prefijo_menu='$prefijo.$opcion'"));
+		$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from menu where prefijo_menu='$prefijo.$opcion'"));
 	else
-		$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from menu where prefijo_menu='$opcion'"));
+		$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from menu where prefijo_menu='$opcion'"));
 	if(intval($cuantos["n"])>0)
 		return true;
 	return false;
@@ -30,8 +30,8 @@ function TieneHijos($prefijo,$opcion)
 function Hijos($prefijo,$opcion,$funcion="")
 {
 	$mysqli = Conectar();
-	$menu=mysqli_fetch_array(consulta_directa($mysqli, "select descripcion from menu where prefijo_menu='$prefijo' and opcion='$opcion'"));
-	$cuantos=mysqli_fetch_array(consulta_directa($mysqli, "select count(*) as n from funcion_menu where funcion='$funcion' and prefijo_menu='$prefijo' and opcion='$opcion'"));
+	$menu=mysqli_fetch_array(consulta_directa("select descripcion from menu where prefijo_menu='$prefijo' and opcion='$opcion'"));
+	$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from funcion_menu where funcion='$funcion' and prefijo_menu='$prefijo' and opcion='$opcion'"));
 	if(intval($cuantos["n"])>0)
 	{
 		$chec=" checked='checked'";
@@ -44,9 +44,9 @@ function Hijos($prefijo,$opcion,$funcion="")
 	if(TieneHijos($prefijo,$opcion))
 	{
 		if($prefijo!="")
-			$hijos_bd=consulta_directa($mysqli, "select prefijo_menu,opcion from menu where prefijo_menu='$prefijo.$opcion' order by posicion");
+			$hijos_bd=consulta_directa("select prefijo_menu,opcion from menu where prefijo_menu='$prefijo.$opcion' order by posicion");
 		else
-			$hijos_bd=consulta_directa($mysqli, "select prefijo_menu,opcion from menu where prefijo_menu='$opcion' order by posicion");
+			$hijos_bd=consulta_directa("select prefijo_menu,opcion from menu where prefijo_menu='$opcion' order by posicion");
 		echo "\n<ul>";
 		while($hijo_actual=mysqli_fetch_array($hijos_bd))
 			Hijos($hijo_actual["prefijo_menu"],$hijo_actual["opcion"],$funcion);
@@ -132,14 +132,14 @@ if(PostString("sincambios")!="yes" && $funcion!="")
 	$total=count($registros);
 	if($total>0)
 	{
-		consulta_directa($Con, "delete from funcion_menu where funcion='$funcion'");
+		consulta_directa("delete from funcion_menu where funcion='$funcion'");
 	}
 	for($x=0;$x<$total && isset($registros[$x]);$x++)
 	{
 		$actual=explode("-",$registros[$x]);
 		$prefijo=$actual[0];
 		$opcion=$actual[1];
-		consulta_directa($Con, "insert into funcion_menu (funcion, prefijo_menu, opcion) values ('$funcion', '$prefijo', '$opcion');");
+		consulta_directa("insert into funcion_menu (funcion, prefijo_menu, opcion) values ('$funcion', '$prefijo', '$opcion');");
 		ErrorMySQLAlert();
 	}
 }
@@ -180,7 +180,7 @@ if(PostString("sincambios")!="yes" && $funcion!="")
 	<tr>
 		<td style="font-size:small;" colspan="2">
 			<?php
-			if($raiz=consulta_directa($Con, "select prefijo_menu,opcion, descripcion from menu where prefijo_menu='' order by posicion"))
+			if($raiz=consulta_directa("select prefijo_menu,opcion, descripcion from menu where prefijo_menu='' order by posicion"))
 			{
 				echo "\n<ul>";
 				while($menu=mysqli_fetch_array($raiz))

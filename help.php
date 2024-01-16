@@ -5,7 +5,7 @@ $Con=Conectar();
 $title="";
 if(Get("file")!="")
 {
-	$titul=@mysqli_fetch_array(consulta_directa($Con, "select descripcion from ayuda where archivo='".Get("file")."'"));
+	$titul=@mysqli_fetch_array(consulta_directa("select descripcion from ayuda where archivo='".Get("file")."'"));
 	if($titul["descripcion"]!="") $title=$titul["descripcion"];
 }
 ?>

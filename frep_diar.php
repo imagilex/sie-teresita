@@ -10,7 +10,7 @@ $Con=Conectar();
 $tipo_reporte=PostString("tipo_rep").Get("tipo_rep");
 if($tipo_reporte=="") $tipo_reporte="RD";
 
-$carp=@mysqli_fetch_array(consulta_directa($Con, "select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
+$carp=@mysqli_fetch_array(consulta_directa("select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
 $carpeta=$carp["otro"];
 
 if(!isset($_SESSION["tipo"]) )
@@ -28,7 +28,7 @@ $btn_sig=((PostString("sig_rep")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
-	$reps=consulta_directa($Con, "select reporte from reportes where tipo = '$tipo_reporte' and reporte in (select distinct reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion");
+	$reps=consulta_directa("select reporte from reportes where tipo = '$tipo_reporte' and reporte in (select distinct reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion");
 	while($rep=mysqli_fetch_array($reps))
 		$reportes[]=$rep["reporte"];
 	$ya=false;
@@ -319,7 +319,7 @@ if(PostString("reporte_actual")!=$id_reporte)
 				<option value=""></option>
 				<?php
 				$query="select reporte,nombre from reportes where tipo = '$tipo_reporte' and reporte in (select reporte from reporte_nivel where id_reporte in (select id_reporte from reporte_seguridad where usuario='".$_SESSION["id_usr"]."' )) order by posicion, nombre";
-				if($reps_bd=consulta_directa($Con, $query))
+				if($reps_bd=consulta_directa($query))
 					while($rep_bd=mysqli_fetch_array($reps_bd))
 					{
 						?>
@@ -344,7 +344,7 @@ if(PostString("reporte_actual")!=$id_reporte)
 			?>
 			<select name="nivel" onchange="javascript: document.rep_di.submit();">
 			<?php
-				if($niveles_bd=consulta_directa($Con, $quer))
+				if($niveles_bd=consulta_directa($quer))
 				{
 					while($nivel_bd=mysqli_fetch_array($niveles_bd))
 					{
@@ -367,10 +367,10 @@ if(PostString("reporte_actual")!=$id_reporte)
 </form>
 <?php
 
-$arch_1=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_A'"));
-$arch_2=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_B'"));
-$arch_3=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_A'"));
-$arch_4=@mysqli_fetch_array(consulta_directa($Con, "select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_B'"));
+$arch_1=@mysqli_fetch_array(consulta_directa("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_A'"));
+$arch_2=@mysqli_fetch_array(consulta_directa("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Encabezado_B'"));
+$arch_3=@mysqli_fetch_array(consulta_directa("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_A'"));
+$arch_4=@mysqli_fetch_array(consulta_directa("select prefijo_reporte, extension from reportes_secciones where id_reporte='$nivel' and nombre='Detalle_B'"));
 if($arch_1["prefijo_reporte"]!="" && $arch_2["prefijo_reporte"]!="" && $arch_3["prefijo_reporte"]!="" && $arch_4["prefijo_reporte"]!="")
 {
 	$pref_1=$Dir."/$carpeta/$fecha/";
@@ -474,7 +474,7 @@ else
 ?>
 <table id="tbl_reporte" border="0" align="center" cellpadding="0" cellspacing="0" style="font-size:12px;"><tr><td style="padding:0px; margin:0px;">
 <?php
-if($secciones=consulta_directa($Con, "select prefijo_reporte, nombre,extension from reportes_secciones where id_reporte='$nivel' order by posicion"))
+if($secciones=consulta_directa("select prefijo_reporte, nombre,extension from reportes_secciones where id_reporte='$nivel' order by posicion"))
 {
 	$maximo=-32000;
 	while($seccion=mysqli_fetch_array($secciones))
