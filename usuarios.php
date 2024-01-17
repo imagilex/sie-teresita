@@ -7,42 +7,42 @@ include "lists.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]) )
 {
-	header("location: index.php?noCahce=".rand(0,32000));
-	exit();
+    header("location: index.php?noCahce=".rand(0,32000));
+    exit();
 }
 
 $usuario_form = Get_Vars_Helper::getPostVar("usuario");
 
 if(Get_Vars_Helper::getPostVar("Guardar")!="")
 {
-	$clave = Get_Vars_Helper::getPostVar("clave");
-	$password = Get_Vars_Helper::getPostVar("password");
-	$persona = Get_Vars_Helper::getPostVar("persona");
-	$tipo_usuario = Get_Vars_Helper::getPostVar("tipo_usuario");
-	$estatus = Get_Vars_Helper::getPostVar("estatus");
-	$fecha_alta = Get_Vars_Helper::getPostDate("fecha_alta");
-	if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
-	{
-		consulta_directa("insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
-		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
-		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Seleccionados', 'A', '$clave', curdate(), '2', 'A')");
-		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Favoritos', 'A', '$clave', curdate(), '3', 'A')");
-		$lp=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$persona' and usuario = '$clave'"));
-		$ls=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Seleccionados' and usuario = '$clave'"));
-		$lf=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Favoritos' and usuario = '$clave'"));
-		consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$ls["lista"]."', '1')");
-		consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$lf["lista"]."', '2')");
-	}
-	else if($clave!="")
-	{
-		consulta_directa("update usuario set password='$password', estatus='$estatus', tipo_usuario='$tipo_usuario', persona='$persona', fecha_alta='$fecha_alta' where clave='$clave'");
-	}
-	$usuario_form=$clave;
+    $clave = Get_Vars_Helper::getPostVar("clave");
+    $password = Get_Vars_Helper::getPostVar("password");
+    $persona = Get_Vars_Helper::getPostVar("persona");
+    $tipo_usuario = Get_Vars_Helper::getPostVar("tipo_usuario");
+    $estatus = Get_Vars_Helper::getPostVar("estatus");
+    $fecha_alta = Get_Vars_Helper::getPostDate("fecha_alta");
+    if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
+    {
+        consulta_directa("insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
+        consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
+        consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Seleccionados', 'A', '$clave', curdate(), '2', 'A')");
+        consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('Favoritos', 'A', '$clave', curdate(), '3', 'A')");
+        $lp=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = '$persona' and usuario = '$clave'"));
+        $ls=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Seleccionados' and usuario = '$clave'"));
+        $lf=mysqli_fetch_array(consulta_directa("select lista from lista where nombre = 'Favoritos' and usuario = '$clave'"));
+        consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$ls["lista"]."', '1')");
+        consulta_directa("insert into lista_asociada (lista, lista_asociada, posicion) values ('".$lp["lista"]."', '".$lf["lista"]."', '2')");
+    }
+    else if($clave!="")
+    {
+        consulta_directa("update usuario set password='$password', estatus='$estatus', tipo_usuario='$tipo_usuario', persona='$persona', fecha_alta='$fecha_alta' where clave='$clave'");
+    }
+    $usuario_form=$clave;
 }
 
 $datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='$usuario_form'"));
@@ -63,10 +63,10 @@ $datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
 <script language="javascript">
-	function DataValidation()
-	{
-			return true;
-	}
+    function DataValidation()
+    {
+            return true;
+    }
 </script>
 </head>
 
@@ -95,26 +95,26 @@ $datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='
 //BarraHerramientas();
 ?>
 <div align="right">
-	<form action="sistema.php" method="post" name="sist">
-		Secci&oacute;n:
-		<select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
-		</select>
-	</form>
-	<script language="javascript">
-		document.sist.seccion.value=1;
-	</script>
+    <form action="sistema.php" method="post" name="sist">
+        Secci&oacute;n:
+        <select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
+        </select>
+    </form>
+    <script language="javascript">
+        document.sist.seccion.value=1;
+    </script>
 </div>
 <div align="right">
-	<form action="seguridad.php" method="post" name="seg">
-		Acci&oacute;n:
-		<select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
-		</select>
-	</form>
-	<script language="javascript">
-		document.seg.accion.value="2";
-	</script>
+    <form action="seguridad.php" method="post" name="seg">
+        Acci&oacute;n:
+        <select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
+        </select>
+    </form>
+    <script language="javascript">
+        document.seg.accion.value="2";
+    </script>
 </div>
 <?php
 
@@ -124,86 +124,86 @@ if(Get_Vars_Helper::getPostVar("Nuevo")=="")
 ?>
 <form method="post" enctype="multipart/form-data" name="datos" action="usuarios.php">
 <table border="0" align="center">
-	<tr>
-		<td></td>
-		<td align="right">Usuario:</td>
-		<td>
-			<select name="usuario" onchange="javascript: document.datos.submit();">
-				<option value=""></option>
-				<?php
-				if($usuarios=consulta_directa("select clave from usuario order by clave"))
-				{
-					while($usuario=mysqli_fetch_array($usuarios))
-					{
-						?>
-						<option value="<?php echo $usuario["clave"]; ?>"><?php echo $usuario["clave"]; ?></option>
-						<?php
-					}
-				}
-				?>
-			</select>		</td>
-		<td>
-			<input type="submit" name="Borrar" value="Borrar" class="btn_normal" />
-			<input type="submit" name="Nuevo" value="Nuevo" class="btn_normal" />
-			<input type="submit" name="Guardar" value="Guardar" class="btn_normal" />		</td>
-	</tr>
-	<tr><td colspan="5">&nbsp;</td></tr>
-	<tr>
-		<td rowspan="6">		</td>
-		<td align="right">Usuario:</td>
-		<td>
-			<input type="text" maxlength="250" size="25" disabled="disabled" value="<?php echo $datos["clave"]; ?>" />
-			<input type="hidden" name="clave" value="<?php echo $datos["clave"]; ?>" />		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Contrase&ntilde;a:</td>
-		<td><input type="password" name="password" maxlength="250" size="25" value="<?php echo $datos["password"]; ?>" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Persona:</td>
-		<td>
-			<select name="persona">
-				<option value=""></option>
-				<?php
-				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
-				{
-					while($persona=mysqli_fetch_array($personas))
-					{
-						?>
-						<option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
-						<?php
-					}
-				}
-				?>
-			</select>		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Tipo:</td>
-		<td><select name="tipo_usuario"><?php echo CboCG("tipo_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Estatus:</td>
-		<td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Fecha:</td>
-		<td><?php echo FormFecha("fecha_alta"); ?></td>
-		<td></td>
-	</tr>
+    <tr>
+        <td></td>
+        <td align="right">Usuario:</td>
+        <td>
+            <select name="usuario" onchange="javascript: document.datos.submit();">
+                <option value=""></option>
+                <?php
+                if($usuarios=consulta_directa("select clave from usuario order by clave"))
+                {
+                    while($usuario=mysqli_fetch_array($usuarios))
+                    {
+                        ?>
+                        <option value="<?php echo $usuario["clave"]; ?>"><?php echo $usuario["clave"]; ?></option>
+                        <?php
+                    }
+                }
+                ?>
+            </select>        </td>
+        <td>
+            <input type="submit" name="Borrar" value="Borrar" class="btn_normal" />
+            <input type="submit" name="Nuevo" value="Nuevo" class="btn_normal" />
+            <input type="submit" name="Guardar" value="Guardar" class="btn_normal" />        </td>
+    </tr>
+    <tr><td colspan="5">&nbsp;</td></tr>
+    <tr>
+        <td rowspan="6">        </td>
+        <td align="right">Usuario:</td>
+        <td>
+            <input type="text" maxlength="250" size="25" disabled="disabled" value="<?php echo $datos["clave"]; ?>" />
+            <input type="hidden" name="clave" value="<?php echo $datos["clave"]; ?>" />        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Contrase&ntilde;a:</td>
+        <td><input type="password" name="password" maxlength="250" size="25" value="<?php echo $datos["password"]; ?>" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Persona:</td>
+        <td>
+            <select name="persona">
+                <option value=""></option>
+                <?php
+                if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
+                {
+                    while($persona=mysqli_fetch_array($personas))
+                    {
+                        ?>
+                        <option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
+                        <?php
+                    }
+                }
+                ?>
+            </select>        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Tipo:</td>
+        <td><select name="tipo_usuario"><?php echo CboCG("tipo_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Estatus:</td>
+        <td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Fecha:</td>
+        <td><?php echo FormFecha("fecha_alta"); ?></td>
+        <td></td>
+    </tr>
 </table>
 <script language="javascript">
-	document.datos.usuario.value="<?php echo $datos["clave"]; ?>";
-	document.datos.persona.value="<?php echo $datos["persona"]; ?>";
-	document.datos.tipo_usuario.value="<?php echo $datos["tipo_usuario"]; ?>";
-	document.datos.estatus.value="<?php echo $datos["estatus"]; ?>";
-	document.datos.fecha_alta_d.value="<?php echo intval(substr($datos["fecha_alta"],8,2)); ?>";
-	document.datos.fecha_alta_m.value="<?php echo intval(substr($datos["fecha_alta"],5,2)); ?>";
-	document.datos.fecha_alta_a.value="<?php echo intval(substr($datos["fecha_alta"],0,4)); ?>";
+    document.datos.usuario.value="<?php echo $datos["clave"]; ?>";
+    document.datos.persona.value="<?php echo $datos["persona"]; ?>";
+    document.datos.tipo_usuario.value="<?php echo $datos["tipo_usuario"]; ?>";
+    document.datos.estatus.value="<?php echo $datos["estatus"]; ?>";
+    document.datos.fecha_alta_d.value="<?php echo intval(substr($datos["fecha_alta"],8,2)); ?>";
+    document.datos.fecha_alta_m.value="<?php echo intval(substr($datos["fecha_alta"],5,2)); ?>";
+    document.datos.fecha_alta_a.value="<?php echo intval(substr($datos["fecha_alta"],0,4)); ?>";
 </script>
 </form>
 <?php
@@ -214,67 +214,67 @@ else
 <form method="post" enctype="multipart/form-data" name="datos" action="usuarios.php">
 <input type="hidden" name="add" value="yes" />
 <table border="0" align="center">
-	<tr>
-		<td colspan="3"></td>
-		<td>
-			<input type="submit" name="Guardar" value="Guardar" class="btn_normal" />		</td>
-	</tr>
-	<tr><td colspan="5">&nbsp;</td></tr>
-	<tr>
-		<td rowspan="6">		</td>
-		<td align="right">Usuario:</td>
-		<td>
-			<input type="text" name="clave" maxlength="250" size="25" />		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Contrase&ntilde;a:</td>
-		<td><input type="password" name="password" maxlength="250" size="25" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Persona:</td>
-		<td>
-			<select name="persona">
-				<option value=""></option>
-				<?php
-				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
-				{
-					while($persona=mysqli_fetch_array($personas))
-					{
-						?>
-						<option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
-						<?php
-					}
-				}
-				?>
-			</select>		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Tipo:</td>
-		<td><select name="tipo_usuario"><?php echo CboCG("tipo_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Estatus:</td>
-		<td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Fecha:</td>
-		<td>
-			<?php echo FormFecha("fecha_alta");
-			$hoy=getdate();
-			?>
-			<script language="javascript">
-				document.datos.fecha_alta_d.value="<?php echo intval($hoy["mday"]); ?>";
-				document.datos.fecha_alta_m.value="<?php echo intval($hoy["mon"]); ?>";
-				document.datos.fecha_alta_a.value="<?php echo intval($hoy["year"]); ?>";
-			</script>
-		</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td colspan="3"></td>
+        <td>
+            <input type="submit" name="Guardar" value="Guardar" class="btn_normal" />        </td>
+    </tr>
+    <tr><td colspan="5">&nbsp;</td></tr>
+    <tr>
+        <td rowspan="6">        </td>
+        <td align="right">Usuario:</td>
+        <td>
+            <input type="text" name="clave" maxlength="250" size="25" />        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Contrase&ntilde;a:</td>
+        <td><input type="password" name="password" maxlength="250" size="25" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Persona:</td>
+        <td>
+            <select name="persona">
+                <option value=""></option>
+                <?php
+                if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
+                {
+                    while($persona=mysqli_fetch_array($personas))
+                    {
+                        ?>
+                        <option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
+                        <?php
+                    }
+                }
+                ?>
+            </select>        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Tipo:</td>
+        <td><select name="tipo_usuario"><?php echo CboCG("tipo_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Estatus:</td>
+        <td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Fecha:</td>
+        <td>
+            <?php echo FormFecha("fecha_alta");
+            $hoy=getdate();
+            ?>
+            <script language="javascript">
+                document.datos.fecha_alta_d.value="<?php echo intval($hoy["mday"]); ?>";
+                document.datos.fecha_alta_m.value="<?php echo intval($hoy["mon"]); ?>";
+                document.datos.fecha_alta_a.value="<?php echo intval($hoy["year"]); ?>";
+            </script>
+        </td>
+        <td></td>
+    </tr>
 </table>
 </form>
 <?php

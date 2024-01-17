@@ -6,13 +6,13 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]) )
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 ?>

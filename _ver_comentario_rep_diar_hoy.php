@@ -16,13 +16,13 @@ $usuario=$usr["usuario"];
 
 if($fecha=="hoy")
 {
-	$comentario=@mysqli_fetch_array(consulta_directa("select comentario from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' fecha=curdate() and fecha_reporte='$fecha_reporte'"));
-	consulta_directa("delete from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha=curdate() and fecha_reporte='$fecha_reporte'");
+    $comentario=@mysqli_fetch_array(consulta_directa("select comentario from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' fecha=curdate() and fecha_reporte='$fecha_reporte'"));
+    consulta_directa("delete from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha=curdate() and fecha_reporte='$fecha_reporte'");
 }
 else
 {
-	$comentario=@mysqli_fetch_array(consulta_directa("select comentario from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha='$fecha' and fecha_reporte='$fecha_reporte'"));
-	consulta_directa("delete from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha='$fecha' and fecha_reporte='$fecha_reporte'");
+    $comentario=@mysqli_fetch_array(consulta_directa("select comentario from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha='$fecha' and fecha_reporte='$fecha_reporte'"));
+    consulta_directa("delete from reporte_comentario where id_reporte='$id_reporte' and usuario='$usuario' and fecha='$fecha' and fecha_reporte='$fecha_reporte'");
 }
 
 echo NoAcute($comentario["comentario"]);

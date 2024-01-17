@@ -20,13 +20,13 @@ $nivel=$niv["nivel"];
 
 if($fecha=="hoy")
 {
-	$comentario=@mysqli_fetch_array(consulta_directa("select comentario from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha=curdate()"));
-	consulta_directa("delete from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha=curdate()");
+    $comentario=@mysqli_fetch_array(consulta_directa("select comentario from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha=curdate()"));
+    consulta_directa("delete from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha=curdate()");
 }
 else
 {
-	$comentario=@mysqli_fetch_array(consulta_directa("select comentario from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha='$fecha'"));
-	consulta_directa("delete from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha='$fecha'");
+    $comentario=@mysqli_fetch_array(consulta_directa("select comentario from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha='$fecha'"));
+    consulta_directa("delete from indicador_comentario where anio='$anio' and mes='$mes' and indicador='$indicador' and usuario='$usuario' and nivel='$nivel' and fecha='$fecha'");
 }
 
 echo NoAcute($comentario["comentario"]);

@@ -9,31 +9,31 @@ $Con=Conectar();
 $accion = Get_Vars_Helper::getPostVar("accion");
 if($accion!="")
 {
-	if($accion=="1")
-	{
-		header("location: personas.php");
-		exit();
-	}
-	else if($accion=="2")
-	{
-		header("location: usuarios.php");
-		exit();
-	}
-	else if($accion=="3")
-	{
-		header("location: tipo_usua_func.php");
-		exit();
-	}
-	else if($accion=="4")
-	{
-		header("location: asign_opc.php");
-		exit();
-	}
-	else if($accion=="5")
-	{
-		header("location: menu_sist.php");
-		exit();
-	}
+    if($accion=="1")
+    {
+        header("location: personas.php");
+        exit();
+    }
+    else if($accion=="2")
+    {
+        header("location: usuarios.php");
+        exit();
+    }
+    else if($accion=="3")
+    {
+        header("location: tipo_usua_func.php");
+        exit();
+    }
+    else if($accion=="4")
+    {
+        header("location: asign_opc.php");
+        exit();
+    }
+    else if($accion=="5")
+    {
+        header("location: menu_sist.php");
+        exit();
+    }
 }
 
 ?>
@@ -78,23 +78,23 @@ if($accion!="")
 //BarraHerramientas();
 ?>
 <div align="right">
-	<form action="sistema.php" method="post" name="sist">
-		Secci&oacute;n:
-		<select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
-		</select>
-	</form>
-	<script language="javascript">
-		document.sist.seccion.value=1;
-	</script>
+    <form action="sistema.php" method="post" name="sist">
+        Secci&oacute;n:
+        <select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
+        </select>
+    </form>
+    <script language="javascript">
+        document.sist.seccion.value=1;
+    </script>
 </div>
 <div align="right">
-	<form action="seguridad.php" method="post" name="seg">
-		Acci&oacute;n:
-		<select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
-		</select>
-	</form>
+    <form action="seguridad.php" method="post" name="seg">
+        Acci&oacute;n:
+        <select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
+        </select>
+    </form>
 </div>
 <?php
 BH_Ayuda('0.4.51','1');

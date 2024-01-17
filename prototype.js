@@ -5497,7 +5497,7 @@ var Selector = Class.create({
 
           this.matcher.push(Object.isFunction(c[i]) ? c[i](m) :
 
-    	      new Template(c[i]).evaluate(m));
+              new Template(c[i]).evaluate(m));
 
           e = e.replace(m[0], '');
 
@@ -6176,7 +6176,7 @@ Object.extend(Selector, {
 
       while (node = node.nextSibling)
 
-	      if (node.nodeType == 1) return node;
+          if (node.nodeType == 1) return node;
 
       return null;
 

@@ -5,23 +5,23 @@
 <title>Documento sin t&iacute;tulo</title>
 </head>
 <script language="javascript">
-	var mov=20;
-	function go_left()
-	{
-		scrollBy(-1*mov,0);
-	}
-	function go_right()
-	{
-		scrollBy(mov,0);
-	}
-	function go_top()
-	{
-		scrollBy(0,-1*mov);
-	}
-	function go_bottom()
-	{
-		scrollBy(0,mov);
-	}
+    var mov=20;
+    function go_left()
+    {
+        scrollBy(-1*mov,0);
+    }
+    function go_right()
+    {
+        scrollBy(mov,0);
+    }
+    function go_top()
+    {
+        scrollBy(0,-1*mov);
+    }
+    function go_bottom()
+    {
+        scrollBy(0,mov);
+    }
 </script>
 <body>
 <?php
@@ -34,24 +34,24 @@ $informacion=pathinfo($archivo=$Dir.Get_Vars_Helper::getGetVar("archivo"));
 
 if($archivo!="" && file_exists($archivo) && isset($informacion["extension"]))
 {
-	if($informacion["extension"]=="" || $informacion["extension"]=="txt")
-	{
-		if($Arch=@fopen($archivo,"r"))
-		{
-			?><pre><?php
-			while(!feof($Arch))
-				echo fgets($Arch)."";
-			fclose($Arch);
-			?></pre><?php
-		}
-		else {trigger_error("Archivo no encontrado: $archivo");}
-	}
-	else if($informacion["extension"]=="jpg" || $informacion["extension"]=="png" || $informacion["extension"]=="bmp" || $informacion["extension"]=="gif")
-	{
-		?>
-		<img src="<?php echo substr($archivo, strlen($Dir)+1); ?>" border="0" />
-		<?php
-	}
+    if($informacion["extension"]=="" || $informacion["extension"]=="txt")
+    {
+        if($Arch=@fopen($archivo,"r"))
+        {
+            ?><pre><?php
+            while(!feof($Arch))
+                echo fgets($Arch)."";
+            fclose($Arch);
+            ?></pre><?php
+        }
+        else {trigger_error("Archivo no encontrado: $archivo");}
+    }
+    else if($informacion["extension"]=="jpg" || $informacion["extension"]=="png" || $informacion["extension"]=="bmp" || $informacion["extension"]=="gif")
+    {
+        ?>
+        <img src="<?php echo substr($archivo, strlen($Dir)+1); ?>" border="0" />
+        <?php
+    }
 }
 else {trigger_error("Archivo no encontrado: $archivo");}
 

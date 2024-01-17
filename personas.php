@@ -6,43 +6,43 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]) )
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 $persona_form = Get_Vars_Helper::getPostVar("persona");
 if(Get_Vars_Helper::getPostVar("Guardar")!="" || Get_Vars_Helper::getPostVar("save")!="")
 {
-	$clave = Get_Vars_Helper::getPostVar("clave");
-	$nombre = Get_Vars_Helper::getPostVar("nombre");
-	$email = Get_Vars_Helper::getPostVar("email");
-	$tipo_pers = Get_Vars_Helper::getPostVar("tipo");
-	$estatus = Get_Vars_Helper::getPostVar("estatus");
-	$fecha = Get_Vars_Helper::getPostDate("fecha");
-	if($clave!="" && isset($_FILES["foto"]["name"]) && $_FILES["foto"]["name"]!="")
-	{
-		$info=pathinfo($_FILES["foto"]["name"]);
-		move_uploaded_file($_FILES["foto"]["tmp_name"], $Dir."/Imagenes/".$clave.".".$info["extension"]);
-		$foto=basename($Dir."/Imagenes/".$clave.".".$info["extension"]);
-	}
-	else
-	{
-		$foto="";
-	}
-	if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
-	{
-		consulta_directa("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
-	}
-	else if($clave!="")
-	{
-		consulta_directa("update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
-	}
-	$persona_form=$clave;
+    $clave = Get_Vars_Helper::getPostVar("clave");
+    $nombre = Get_Vars_Helper::getPostVar("nombre");
+    $email = Get_Vars_Helper::getPostVar("email");
+    $tipo_pers = Get_Vars_Helper::getPostVar("tipo");
+    $estatus = Get_Vars_Helper::getPostVar("estatus");
+    $fecha = Get_Vars_Helper::getPostDate("fecha");
+    if($clave!="" && isset($_FILES["foto"]["name"]) && $_FILES["foto"]["name"]!="")
+    {
+        $info=pathinfo($_FILES["foto"]["name"]);
+        move_uploaded_file($_FILES["foto"]["tmp_name"], $Dir."/Imagenes/".$clave.".".$info["extension"]);
+        $foto=basename($Dir."/Imagenes/".$clave.".".$info["extension"]);
+    }
+    else
+    {
+        $foto="";
+    }
+    if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
+    {
+        consulta_directa("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
+    }
+    else if($clave!="")
+    {
+        consulta_directa("update persona set nombre='$nombre', email='$email', tipo_persona='$tipo_pers', estatus='$estatus', fecha='$fecha'".(($foto!="")?(", imagen='$foto'"):(""))."where clave='$clave'");
+    }
+    $persona_form=$clave;
 }
 $datos=@mysqli_fetch_array(consulta_directa("select * from persona where clave='$persona_form'"));
 
@@ -71,26 +71,26 @@ BarraHerramientas();
 
 ?>
 <div align="right">
-	<form action="sistema.php" method="post" name="sist" style="padding:0px;">
-		Secci&oacute;n:
-		<select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
-		</select>
-	</form>
-	<script language="javascript">
-		document.sist.seccion.value=1;
-	</script>
+    <form action="sistema.php" method="post" name="sist" style="padding:0px;">
+        Secci&oacute;n:
+        <select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
+        </select>
+    </form>
+    <script language="javascript">
+        document.sist.seccion.value=1;
+    </script>
 </div>
 <div align="right">
-	<form action="seguridad.php" method="post" name="seg" style="padding:0px;">
-		Acci&oacute;n:
-		<select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
-		</select>
-	</form>
-	<script language="javascript">
-		document.seg.accion.value="1";
-	</script>
+    <form action="seguridad.php" method="post" name="seg" style="padding:0px;">
+        Acci&oacute;n:
+        <select name="accion" onchange="javascript: document.seg.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51.1'); ?>
+        </select>
+    </form>
+    <script language="javascript">
+        document.seg.accion.value="1";
+    </script>
 </div>
 <?php
 BH_Ayuda('0.4.51.1','1');
@@ -99,83 +99,83 @@ if(Get_Vars_Helper::getPostVar("Nuevo")=="")
 ?>
 <form action="personas.php" method="post" enctype="multipart/form-data" name="datos">
 <table border="0" align="center">
-	<tr>
-		<td></td>
-		<td align="right">Persona:</td>
-		<td>
-			<select name="persona" onchange="javascript: document.datos.submit();">
-				<option value=""></option>
-				<?php
-				if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
-				{
-					while($persona=mysqli_fetch_array($personas))
-					{
-						?>
-						<option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
-						<?php
-					}
-				}
-				?>
-			</select>
-			<script language="javascript">
-				document.datos.persona.value="<?php echo $persona_form; ?>";
-			</script>
-		</td>
-		<td>
-			<input type="submit" name="Borrar" value="Borrar" class="btn_normal" />
-			<input type="submit" name="Nuevo" value="Nuevo" class="btn_normal" />
-			<input type="submit" name="Guardar" value="Guardar" class="btn_normal" />
-		</td>
-	</tr>
-	<tr><td colspan="5">&nbsp;</td></tr>
-	<tr>
-		<td rowspan="5" align="center" valign="middle">
-			<img width="100" src="img_personas/<?php echo $photo_src; ?>" />
-			<input type="hidden" name="photo" value="<?php echo $datos["imagen"]; ?>" />
-		</td>
-		<td align="right">Clave:</td>
-		<td>
-			<input type="text" maxlength="250" size="25" disabled="disabled" value="<?php echo $datos["clave"]; ?>" />
-			<input type="hidden" name="clave" value="<?php echo $datos["clave"]; ?>" />
-		</td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Nombre:</td>
-		<td><input type="text" name="nombre" maxlength="250" size="25" value="<?php echo $datos["nombre"]; ?>" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">E-Mail:</td>
-		<td><input type="text" name="email" maxlength="250" size="25" value="<?php echo $datos["email"]; ?>" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Tipo:</td>
-		<td><select name="tipo"><?php echo CboCG("tipo_persona"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Estatus:</td>
-		<td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>
-			<input type="file" name="foto" onchange="javascript: document.datos.save.value='yes'; document.datos.submit();" />
-			<input type="hidden" name="save" />
-		</td>
-		<td align="right">Fecha:</td>
-		<td><?php echo FormFecha("fecha"); ?></td>
-		<td></td>
-	</tr>
+    <tr>
+        <td></td>
+        <td align="right">Persona:</td>
+        <td>
+            <select name="persona" onchange="javascript: document.datos.submit();">
+                <option value=""></option>
+                <?php
+                if($personas=consulta_directa("select nombre, clave from persona order by nombre"))
+                {
+                    while($persona=mysqli_fetch_array($personas))
+                    {
+                        ?>
+                        <option value="<?php echo $persona["clave"]; ?>"><?php echo $persona["nombre"]; ?></option>
+                        <?php
+                    }
+                }
+                ?>
+            </select>
+            <script language="javascript">
+                document.datos.persona.value="<?php echo $persona_form; ?>";
+            </script>
+        </td>
+        <td>
+            <input type="submit" name="Borrar" value="Borrar" class="btn_normal" />
+            <input type="submit" name="Nuevo" value="Nuevo" class="btn_normal" />
+            <input type="submit" name="Guardar" value="Guardar" class="btn_normal" />
+        </td>
+    </tr>
+    <tr><td colspan="5">&nbsp;</td></tr>
+    <tr>
+        <td rowspan="5" align="center" valign="middle">
+            <img width="100" src="img_personas/<?php echo $photo_src; ?>" />
+            <input type="hidden" name="photo" value="<?php echo $datos["imagen"]; ?>" />
+        </td>
+        <td align="right">Clave:</td>
+        <td>
+            <input type="text" maxlength="250" size="25" disabled="disabled" value="<?php echo $datos["clave"]; ?>" />
+            <input type="hidden" name="clave" value="<?php echo $datos["clave"]; ?>" />
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Nombre:</td>
+        <td><input type="text" name="nombre" maxlength="250" size="25" value="<?php echo $datos["nombre"]; ?>" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">E-Mail:</td>
+        <td><input type="text" name="email" maxlength="250" size="25" value="<?php echo $datos["email"]; ?>" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Tipo:</td>
+        <td><select name="tipo"><?php echo CboCG("tipo_persona"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Estatus:</td>
+        <td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <input type="file" name="foto" onchange="javascript: document.datos.save.value='yes'; document.datos.submit();" />
+            <input type="hidden" name="save" />
+        </td>
+        <td align="right">Fecha:</td>
+        <td><?php echo FormFecha("fecha"); ?></td>
+        <td></td>
+    </tr>
 </table>
 <script language="javascript">
-	document.datos.tipo.value="<?php echo $datos["tipo_persona"]; ?>";
-	document.datos.estatus.value="<?php echo $datos["estatus"]; ?>";
-	document.datos.fecha_d.value="<?php echo intval(substr($datos["fecha"],8,2)); ?>";
-	document.datos.fecha_m.value="<?php echo intval(substr($datos["fecha"],5,2)); ?>";
-	document.datos.fecha_a.value="<?php echo intval(substr($datos["fecha"],0,4)); ?>";
+    document.datos.tipo.value="<?php echo $datos["tipo_persona"]; ?>";
+    document.datos.estatus.value="<?php echo $datos["estatus"]; ?>";
+    document.datos.fecha_d.value="<?php echo intval(substr($datos["fecha"],8,2)); ?>";
+    document.datos.fecha_m.value="<?php echo intval(substr($datos["fecha"],5,2)); ?>";
+    document.datos.fecha_a.value="<?php echo intval(substr($datos["fecha"],0,4)); ?>";
 </script>
 </form>
 <?php
@@ -186,59 +186,59 @@ else
 <form action="personas.php" method="post" enctype="multipart/form-data" name="datos">
 <input type="hidden" name="add" value="yes" />
 <table border="0" align="center">
-	<tr>
-		<td colspan="3"></td>
-		<td align="right">
-			<input type="submit" name="Guardar" value="Guardar" class="btn_normal" />
-		</td>
-	</tr>
-	<tr>
-		<td rowspan="5" align="center" valign="middle">
-			<img src="Imagenes/photo.jpg" width="100" />
-		</td>
-		<td align="right">Clave:</td>
-		<td><input type="text" name="clave" maxlength="250" size="25" onchange="javascript: if(document.datos.clave.value!='') document.datos.foto.disabled=''; else document.datos.foto.disabled='disabled' " /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Nombre:</td>
-		<td><input type="text" name="nombre" maxlength="250" size="25" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">E-Mail:</td>
-		<td><input type="text" name="email" maxlength="250" size="25" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Tipo:</td>
-		<td><select name="tipo"><?php echo CboCG("tipo_persona"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td align="right">Estatus:</td>
-		<td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td>
-			<input type="file" name="foto" disabled="disabled" onchange="javascript: document.datos.save.value='yes'; document.datos.submit();" />
-			<input type="hidden" name="save" />
-		</td>
-		<td align="right">Fecha:</td>
-		<td>
-			<?php
-			echo FormFecha("fecha");
-			$hoy=getdate();
-			?>
-			<script language="javascript">
-				document.datos.fecha_d.value="<?php echo intval($hoy["mday"]); ?>";
-				document.datos.fecha_m.value="<?php echo intval($hoy["mon"]); ?>";
-				document.datos.fecha_a.value="<?php echo intval($hoy["year"]); ?>";
-			</script>
-		</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td colspan="3"></td>
+        <td align="right">
+            <input type="submit" name="Guardar" value="Guardar" class="btn_normal" />
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="5" align="center" valign="middle">
+            <img src="Imagenes/photo.jpg" width="100" />
+        </td>
+        <td align="right">Clave:</td>
+        <td><input type="text" name="clave" maxlength="250" size="25" onchange="javascript: if(document.datos.clave.value!='') document.datos.foto.disabled=''; else document.datos.foto.disabled='disabled' " /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Nombre:</td>
+        <td><input type="text" name="nombre" maxlength="250" size="25" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">E-Mail:</td>
+        <td><input type="text" name="email" maxlength="250" size="25" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Tipo:</td>
+        <td><select name="tipo"><?php echo CboCG("tipo_persona"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="right">Estatus:</td>
+        <td><select name="estatus"><?php echo CboCG("estatus_usuario"); ?></select></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            <input type="file" name="foto" disabled="disabled" onchange="javascript: document.datos.save.value='yes'; document.datos.submit();" />
+            <input type="hidden" name="save" />
+        </td>
+        <td align="right">Fecha:</td>
+        <td>
+            <?php
+            echo FormFecha("fecha");
+            $hoy=getdate();
+            ?>
+            <script language="javascript">
+                document.datos.fecha_d.value="<?php echo intval($hoy["mday"]); ?>";
+                document.datos.fecha_m.value="<?php echo intval($hoy["mon"]); ?>";
+                document.datos.fecha_a.value="<?php echo intval($hoy["year"]); ?>";
+            </script>
+        </td>
+        <td></td>
+    </tr>
 </table>
 </form>
 <?php

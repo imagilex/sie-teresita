@@ -6,31 +6,31 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]) )
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 $secc = Get_Vars_Helper::getPostVar("secc");
 
 if($secc=="1") //¿Como usar un mapa?
 {
-	header("location: usar_mapa.php?noCache=".rand(0,32000));
-	exit();
+    header("location: usar_mapa.php?noCache=".rand(0,32000));
+    exit();
 }
 else if($secc=="2") //Indicadores Críticos
 {
-	header("location: ind_crit.php?noCache=".rand(0,32000));
-	exit();
+    header("location: ind_crit.php?noCache=".rand(0,32000));
+    exit();
 }
 else if($secc=="3") // Planes det trabajo
 {
-	header("location: plan_trab.php?noCache=".rand(0,32000));
-	exit();
+    header("location: plan_trab.php?noCache=".rand(0,32000));
+    exit();
 }
 
 ?>
@@ -57,20 +57,20 @@ BarraHerramientas();
 
 ?>
 <table align="right">
-	<tr>
-		<td>
-			Secci&oacute;n:
-		</td>
-		<td>
-			<form name="Seccion" action="secciones.php" method="post" style="padding:0px; margin:0px;">
-			<select name="secc" onchange="javascript: document.Seccion.submit();"><option value=""></option><?php echo CboCG("mnu_Secciones"); ?></select>
-			</form>
-		</td>
-	</tr>
+    <tr>
+        <td>
+            Secci&oacute;n:
+        </td>
+        <td>
+            <form name="Seccion" action="secciones.php" method="post" style="padding:0px; margin:0px;">
+            <select name="secc" onchange="javascript: document.Seccion.submit();"><option value=""></option><?php echo CboCG("mnu_Secciones"); ?></select>
+            </form>
+        </td>
+    </tr>
 </table>
 <script language="javascript">
-	document.Administracion.ira_adm.value="53";
-	document.Seccion.secc.value="";
+    document.Administracion.ira_adm.value="53";
+    document.Seccion.secc.value="";
 </script>
 <?php
 BH_Ayuda('','');

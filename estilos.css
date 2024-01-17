@@ -2,19 +2,19 @@
 
 {
 
-	border-color:#000000;
+    border-color:#000000;
 
-	border-style:solid;
+    border-style:solid;
 
-	border-width:1px;
+    border-width:1px;
 
-	padding-top:15px;
+    padding-top:15px;
 
-	padding-bottom:25px;
+    padding-bottom:25px;
 
-	padding-left:10px;
+    padding-left:10px;
 
-	padding-right:10px;
+    padding-right:10px;
 
 }
 
@@ -22,11 +22,11 @@ body
 
 {
 
-	font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 
-	font-size:12px;
+    font-size:12px;
 
-	background-repeat:repeat-y;
+    background-repeat:repeat-y;
 
 }
 
@@ -34,9 +34,9 @@ body, form
 
 {
 
-	padding:0px;
+    padding:0px;
 
-	margin:0px;
+    margin:0px;
 
 }
 
@@ -44,9 +44,9 @@ body, form
 
 {
 
-	width:75px;
+    width:75px;
 
-	height:25px;
+    height:25px;
 
 }
 
@@ -54,9 +54,9 @@ body, form
 
 {
 
-	width:100px;
+    width:100px;
 
-	height:25px;
+    height:25px;
 
 }
 
@@ -64,9 +64,9 @@ body, form
 
 {
 
-	width:125px;
+    width:125px;
 
-	height:25px;
+    height:25px;
 
 }
 
@@ -74,9 +74,9 @@ body, form
 
 {
 
-	width:150px;
+    width:150px;
 
-	height:25px;
+    height:25px;
 
 }
 
@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6
 
 {
 
-	color:#990099;
+    color:#990099;
 
 }
 
@@ -92,9 +92,9 @@ a
 
 {
 
-	color:#999;
+    color:#999;
 
-	text-decoration:none;
+    text-decoration:none;
 
 }
 
@@ -102,7 +102,7 @@ input, select, optgroup
 
 {
 
-	font-size:12px;
+    font-size:12px;
 
 }
 
@@ -118,17 +118,17 @@ input, select, optgroup
 
 {
 
-	border-width:1px;
+    border-width:1px;
 
-	border-bottom-style:none;
+    border-bottom-style:none;
 
-	border-right-style:none;
+    border-right-style:none;
 
-	border-top-style:none;
+    border-top-style:none;
 
-	border-left-style:none;
+    border-left-style:none;
 
-	border-color:#BBBBBB;
+    border-color:#BBBBBB;
 
 }
 
@@ -136,27 +136,27 @@ input, select, optgroup
 
 {
 
-	color:#000000;
+    color:#000000;
 
-	background-color:#999999;
+    background-color:#999999;
 
-	text-align:center;
+    text-align:center;
 
-	font-weight:bold;
+    font-weight:bold;
 
-	border-width:1px;
+    border-width:1px;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-right-style:solid;
+    border-right-style:solid;
 
-	border-top-style:solid;
+    border-top-style:solid;
 
-	border-left-style:none;
+    border-left-style:none;
 
-	border-color:#BBBBBB;
+    border-color:#BBBBBB;
 
-	vertical-align:bottom;
+    vertical-align:bottom;
 
 }
 
@@ -164,21 +164,21 @@ input, select, optgroup
 
 {
 
-	color:#000000;
+    color:#000000;
 
-	background-color:#FFFFFF;
+    background-color:#FFFFFF;
 
-	border-width:1px;
+    border-width:1px;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-right-style:solid;
+    border-right-style:solid;
 
-	border-top-style:none;
+    border-top-style:none;
 
-	border-left-style:none;
+    border-left-style:none;
 
-	border-color:#BBBBBB;
+    border-color:#BBBBBB;
 
 }
 
@@ -186,11 +186,11 @@ input, select, optgroup
 
 {
 
-	border-right-style:solid;
+    border-right-style:solid;
 
-	border-width:1px;
+    border-width:1px;
 
-	border-color:#BBBBBB;
+    border-color:#BBBBBB;
 
 }
 
@@ -198,17 +198,17 @@ input, select, optgroup
 
 {
 
-	border-width:1px;
+    border-width:1px;
 
-	border-color:#000000;
+    border-color:#000000;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-left-style:none;
+    border-left-style:none;
 
-	border-top-style:solid;
+    border-top-style:solid;
 
-	border-right-style:none;
+    border-right-style:none;
 
 }
 
@@ -216,25 +216,25 @@ input, select, optgroup
 
 {
 
-	border-width:1px;
+    border-width:1px;
 
-	border-color:#000000;
+    border-color:#000000;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-left-style:solid;
+    border-left-style:solid;
 
-	border-top-style:solid;
+    border-top-style:solid;
 
-	border-right-style:solid;
+    border-right-style:solid;
 
-	background-color:#CCCCCC;
+    background-color:#CCCCCC;
 
-	color:#000000;
+    color:#000000;
 
-	padding:5px;
+    padding:5px;
 
-	font-size:small;
+    font-size:small;
 
 }
 
@@ -242,25 +242,25 @@ input, select, optgroup
 
 {
 
-	border-width:1px;
+    border-width:1px;
 
-	border-color:#000000;
+    border-color:#000000;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-left-style:solid;
+    border-left-style:solid;
 
-	border-top-style:solid;
+    border-top-style:solid;
 
-	border-right-style:solid;
+    border-right-style:solid;
 
-	background-color:#666666;
+    background-color:#666666;
 
-	color:#FFFFFF;
+    color:#FFFFFF;
 
-	padding:5px;
+    padding:5px;
 
-	font-size:small;
+    font-size:small;
 
 }
 
@@ -276,25 +276,25 @@ a.item_menu, span.item_menu
 
 {
 
-	background-color:#FFFFFF;
+    background-color:#FFFFFF;
 
-	color:#999;
+    color:#999;
 
-	font-size:11px;
+    font-size:11px;
 
-	width:98px;
+    width:98px;
 
-	height:23px;
+    height:23px;
 
-	display:block;
+    display:block;
 
-	vertical-align:top;
+    vertical-align:top;
 
-	text-align:left;
+    text-align:left;
 
-	text-decoration:none;
+    text-decoration:none;
 
-	cursor:default;
+    cursor:default;
 
 }
 
@@ -302,25 +302,25 @@ a.item_menu_over, span.item_menu_over
 
 {
 
-	background-color:#FFFFFF;
+    background-color:#FFFFFF;
 
-	color:#000;
+    color:#000;
 
-	font-size:11px;
+    font-size:11px;
 
-	width:98px;
+    width:98px;
 
-	height:23px;
+    height:23px;
 
-	display:block;
+    display:block;
 
-	vertical-align:top;
+    vertical-align:top;
 
-	text-align:left;
+    text-align:left;
 
-	text-decoration:none;
+    text-decoration:none;
 
-	cursor:hand;
+    cursor:hand;
 
 }
 
@@ -328,21 +328,21 @@ span.item_menu2
 
 {
 
-	background-color:#FFFFFF;
+    background-color:#FFFFFF;
 
-	color:#000000;
+    color:#000000;
 
-	font-size:9px;
+    font-size:9px;
 
-	display:block;
+    display:block;
 
-	vertical-align:middle;
+    vertical-align:middle;
 
-	text-align:left;
+    text-align:left;
 
-	text-decoration:none;
+    text-decoration:none;
 
-	cursor:default;
+    cursor:default;
 
 }
 
@@ -350,21 +350,21 @@ span.item_menu_over2
 
 {
 
-	background-color:#CCCCCC;
+    background-color:#CCCCCC;
 
-	color:#FFFFFF;
+    color:#FFFFFF;
 
-	font-size:9px;
+    font-size:9px;
 
-	display:block;
+    display:block;
 
-	vertical-align:middle;
+    vertical-align:middle;
 
-	text-align:left;
+    text-align:left;
 
-	text-decoration:none;
+    text-decoration:none;
 
-	cursor:default;
+    cursor:default;
 
 }
 
@@ -372,27 +372,27 @@ span.item_menu_over2
 
 {
 
-	border-top-style:none;
+    border-top-style:none;
 
-	border-left-style:none;
+    border-left-style:none;
 
-	border-right-style:none;
+    border-right-style:none;
 
-	border-bottom-style:solid;
+    border-bottom-style:solid;
 
-	border-bottom-width:1px;
+    border-bottom-width:1px;
 
-	height:28px;
+    height:28px;
 
-	width:160px;
+    width:160px;
 
-	vertical-align:middle;
+    vertical-align:middle;
 
-	text-align:center;
+    text-align:center;
 
-	font-weight:bold;
+    font-weight:bold;
 
-	margin-top:5px;
+    margin-top:5px;
 
 }
 
@@ -404,17 +404,17 @@ span.item_menu_over2
 
 {
 
-	border-width:1px;
+    border-width:1px;
 
-	border-style:solid;
+    border-style:solid;
 
-	width:159px;
+    width:159px;
 
-	vertical-align:top;
+    vertical-align:top;
 
-	text-align:left;
+    text-align:left;
 
-	background-color:#FFFFFF;
+    background-color:#FFFFFF;
 
 }
 
@@ -542,8 +542,8 @@ span.item_menu_over2
 
 {
 
-	border-style:none;
+    border-style:none;
 
-	border-color:#FFFFFF;
+    border-color:#FFFFFF;
 
 }

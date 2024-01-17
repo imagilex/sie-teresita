@@ -6,34 +6,34 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]))
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 $ira = Get_Vars_Helper::getPGVar("seccion");
 
 if($ira!="")
 {
-	if($ira=="7")
-	{
-		header("location: listas_administracion.php?noCache=".rand(0,32000));
-		exit();
-	}
-	else if($ira=="8")
-	{
-		header("location: listas_usuarios.php?noCache=".rand(0,32000));
-		exit();
-	}
-	else if($ira=="9")
-	{
-		header("location: listas_posicion.php?noCache=".rand(0,32000));
-		exit();
-	}
+    if($ira=="7")
+    {
+        header("location: listas_administracion.php?noCache=".rand(0,32000));
+        exit();
+    }
+    else if($ira=="8")
+    {
+        header("location: listas_usuarios.php?noCache=".rand(0,32000));
+        exit();
+    }
+    else if($ira=="9")
+    {
+        header("location: listas_posicion.php?noCache=".rand(0,32000));
+        exit();
+    }
 }
 
 ?>
@@ -79,13 +79,13 @@ if($ira!="")
 ?>
 <div align="right">
 <form name="menu1" action="herramientas.php" method="post">
-		Secci&oacute;n:
-		  <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
+        Secci&oacute;n:
+          <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
             <?php menu_items($_SESSION["tipo"],'0.4.52'); ?>
           </select>
-		  <script language="javascript">
-		  	document.menu1.seccion.value="";
-		  </script>
+          <script language="javascript">
+              document.menu1.seccion.value="";
+          </script>
 </form>
 </div>
 <?php

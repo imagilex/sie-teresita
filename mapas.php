@@ -12,13 +12,13 @@ include_once("u_mapa/mapa.php");
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]))
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 ?>
@@ -71,12 +71,12 @@ $inferiores="";
 
 if($regs=consulta_directa("select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
 {
-	$inferiores='<optgroup label="Inferior">';
-	while($reg=mysqli_fetch_array($regs))
-	{
-		$inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
-	}
-	$inferiores.='</optgroup>';
+    $inferiores='<optgroup label="Inferior">';
+    while($reg=mysqli_fetch_array($regs))
+    {
+        $inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
+    }
+    $inferiores.='</optgroup>';
 }
 
 ?>

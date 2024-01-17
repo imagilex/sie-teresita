@@ -17,6 +17,6 @@ $usuario=strtolower($usuario);
 
 $num=mysqli_fetch_array(consulta_directa("select count(*) as n from usuario where usuario.usuario like '$usuario%'"));
 if($num["n"]>0)
-	$usuario=$usuario.($num["n"]+1);
+    $usuario=$usuario.($num["n"]+1);
 echo $usuario;
 ?>

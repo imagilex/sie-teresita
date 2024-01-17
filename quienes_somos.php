@@ -6,28 +6,28 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]))
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 $ira = Get_Vars_Helper::getPostVar("seccion");
 
 if($ira=="")
-	$ira="1";
+    $ira="1";
 
 if($ira=="1")
-	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Mision'"));
 else if($ira=="2")
-	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Vision'"));
 else if($ira=="3")
-	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Valores'"));
 else if($ira=="4")
-	$archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Lineamientos' and elemento='Politica_Calidad'"));
 
 ?>
 
@@ -72,26 +72,26 @@ else if($ira=="4")
 ?>
 <div align="right">
 <form name="menu1" action="quienes_somos.php" method="post">
-		Secci&oacute;n:
-		  <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
+        Secci&oacute;n:
+          <select name="seccion" id="seccion" onchange="javascript: document.menu1.submit();">
             <?php menu_items($_SESSION["tipo"],'0.4.5'); ?>
           </select>
-		  <script language="javascript">
-		  	document.menu1.seccion.value="<?php echo $ira; ?>";
-		  </script>
+          <script language="javascript">
+              document.menu1.seccion.value="<?php echo $ira; ?>";
+          </script>
 </form>
 </div>
 <?php
 BH_Ayuda('0.4',$ira);
 ?>
 <table align="center" border="0" width="65%">
-	<tr>
-		<td align="center">
-			<?php
-				MostrarArchivo(dirname(__FILE__)."/Archivos_Secciones/".$archivo["valor"]);
-			?>
-		</td>
-	</tr>
+    <tr>
+        <td align="center">
+            <?php
+                MostrarArchivo(dirname(__FILE__)."/Archivos_Secciones/".$archivo["valor"]);
+            ?>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
