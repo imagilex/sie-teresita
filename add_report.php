@@ -26,7 +26,7 @@ if(Get_Vars_Helper::getPostVar("add")=='yes')
 	else
 	{
 		consulta_directa("insert into reporte (nombre) values ('$nombre')");
-		ErrorMySQLAlert();
+		ErrorMySQLAlert($Con);
 		$id = mysqli_fetch_array(consulta_directa("select id_reporte from reporte where nombre =  '$nombre'"));
 		$id_reporte = $id["id_reporte"];
 		$num_secc = Get_Vars_Helper::getPostVar("num_secc");

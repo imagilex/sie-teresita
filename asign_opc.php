@@ -140,7 +140,7 @@ if(Get_Vars_Helper::getPostVar("sincambios")!="yes" && $funcion!="")
 		$prefijo=$actual[0];
 		$opcion=$actual[1];
 		consulta_directa("insert into funcion_menu (funcion, prefijo_menu, opcion) values ('$funcion', '$prefijo', '$opcion');");
-		ErrorMySQLAlert();
+		ErrorMySQLAlert($Con);
 	}
 }
 ?>

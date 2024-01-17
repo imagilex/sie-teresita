@@ -216,7 +216,7 @@ else if($nivel_lista["lista_nivel"]=="A")
 		</form>
 		<?php
 	}
-	ErrorMySQLAlert();
+	ErrorMySQLAlert($Con);
 }
 else if($nivel_lista["lista_nivel"]=="P")
 {
@@ -286,7 +286,7 @@ else if($nivel_lista["lista_nivel"]=="P")
 			<?php
 		$cad_nombres = substr($cad_nombres,0,strlen($cad_nombres)-1);
 	}
-	ErrorMySQLAlert();
+	ErrorMySQLAlert($Con);
 }
 ?>
 </body>

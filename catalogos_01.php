@@ -59,7 +59,7 @@ if($activity!="")
 
 					consulta_directa("insert into lista_asociada(lista, lista_asocidada, posicion) values ('".$lista_padre["lista"]."', '".$lista_hijo["lista"]."', '".$posicion["n"]."')");
 				}
-				ErrorMySQLAlert();
+				ErrorMySQLAlert($Con);
 			}
    			Change_name_list($sublista, $new_name);
 		}

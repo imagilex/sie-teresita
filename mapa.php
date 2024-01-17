@@ -396,7 +396,7 @@ class mapa
 							<?php
 							$query="select contenido, tipo_documento from mapa_documento where id_documento='$id_documento'";
 							$prod=@mysqli_fetch_array($db->consulta($query));
-							ErrorMySQLAlert();
+							ErrorMySQLAlert($db->coneccion);
 							switch(intval($prod["tipo_documento"]))
 							{
 								case 1: //tipo texto
