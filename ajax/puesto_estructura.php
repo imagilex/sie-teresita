@@ -11,7 +11,7 @@ include("../u_db/data_base.php");
 
 $db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
-$dato=PostString("pto").Get("pto");
+$dato = getPGVar("pto");
 
 if($dato=="") exit();
 

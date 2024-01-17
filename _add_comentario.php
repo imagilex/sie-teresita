@@ -4,9 +4,9 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$comentario=Get("comentario").PostString("comentario");
-$id_reporte=Get("id_reporte").PostString("id_reporte");
-$id_usuario=Get("id_usuario").PostString("id_usuario");
+$comentario = getPGVar("comentario");
+$id_reporte = getPGVar("id_reporte");
+$id_usuario = getPGVar("id_usuario");
 
 $date_actual=getdate();
 $fecha=$date_actual["year"]."-".$date_actual["mon"]."-".$date_actual["mday"];
@@ -50,7 +50,5 @@ if($id_reporte!="" && $comentarios=consulta_directa("select fecha, comentario, n
 	</dl></fieldset><br />
 	<?php
 }
-
-mysqli_close($Con);
 
 ?>

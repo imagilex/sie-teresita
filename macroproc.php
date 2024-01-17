@@ -5,9 +5,9 @@ session_start();
 include "apoyo.php";
 include "util_dir/directorio.php";
 
-$Con=Conectar();
+$Con = Conectar();
 
-$tipo_reporte=PostString("tipo_rep").Get("tipo_rep");
+$tipo_reporte = getPostVar("tipo_rep");
 if($tipo_reporte=="") $tipo_reporte="RH";
 
 $carp=@mysqli_fetch_array(consulta_directa("select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
@@ -19,12 +19,12 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$id_reporte=PostString("reporte");
-$nivel=PostString("nivel");
-$fecha=PostString("fecha_reporte");
+$id_reporte = getPostVar("reporte");
+$nivel = getPostVar("nivel");
+$fecha = getPostVar("fecha_reporte");
 
-$btn_ant=((PostString("ant_rep")!="")?(true):(false));
-$btn_sig=((PostString("sig_rep")!="")?(true):(false));
+$btn_ant = ((getPostVar("ant_rep")!="")?(true):(false));
+$btn_sig = ((getPostVar("sig_rep")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
@@ -60,7 +60,7 @@ if($btn_ant || $btn_sig)
 	$id_reporte=$reportes[$x];
 }
 
-if(PostString("reporte_actual")!=$id_reporte)
+if(getPostVar("reporte_actual")!=$id_reporte)
 	$nivel="";
 
 ?>
@@ -608,8 +608,3 @@ if($secciones=consulta_directa("select prefijo_reporte, nombre,extension from re
 </script>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

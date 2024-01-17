@@ -1,14 +1,14 @@
 <?php
 include("../apoyo.php");
 
-/*echo "<br />accion = ".($accion=PostString("accion").Get("accion"));
-echo "<br />url_retorno = ".($url_retorno=PostString("url_retorno").Get("url_retorno"));
-echo "<br />carpeta = ".($carpeta=PostString("carpeta").Get("carpeta"));
-echo "<br />ruta = ".($ruta=PostString("ruta").Get("ruta"));*/
-$accion=PostString("accion").Get("accion");
-$url_retorno=PostString("url_retorno").Get("url_retorno");
-$carpeta=PostString("carpeta").Get("carpeta");
-$ruta=PostString("ruta").Get("ruta");
+/*echo "<br />accion = ".($accion = getPGVar("accion"));
+echo "<br />url_retorno = ".($url_retorno = getPGVar("url_retorno"));
+echo "<br />carpeta = ".($carpeta = getPGVar("carpeta"));
+echo "<br />ruta = ".($ruta = getPGVar("ruta"));*/
+$accion = getPGVar("accion");
+$url_retorno = getPGVar("url_retorno");
+$carpeta = getPGVar("carpeta");
+$ruta = getPGVar("ruta");
 
 if($accion!="")
 {

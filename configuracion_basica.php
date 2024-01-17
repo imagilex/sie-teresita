@@ -17,13 +17,13 @@ if(!isset($_SESSION["tipo"]) )
 
 $id_seccion=$elemento="";
 
-$datos=PostString("datos");
+$datos = getPostVar("datos");
 if($datos!="")
 {
 	list($id_seccion,$elemento)=explode(" ",$datos);
 }
 
-	$tipo_contenido=PostString("tipo_contenido");
+	$tipo_contenido = getPostVar("tipo_contenido");
 	if($tipo_contenido=="archivo de texto")
 	{
 		if(isset($_FILES["valor"]["name"]) && $_FILES["valor"]["name"]!="")
@@ -68,8 +68,8 @@ if($datos!="")
 	}
 	else if($tipo_contenido=="texto")
 	{
-		if(PostString("valor")!="")
-			consulta_directa("update seccion set valor='".PostString("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
+		if(getPostVar("valor")!="")
+			consulta_directa("update seccion set valor='".getPostVar("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
 	}
 ?>
 
@@ -232,8 +232,3 @@ BH_Ayuda('0.4.51','3');
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

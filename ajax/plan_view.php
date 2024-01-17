@@ -1,11 +1,11 @@
-<?php session_start(); 
+<?php session_start();
 
 include_once("../apoyo.php");
-$vista=PostString("vista").Get("vista");
-$origen=PostString("origen").Get("origen");
-$estatus=PostString("estatus").Get("estatus");
-$accion=PostString("accion").Get("accion");
-$documento=PostString("documento").Get("documento");
+$vista = getPGVar("vista");
+$origen = getPGVar("origen");
+$estatus = getPGVar("estatus");
+$accion = getPGVar("accion");
+$documento = getPGVar("documento");
 if($accion!="")
 {
 	if($accion=="activar" && $documento!="")
@@ -32,7 +32,7 @@ if($accion!="")
 	{
 		$taux=CTabla("docto6");
 		$taux->update(array("estatus"=>"S"),"id_documento='$documento'");
-	}	
+	}
 	else if($accion=="terminar" && $documento!="")
 	{
 		$taux=CTabla("docto6");
@@ -117,7 +117,7 @@ if($vista=="1")
 					}
 					?>
 					</td>
-				</tr>				
+				</tr>
 				<?php
 			}
 			$cuantos=$tdocs->registro($tdocs->query("select count(*) as 'n' from docto_general inner join docto6 on docto_general.id_documento=docto6.id_documento where tipo_documento='2' and origen='$origen' and (agrupador='3' or agrupador='7')".($estatus!="all"?" and estatus='$estatus'":"")));

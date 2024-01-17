@@ -6,7 +6,7 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$accion=PostString("accion");
+$accion = getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="1")
@@ -101,8 +101,3 @@ BH_Ayuda('0.4.51','1');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

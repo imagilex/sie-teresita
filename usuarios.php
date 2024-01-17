@@ -16,17 +16,17 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$usuario_form=PostString("usuario");
+$usuario_form = getPostVar("usuario");
 
-if(PostString("Guardar")!="")
+if(getPostVar("Guardar")!="")
 {
-	$clave=PostString("clave");
-	$password=PostString("password");
-	$persona=PostString("persona");
-	$tipo_usuario=PostString("tipo_usuario");
-	$estatus=PostString("estatus");
-	$fecha_alta=PostDate("fecha_alta");
-	if(PostString("add")=="yes" && $clave!="")
+	$clave = getPostVar("clave");
+	$password = getPostVar("password");
+	$persona = getPostVar("persona");
+	$tipo_usuario = getPostVar("tipo_usuario");
+	$estatus = getPostVar("estatus");
+	$fecha_alta = getPostDate("fecha_alta");
+	if(getPostVar("add")=="yes" && $clave!="")
 	{
 		consulta_directa("insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
 		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
@@ -119,7 +119,7 @@ $datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='
 <?php
 
 BH_Ayuda('0.4.51.1','2');
-if(PostString("Nuevo")=="")
+if(getPostVar("Nuevo")=="")
 {
 ?>
 <form method="post" enctype="multipart/form-data" name="datos" action="usuarios.php">
@@ -282,8 +282,3 @@ else
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

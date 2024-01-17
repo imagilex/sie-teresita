@@ -9,9 +9,9 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
+$db = new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
 
-$dato=PostString("clave").Get("clave");
+$dato = getPGVar("clave");
 
 if($dato=="") exit();
 

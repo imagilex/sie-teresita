@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$seccion=PostString("seccion");
+$seccion = getPostVar("seccion");
 if($seccion!="")
 {
 	if($seccion=="1")
@@ -89,8 +89,3 @@ BH_Ayuda('0.4','51');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

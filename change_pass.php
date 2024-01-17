@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$newp=PostString("newp").Get("newp");
+$newp = getPGVar("newp");
 if($newp!="")
 {
 	$query="update usuario set password = '$newp' where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'";
@@ -89,8 +89,3 @@ BH_Ayuda('','');
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

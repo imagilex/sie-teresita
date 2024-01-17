@@ -1,8 +1,8 @@
-<?php 
+<?php
 session_start();
 include("../apoyo.php");
-$accion=PostString("accion").Get("accion");
-$herramienta=PostString("herramienta").Get("herramienta");
+$accion = getPGVar("accion");
+$herramienta = getPGVar("herramienta");
 
 if($accion!="" && $herramienta!="")
 {
@@ -98,14 +98,14 @@ if($accion!="" && $herramienta!="")
 	}
 	else if($accion=="salvar")
 	{
-		$total=PostString("total_cols").Get("total_cols");
+		$total = getPGVar("total_cols");
 		$thpp->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."'");
 		for($x=1;$x<=$total;$x++)
 		{
-			$campo=PostString("vis_".$x).Get("vis_".$x);
-			$etiqueta=PostString("eti_".$x).Get("eti_".$x);
-			$posicion=PostString("pos_".$x).Get("pos_".$x);
-			$orden=PostString("ord_".$x).Get("ord_".$x);
+			$campo = getPGVar("vis_".$x);
+			$etiqueta = getPGVar("eti_".$x);
+			$posicion = getPGVar("pos_".$x);
+			$orden = getPGVar("ord_".$x);
 			if($campo!="")
 			{
 				$thpp->insert(array("campo"=>$campo, "etiqueta"=>$etiqueta, "usuario"=>$_SESSION["id_usr"], "orden"=>$orden, "posicion"=>$posicion, "herramienta"=>$herramienta));

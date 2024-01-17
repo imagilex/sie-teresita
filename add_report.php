@@ -15,9 +15,9 @@ if(!isset($_SESSION["tipo"])  )
 	exit();
 }
 
-if(PostString("add")=='yes')
+if(getPostVar("add")=='yes')
 {
-	$nombre=PostString("nombre");
+	$nombre = getPostVar("nombre");
 	$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from reporte where nombre = '$nombre'"));
 	if(intval($cuantos["n"])>0)
 	{
@@ -27,14 +27,14 @@ if(PostString("add")=='yes')
 	{
 		consulta_directa("insert into reporte (nombre) values ('$nombre')");
 		ErrorMySQLAlert();
-		$id=mysqli_fetch_array(consulta_directa("select id_reporte from reporte where nombre =  '$nombre'"));
-		$id_reporte=$id["id_reporte"];
-		$num_secc=PostString("num_secc");
+		$id = mysqli_fetch_array(consulta_directa("select id_reporte from reporte where nombre =  '$nombre'"));
+		$id_reporte = $id["id_reporte"];
+		$num_secc = getPostVar("num_secc");
 		for($x=2;$x<=$num_secc;$x++)
 		{
-			$seccion=PostString("nom$x");
-			$posicion=PostString("pos$x");
-			$mostrar=((PostString("mos$x")=="S")?(1):(0));
+			$seccion = getPostVar("nom$x");
+			$posicion = getPostVar("pos$x");
+			$mostrar = ((getPostVar("mos$x")=="S")?(1):(0));
 			if($seccion!="" && isset($_FILES["arc$x"]["name"]) && $_FILES["arc$x"]["name"]!="")
 			{
 				$info=pathinfo($Dir."/Archivos_Reportes/".$_FILES["arc$x"]["name"]);
@@ -43,9 +43,9 @@ if(PostString("add")=='yes')
 				consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 			}
 		}
-		$seccion=PostString("nom1");
-		$posicion=PostString("pos1");
-		$mostrar=PostString("mos1");
+		$seccion = getPostVar("nom1");
+		$posicion = getPostVar("pos1");
+		$mostrar = getPostVar("mos1");
 		consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 	}
 }
@@ -160,8 +160,3 @@ BH_Ayuda('0.4.','');
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

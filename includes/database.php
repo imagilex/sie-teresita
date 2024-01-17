@@ -61,7 +61,7 @@ if(!isset($__DB_MODULE__)) {
 			$ret = $this->mysqli->query($query, $modo);
             if($this->mysqli->errno) {
                 throw new Exception(
-                    "Error al establecer conexion con la base de datos: " .
+                    "Error al ejecutar consulta en la base de datos: " .
                     $this->error());
             }
 			return $ret;

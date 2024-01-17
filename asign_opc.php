@@ -125,10 +125,10 @@ BarraHerramientas();
 <?php
 BH_Ayuda('0.4.51.1','4');
 
-$funcion=PostString("funcion");
-if(PostString("sincambios")!="yes" && $funcion!="")
+$funcion = getPostVar("funcion");
+if(getPostVar("sincambios")!="yes" && $funcion!="")
 {
-	$registros=PostString("Reg");
+	$registros = getPostVar("Reg");
 	$total=count($registros);
 	if($total>0)
 	{
@@ -196,8 +196,3 @@ if(PostString("sincambios")!="yes" && $funcion!="")
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

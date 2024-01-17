@@ -8,11 +8,11 @@ $esta=false;
 
 $Con=Conectar();
 
-$comentario=Get("comentario").PostString("comentario");
-$id_usuario=Get("id_usuario").PostString("id_usuario");
-$id_reporte=Get("id_reporte").PostString("id_reporte");
-$fecha=Get("fecha").PostString("fecha");
-$fecha_reporte=Get("fecha_reporte").PostString("fecha_reporte");
+$comentario = getPGVar("comentario");
+$id_usuario = getPGVar("id_usuario");
+$id_reporte = getPGVar("id_reporte");
+$fecha = getPGVar("fecha");
+$fecha_reporte = getPGVar("fecha_reporte");
 
 if($comentario != "" && $id_reporte != "" && $id_usuario != "" && $fecha_reporte!="")
 {
@@ -89,6 +89,4 @@ if(! $esta)
 		<div id="elComentario"></div>
 	<?php
 }
-
-mysqli_close($Con);
 ?>

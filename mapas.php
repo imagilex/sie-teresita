@@ -63,8 +63,8 @@ if(!isset($_SESSION["tipo"]))
 //B_reportes();
 BH_Ayuda('','');
 
-$id_mapa=PostString("id_mapa").Get("id_mapa");
-$docto=PostString("docto").Get("docto");
+$id_mapa = getPostVar("id_mapa");
+$docto = getPostVar("docto");
 
 $superiores= array();
 $inferiores="";
@@ -93,8 +93,3 @@ $cont->print_mapa("mapas.php?",'950px','760px',$docto);
 </td></tr></table>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

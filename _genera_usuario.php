@@ -4,8 +4,8 @@ include("apoyo.php");
 
 $Con=Conectar();
 
-$nombre=PostString("nombre");
-$apaterno=PostString("apaterno");
+$nombre = getPostVar("nombre");
+$apaterno = getPostVar("apaterno");
 $usuario=substr($nombre,0,1).$apaterno;
 $usuario=str_replace("á","a",$usuario);$usuario=str_replace("é","e",$usuario);$usuario=str_replace("í","i",$usuario);$usuario=str_replace("ó","o",$usuario);
 $usuario=str_replace("ú","u",$usuario);$usuario=str_replace("Á","a",$usuario);$usuario=str_replace("É","e",$usuario);$usuario=str_replace("Í","i",$usuario);
@@ -19,6 +19,4 @@ $num=mysqli_fetch_array(consulta_directa("select count(*) as n from usuario wher
 if($num["n"]>0)
 	$usuario=$usuario.($num["n"]+1);
 echo $usuario;
-
-mysqli_close($Con);
 ?>

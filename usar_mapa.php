@@ -43,8 +43,3 @@ BH_Ayuda('','');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

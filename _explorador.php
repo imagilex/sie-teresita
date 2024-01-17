@@ -9,9 +9,9 @@ header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 include("apoyo.php");
 $Con=Conectar();
-$raiz=PostString("raiz").Get("raiz");
-$proyecto=PostString("proyecto").Get("proyecto");
-$ruta_expl=PostString("ruta_expl").Get("ruta_expl");
+$raiz = getPGVar("raiz");
+$proyecto = getPGVar("proyecto");
+$ruta_expl = getPGVar("ruta_expl");
 if($ruta_expl!="")
 {
 	$pos=strpos($ruta_expl,"Archivos_Planes");
@@ -21,13 +21,13 @@ if($ruta_expl!="")
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion=PostString("accion");
+$accion = getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -159,7 +159,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)
@@ -837,6 +837,3 @@ function elimina_acentos($cadena){
 
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

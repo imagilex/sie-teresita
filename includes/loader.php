@@ -10,4 +10,5 @@ define("MAIN_DIR", DirectoryHelper::get_site_root_directory(
 include_once MAIN_DIR . "/__settings.php";
 
 define("MAIN_DB", new DB_Database(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE));
+date_default_timezone_set('America/Mexico_City');
 ?>

@@ -6,12 +6,12 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$id_usuario=Get("id_usuario").PostString("id_usuario");
-$indicador=Get("indicador").PostString("indicador");
-$id_indicador_nivel=Get("nivel").PostString("nivel");
-$anio=Get("anio").PostString("anio");
-$mes=Get("mes").PostString("mes");
-$fecha=Get("fecha").PostString("fecha");
+$id_usuario = getPGVar("id_usuario");
+$indicador = getPGVar("indicador");
+$id_indicador_nivel = getPGVar("nivel");
+$anio = getPGVar("anio");
+$mes = getPGVar("mes");
+$fecha = getPGVar("fecha");
 
 $usr=mysqli_fetch_array(consulta_directa("select clave as `usuario` from usuario where clave='$id_usuario'"));
 $usuario=$usr["usuario"];
@@ -30,7 +30,4 @@ else
 }
 
 echo NoAcute($comentario["comentario"]);
-
-mysqli_close($Con);
-
 ?>

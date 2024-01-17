@@ -12,18 +12,18 @@ include_once("u_tabla/tabla.php");
 include "libreria/funciones_ger.php";
 
 $Con=Conectar();
-$proyecto=PostString("proyecto").Get("proyecto");
-$ruta=addslashes(PostString("ruta").Get("ruta"));
+$proyecto=getPGVar("proyecto");
+$ruta=addslashes(getPGVar("ruta"));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion=PostString("accion");
+$accion = getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -154,7 +154,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)
@@ -1026,4 +1026,3 @@ $tbl = new tabla();
 </form>
 </body>
 </html>
-<?php mysqli_close($Con); ?>

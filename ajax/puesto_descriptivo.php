@@ -34,15 +34,15 @@ if(!isset($_SESSION["tipo"]) )
 </style>
 </head>
 <?php
-$regs=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
-$Logo=$regs["valor"];
-$pto=PostString("pto").Get("pto");
-$persona=PostString("persona").Get("persona");
+$regs = mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
+$Logo = $regs["valor"];
+$pto = getPGVar("pto");
+$persona = getPGVar("persona");
 ?>
 <body>
 <?php
 if($pto=="" && $persona=="") exit();
-$puestos=array();
+$puestos = array();
 if($persona=="" && $pto!="")
 {
 	$puestos[]=$pto;
@@ -129,4 +129,3 @@ if($aux<@count($puestos)) echo '<hr class="salto" />';
 ?>
 </body>
 </html>
-<?php mysqli_close($Con); ?>

@@ -8,13 +8,13 @@ $esta=false;
 
 $Con=Conectar();
 
-$comentario=Get("comentario").PostString("comentario");
-$id_usuario=Get("id_usuario").PostString("id_usuario");
-$indicador=Get("indicador").PostString("indicador");
-$id_indicador_nivel=Get("nivel").PostString("nivel");
-$anio=Get("anio").PostString("anio");
-$mes=Get("mes").PostString("mes");
-$fecha=Get("fecha").PostString("fecha");
+$comentario = getPGVar("comentario");
+$id_usuario = getPGVar("id_usuario");
+$indicador = getPGVar("indicador");
+$id_indicador_nivel = getPGVar("nivel");
+$anio = getPGVar("anio");
+$mes = getPGVar("mes");
+$fecha = getPGVar("fecha");
 
 if($comentario != "" && $indicador != "" && $id_indicador_nivel != "" && $id_usuario != "")
 {
@@ -97,6 +97,4 @@ if(! $esta)
 	<div id="elComentario"></div>
 	<?php
 }
-
-mysqli_close($Con);
 ?>

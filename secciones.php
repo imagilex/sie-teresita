@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$secc=PostString("secc");
+$secc = getPostVar("secc");
 
 if($secc=="1") //¿Como usar un mapa?
 {
@@ -77,8 +77,3 @@ BH_Ayuda('','');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

@@ -90,32 +90,32 @@ if(!isset($_SESSION["tipo"]) )
 <?php
 BarraHerramientas();
 
-$Campo=PostString("campo");
-$total=intval(PostString("total"));
+$Campo = getPostVar("campo");
+$total = intval(getPostVar("total"));
 
 if($total>0 && $Campo!="")
 	for($x=1;$x<=$total;$x++)
 	{
-		if(PostString("cambio$x")=="S")
+		if(getPostVar("cambio$x")=="S")
 		{
-			$id=PostString("id$x");
-			$desc=PostString("Des$x");
-			$val=PostString("Val$x");
-			$val=($val!="")?($val):($id);
-			$pos=PostString("pos$x");
-			$otr=PostString("otr$x");
-			$estatus=PostString("estatus$x");
+			$id = getPostVar("id$x");
+			$desc = getPostVar("Des$x");
+			$val = getPostVar("Val$x");
+			$val = ($val!="")?($val):($id);
+			$pos = getPostVar("pos$x");
+			$otr = getPostVar("otr$x");
+			$estatus = getPostVar("estatus$x");
 			consulta_directa("update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
 		}
 	}
 
 for($x=1;$x<=10;$x++)
 {
-	$id=PostString("Clave$x");
-	$desc=PostString("Descrip$x");
-	$posi=PostString("posi$x");
-	$otro=PostString("otro$x");
-	$estatus=PostString("estat$x");
+	$id = getPostVar("Clave$x");
+	$desc = getPostVar("Descrip$x");
+	$posi = getPostVar("posi$x");
+	$otro = getPostVar("otro$x");
+	$estatus = getPostVar("estat$x");
 	if($id!="" && $desc!="")
 	{
 		$registros_repetidos=mysqli_fetch_array(consulta_directa("select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
@@ -126,16 +126,16 @@ for($x=1;$x<=10;$x++)
 
 
 $altas_usr=false;
-if(PostString("btnAltaUsuarios")=="Altas Usuarios")
+if(getPostVar("btnAltaUsuarios")=="Altas Usuarios")
 {
 	$altas_usr=true;
 }
-$query="select * from codigos_generales where campo='$Campo'";
-$clave_b=PostString("clave_b");
-$desc_b=PostString("descr_b");
-$pos_b=PostString("pos_b");
-$otro_b=PostString("otro_b");
-$estatus_b=PostString("estatus_b");
+$query = "select * from codigos_generales where campo='$Campo'";
+$clave_b = getPostVar("clave_b");
+$desc_b = getPostVar("descr_b");
+$pos_b = getPostVar("pos_b");
+$otro_b = getPostVar("otro_b");
+$estatus_b = getPostVar("estatus_b");
 if($clave_b!="")
 	$query=$query." and valor = '$clave_b'";
 if($desc_b!="")
@@ -238,7 +238,3 @@ BH_Ayuda('0.4.51','2');
 </form>
 </body>
 </html>
-<?php
-mysqli_close($Con);
-unset($Campo, $Con, $Reg, $Regs, $x);
-?>

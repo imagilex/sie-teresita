@@ -304,8 +304,3 @@ BH_Ayuda('','');
 <table border="0" id="doc" align="center" cellspacing="10"></table>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

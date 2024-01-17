@@ -119,8 +119,8 @@ class documento
 				<tr><td colspan="2">Palabras Clave: <?php echo $docto1[0]["palabras_clave"]; ?></td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
 				<!-- Orden del dia -->
-				<tr><td colspan="2" align="left"><strong><?php 
-					$nombre=$secciones[2]["nombre_seccion"]; 
+				<tr><td colspan="2" align="left"><strong><?php
+					$nombre=$secciones[2]["nombre_seccion"];
 					if($nombre!="") echo $nombre;
 					else
 					{
@@ -146,8 +146,8 @@ class documento
 				</td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
 				<!-- Komps -->
-				<tr><td colspan="2" align="left"><strong><?php 
-					$nombre=$secciones[3]["nombre_seccion"]; 
+				<tr><td colspan="2" align="left"><strong><?php
+					$nombre=$secciones[3]["nombre_seccion"];
 					if($nombre!="") echo $nombre;
 					else
 					{
@@ -164,7 +164,7 @@ class documento
 							?>
 							<tr style="font-size:9px"><th align="left" width="30">Num</th><th align="left" width="500">Descripci&oacute;n</th><th align="left" width="40">Inicio</th><th align="left" width="40">Fin</th><th align="left" width="150">Proveedor</th><th align="left" width="150">Cliente</th><th align="left" width="75">Puntos</th><th align="left" width="75">Estatus</th></tr>
 							<?php
-							$taux=CTabla("persona");							
+							$taux=CTabla("persona");
 							foreach($docto3 as $elem)
 							{
 								$prov=$taux->select("concat(nombre) as nomb","clave='".$elem["responsable"]."'");
@@ -180,8 +180,8 @@ class documento
 				</td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
 				<!-- Tareas -->
-				<tr><td colspan="2" align="left"><strong><?php 
-					$nombre=$secciones[4]["nombre_seccion"]; 
+				<tr><td colspan="2" align="left"><strong><?php
+					$nombre=$secciones[4]["nombre_seccion"];
 					if($nombre!="") echo $nombre;
 					else
 					{
@@ -214,8 +214,8 @@ class documento
 				</td></tr>
 				<tr><td colspan="2">&nbsp;</td></tr>
 				<!-- Acuerdos -->
-				<tr><td colspan="2" align="left"><strong><?php 
-					$nombre=$secciones[5]["nombre_seccion"]; 
+				<tr><td colspan="2" align="left"><strong><?php
+					$nombre=$secciones[5]["nombre_seccion"];
 					if($nombre!="") echo $nombre;
 					else
 					{
@@ -307,12 +307,12 @@ class documento
 				</td></tr></table>
 				<?php
 			}
-		}		
+		}
 	}
 }
 
-$id_docto=PostString("id_docto").Get("id_docto");
-$act=PostString("act").Get("act");
+$id_docto = getPGVar("id_docto");
+$act = getPGVar("act");
 if($act!="")
 {
 	if($act=="display_all")
@@ -322,7 +322,7 @@ if($act!="")
 	}
 	else if($act=="")
 	{
-		
+
 	}
 }
 ?>

@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$ira=PostString("seccion").Get("seccion");
+$ira = getPGVar("seccion");
 
 if($ira!="")
 {
@@ -93,8 +93,3 @@ BH_Ayuda('','');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

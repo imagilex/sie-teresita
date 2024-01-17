@@ -2,8 +2,8 @@
 include "apoyo.php";
 $Con=Conectar();
 
-$proyecto=PostString("proyecto").Get("proyecto");
-$accion=PostString("accion").Get("accion");
+$proyecto = getPostVar("proyecto");
+$accion = getPostVar("accion");
 
 $arch=false;
 
@@ -40,6 +40,4 @@ else
 {
 	echo "{};";
 }
-
-mysqli_close($Con);
 ?>

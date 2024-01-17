@@ -12,28 +12,28 @@ $Con=Conectar();
 }*/
 if(!isset($_SESSION["id_usr"])) $_SESSION["id_usr"]="0";
 if(!isset($_SESSION["tipo"])) $_SESSION["tipo"]="-1";
-$sid_usuario=$_SESSION["id_usr"];
-$stipo_usuario=$_SESSION["tipo"];
-$lista=PostString("lista").Get("lista");
-$sublista=PostString("sublista").Get("sublista");
-$accion=PostString("accion").Get("accion");
-$ql=stripslashes(PostString("ql").Get("ql"));
-$qsl=stripslashes(PostString("qsl").Get("qsl"));
-$actlist=PostString("actlist").Get("actlist");
-$actsublist=PostString("actsublist").Get("actsublist");
+$sid_usuario = $_SESSION["id_usr"];
+$stipo_usuario = $_SESSION["tipo"];
+$lista = getPGVar("lista");
+$sublista = getPGVar("sublista");
+$accion = getPGVar("accion");
+$ql = stripslashes(getPGVar("ql"));
+$qsl = stripslashes(getPGVar("qsl"));
+$actlist = getPGVar("actlist");
+$actsublist = getPGVar("actsublist");
 
-$activity=Get("activity");
+$activity = getGetVar("activity");
 if($activity!="")
 	{
-    $total=Get("total_currs");
-	$lista=Get("lista");
-    $new_name=Get("new_name");
-    $list_name=Get("list_name");
+    $total = getGetVar("total_currs");
+	$lista = getGetVar("lista");
+    $new_name = getGetVar("new_name");
+    $list_name = getGetVar("list_name");
 	if($activity=="del_single" && $sublista!="")
     {
 		for($x=1;$x<=$total;$x++)
     	{
-       		$curr=explode(" ",Get("id_curr$x"));
+       		$curr = explode(" ", getGetVar("id_curr$x"));
 	       	Del_to_list($sublista, $curr[0], $curr[1]);
     	}
 	}
@@ -86,7 +86,7 @@ if($activity!="")
 		$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr=explode(" ",Get("id_curr$x"));
+			$curr = explode(" ",getGetVar("id_curr$x"));
 			Move_to_list($sublista, $id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -110,7 +110,7 @@ if($activity!="")
 		$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr=explode(" ", Get("id_curr$x"));
+			$curr = explode(" ", getGetVar("id_curr$x"));
 			Copy_to_list($lista, $id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -138,7 +138,7 @@ if($activity!="")
 			$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr=explode(" ",Get("id_curr$x"));
+			$curr = explode(" ", getGetVar("id_curr$x"));
 			Add_to_list($id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -186,7 +186,7 @@ if($activity!="")
 	header("location: catalogos_01.php?$ruta");
 }
 
-$pantalla=PostString("pantalla").Get("pantalla");
+$pantalla = getPGVar("pantalla");
 if($pantalla=="") $pantalla = "Códigos";
 
 $query_list="";
@@ -1067,6 +1067,3 @@ BH_Ayuda('0.4','6');
 </div>
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

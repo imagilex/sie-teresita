@@ -4,7 +4,7 @@ include("apoyo.php");
 
 $Con=Conectar();
 
-$Archivo=$Dir."/".Get("archivo").PostString("archivo");
+$Archivo=$Dir."/".getPGVar("archivo");
 
 if(file_exists($Archivo))
 {
@@ -23,10 +23,6 @@ if(file_exists($Archivo))
 	}
 	else if($info["extension"]=="jpg" || $info["extension"]=="png" || $info["extension"]=="bmp" || $info["extension"]=="wmf" || $info["extension"]=="gif")
 	{
-		?><img border="0" src="<?php echo Get("archivo"); ?>" /><?php
+		?><img border="0" src="<?php echo getGetVar("archivo"); ?>" /><?php
 	}
 }
-
-mysqli_close($Con);
-
-?>

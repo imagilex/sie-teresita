@@ -8,14 +8,14 @@ $Con=Conectar();
 
 if(!isset($_SESSION["id_usr"])) $_SESSION["id_usr"]="0";
 
-$lista=PostString("lista").Get("lista");
-$sublista="";
-$accion=PostString("accion").Get("accion");
-$ql=stripslashes(PostString("ql").Get("ql"));
-$qsl=stripslashes(PostString("qsl").Get("qsl"));
-$actlist=PostString("actlist").Get("actlist");
-$actsublist=PostString("actsublist").Get("actsublist");
-$pantalla=PostString("pantalla").Get("pantalla");
+$lista = getPGVar("lista");
+$sublista = "";
+$accion = getPGVar("accion");
+$ql = stripslashes(getPGVar("ql"));
+$qsl = stripslashes(getPGVar("qsl"));
+$actlist = getPGVar("actlist");
+$actsublist = getPGVar("actsublist");
+$pantalla = getPGVar("pantalla");
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -291,8 +291,3 @@ else if($nivel_lista["lista_nivel"]=="P")
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

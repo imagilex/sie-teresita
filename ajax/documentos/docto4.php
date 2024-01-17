@@ -1,26 +1,26 @@
 <?php
 session_start();
 include("../../apoyo.php");
-$tabla=CTabla("docto4");
-$accion=PostString("accion").Get("accion");
-$documento=PostString("documento").Get("documento");
-$consecutivo=PostString("consecutivo").Get("consecutivo");
+$tabla = CTabla("docto4");
+$accion = getPGVar("accion");
+$documento = getPGVar("documento");
+$consecutivo = getPGVar("consecutivo");
 if($accion!="")
 {
 	if($accion=="inserta")
 	{
-	
+
 	}
 	else if($accion=="actualiza")
 	{
-	
+
 	}
 	else if($accion=="elimina")
 	{
-	
-	}	
+
+	}
 	else if($accion=="get_xml")
-	{	
+	{
 		if($documento=="")
 		{
 		}
@@ -32,7 +32,7 @@ if($accion!="")
 			else
 			{
 			}
-		}	
+		}
 		header('Content-type: text/xml');
 		echo '<?xml version="1.0" encoding="iso-8859-1"?>';
 		echo "\n".'<!DOCTYPE raiz SYSTEM "documento2.dtd">';
@@ -62,7 +62,7 @@ if($accion!="")
 			}
 			$aux .= substr($cad,0,strlen($cad)-1)."\n\t},";
 		}
-		echo substr($aux,0,strlen($aux)-1)."\n".']';	
+		echo substr($aux,0,strlen($aux)-1)."\n".']';
 	}
 }
 ?>

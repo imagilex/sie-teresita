@@ -1,37 +1,37 @@
-<?php 
+<?php
 session_start();
 include_once("../apoyo.php");
 
-$act=PostString("act").Get("act");
-if(PostString("display_page").Get("display_page")=="true") $display_page=true;
+$act = getPGVar("act");
+if(getPGVar("display_page")=="true") $display_page=true;
 else $display_page=false;
-$tcols_def=CTabla("docto3_columnas_alias");
-$tcols=CTabla("docto3_columnas");
+$tcols_def = CTabla("docto3_columnas_alias");
+$tcols = CTabla("docto3_columnas");
 if($act!="")
-{	
+{
 	if($act=="modify_cols")
 	{
-		$col=Get("col");
-		$eti=Get("eti");
-		$pos=Get("pos");
-		$ord=Get("ord");
+		$col = getGetVar("col");
+		$eti = getGetVar("eti");
+		$pos = getGetVar("pos");
+		$ord = getGetVar("ord");
 		$tcols->delete("usuario='".$_SESSION["id_usr"]."'");
 		for($x=0;$x<count($col);$x++)
-		{	
+		{
 			$envio=array("usuario"=>$_SESSION["id_usr"], "columna"=>$col[$x], "posicion"=>$pos[$x], "orden"=>$ord[$x], "etiqueta"=>$eti[$x]);
 			$tcols->insert($envio);
 		}
 	}
 	if($act=="display_sql")
 	{
-		$lista=PostString("lista").Get("lista");
-		$usuar=PostString("usuario").Get("usuario");
+		$lista=getPGVar("lista");
+		$usuar=getPGVar("usuario");
 		echo DisplaySQLD3($lista,$usuar);
 	}
 	exit();
 }
-$dcols_def=$tcols_def->select("*");
-$dcols=$tcols->select("*","usuario='".$_SESSION["id_usr"]."'","posicion");
+$dcols_def = $tcols_def->select("*");
+$dcols = $tcols->select("*","usuario='".$_SESSION["id_usr"]."'","posicion");
 ?>
 <table border="0" align="center">
 	<thead>

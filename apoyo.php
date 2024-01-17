@@ -2,7 +2,7 @@
 
 include_once "includes/loader.php";
 
-function consulta_directa($query, $modo = MYSQLI_STORE_RESULT) {
+function consulta_directa(string $query, int $modo = MYSQLI_STORE_RESULT) {
 	return MAIN_DB->query($query, $modo);
 }
 
@@ -13,6 +13,51 @@ function Conectar()
 	} catch (Exception $e) {
 		Alert($e->getMessage());
 	}
+}
+
+function getPostVar(string $variable) {
+	return isset($_POST[$variable]) && $_POST[$variable] != ""
+		? $_POST[$variable]
+		: "";
+}
+
+function getGetVar(string $variable) {
+	return isset($_GET[$variable]) && $_GET[$variable] != ""
+		? $_GET[$variable]
+		: "";
+}
+
+function getPGVar(string $variable) {
+	return getPostVar($variable) . getGetVar($variable);
+}
+
+function varsAsDate(string $dia, string $mes, string $anio) {
+	$fecha = "{$anio}-{$mes}-{$dia}";
+	return strlen($fecha) > 2 ? $fecha : "";
+}
+
+function getPostDate(string $variable)
+{
+	return varsAsDate(
+		getPostVar($variable."_d"),
+		getPostVar($variable."_m"),
+		getPostVar($variable."_a"));
+}
+
+function getGetDate(string $variable)
+{
+	return varsAsDate(
+		getGetVar($variable."_d"),
+		getGetVar($variable."_m"),
+		getGetVar($variable."_a"));
+}
+
+function getPGDate(string $variable)
+{
+	return varsAsDate(
+		getPGVar($variable."_d"),
+		getPGVar($variable."_m"),
+		getPGVar($variable."_a"));
 }
 
 $Dir = dirname(__FILE__);
@@ -26,18 +71,18 @@ function CTabla($tabla)
 	$aux->query("repair table $tabla");
 	return $aux;
 }
-function PostString($Variable)
-{
-	if(isset($_POST[$Variable]) && $_POST[$Variable]!="")
-		return $_POST[$Variable];
-	return "";
-}
-function Get($Variable)
-{
-	if(isset($_GET[$Variable]) && $_GET[$Variable]!="")
-		return $_GET[$Variable];
-	return "";
-}
+// function PostString($Variable)
+// {
+// 	if(isset($_POST[$Variable]) && $_POST[$Variable]!="")
+// 		return $_POST[$Variable];
+// 	return "";
+// }
+// function Get($Variable)
+// {
+// 	if(isset($_GET[$Variable]) && $_GET[$Variable]!="")
+// 		return $_GET[$Variable];
+// 	return "";
+// }
 function BarraHerramientas($barra_menu=false,$elem=0,$favoritos=true)
 {
 	$mysqli = Conectar();
@@ -356,18 +401,6 @@ function FormFecha($Variable)
 	$Mes=$Mes."</select>";
 	$Anio="<input type=\"text\" maxlength=\"4\" size=\"4\" name=\"$Variable"."_a\" onblur=\"javascript: if(document.getElementById('$Variable"."_a').value.length!=4) alert('El año debe ser de cuatro digitos');\" />";
 	return $Dia." / ".$Mes." / ".$Anio;
-}
-function PostDate($Variable)
-{
-	$Dia=PostString($Variable."_d");
-	$Mes=PostString($Variable."_m");
-	$Anio=PostString($Variable."_a");
-	$Fecha=$Anio."-".$Mes."-".$Dia;
-	unset($Dia,$Mes,$Anio);
-	if(strlen($Fecha)>2)
-		return $Fecha;
-	unset($Fecha);
-	return "";
 }
 function FormComboNum($Variable,$Inicio,$Fin,$Incremento)
 {

@@ -15,15 +15,15 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$persona_form=PostString("persona");
-if(PostString("Guardar")!="" || PostString("save")!="")
+$persona_form = getPostVar("persona");
+if(getPostVar("Guardar")!="" || getPostVar("save")!="")
 {
-	$clave=PostString("clave");
-	$nombre=PostString("nombre");
-	$email=PostString("email");
-	$tipo_pers=PostString("tipo");
-	$estatus=PostString("estatus");
-	$fecha=PostDate("fecha");
+	$clave = getPostVar("clave");
+	$nombre = getPostVar("nombre");
+	$email = getPostVar("email");
+	$tipo_pers = getPostVar("tipo");
+	$estatus = getPostVar("estatus");
+	$fecha = getPostDate("fecha");
 	if($clave!="" && isset($_FILES["foto"]["name"]) && $_FILES["foto"]["name"]!="")
 	{
 		$info=pathinfo($_FILES["foto"]["name"]);
@@ -34,7 +34,7 @@ if(PostString("Guardar")!="" || PostString("save")!="")
 	{
 		$foto="";
 	}
-	if(PostString("add")=="yes" && $clave!="")
+	if(getPostVar("add")=="yes" && $clave!="")
 	{
 		consulta_directa("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
 	}
@@ -94,7 +94,7 @@ BarraHerramientas();
 </div>
 <?php
 BH_Ayuda('0.4.51.1','1');
-if(PostString("Nuevo")=="")
+if(getPostVar("Nuevo")=="")
 {
 ?>
 <form action="personas.php" method="post" enctype="multipart/form-data" name="datos">
@@ -246,8 +246,3 @@ else
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

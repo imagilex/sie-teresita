@@ -21,7 +21,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$proyecto=PostString("proyecto").Get("proyecto");
+$proyecto = getPGVar("proyecto");
 
 if($proyecto=="")
 {
@@ -382,8 +382,3 @@ $ruta_relativa=substr($ruta,$longi);
 
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

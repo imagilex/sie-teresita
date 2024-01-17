@@ -1,27 +1,27 @@
 <?php
 session_start();
 include("../../apoyo.php");
-$tabla=CTabla("docto7");
+$tabla = CTabla("docto7");
 
-$accion=PostString("accion").Get("accion");
-$documento=PostString("documento").Get("documento");
-$consecutivo=PostString("consecutivo").Get("consecutivo");
+$accion = getPGVar("accion");
+$documento = getPGVar("documento");
+$consecutivo = getPGVar("consecutivo");
 if($accion!="")
 {
 	if($accion=="inserta")
 	{
-	
+
 	}
 	else if($accion=="actualiza")
 	{
-	
+
 	}
 	else if($accion=="elimina")
 	{
-	
-	}	
+
+	}
 	else if($accion=="get_xml")
-	{	
+	{
 		if($documento=="")
 		{
 			$regs=$tabla->select("*",'1=1',"posicion");
@@ -36,7 +36,7 @@ if($accion!="")
 			{
 				$regs=$tabla->select("*","id_documento='$documento' and consecutivo='$consecutivo'","posicion");
 			}
-		}	
+		}
 		header('Content-type: text/xml');
 		echo '<?xml version="1.0" encoding="iso-8859-1"?>';
 		echo "\n".'<!DOCTYPE raiz SYSTEM "documento2.dtd">';
@@ -53,20 +53,20 @@ if($accion!="")
 		echo "\n".'</raiz>';
 	}
 	else if($accion=="get_JSON")
-	{	
+	{
 		if($documento=="")
 		{
-		
+
 		}
 		else
 		{
 			if($consecutivo=="")
 			{
-			
+
 			}
 			else
 			{
-			
+
 			}
 		}
 		echo '[';

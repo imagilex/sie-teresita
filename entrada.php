@@ -11,7 +11,7 @@ $namelogin=isset($_SESSION["id_usr"]) ? $_SESSION["id_usr"] : "";
 include("apoyo.php");
 $Con=Conectar();
 
-$ira=PostString("ira_cons").PostString("ira_adm").Get("ir_a");
+$ira = getPostVar("ira_cons").getPostVar("ira_adm").getGetVar("ir_a");
 
 if($ira!="")
 {
@@ -248,10 +248,10 @@ AddNewFolder('c:\\','WT');
 if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 {
 
-	$usr=PostString("usr").Get("usr");
-	$pass=PostString("pass").Get("pass");
-	$id_usr_usr="";
-	$tipo_usr="";
+	$usr = getPGVar("usr");
+	$pass = getPGVar("pass");
+	$id_usr_usr = "";
+	$tipo_usr = "";
 
 	if($usr!="" && $pass!="")
 	{
@@ -461,7 +461,3 @@ echo"		  </p>
 <!--Finaliza piede página-->
 </body>
 </html>
-<?php
-mysqli_close($Con);
-unset($Con);
-?>

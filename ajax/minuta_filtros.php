@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 
 /*
@@ -67,12 +67,12 @@ session_start();
 
 */
 include("../apoyo.php");
-$schema=PostString("schema").Get("schema");
-$type_inf=PostString("type_inf").Get("type_inf");
-$campo_filtro=PostString("campo_filtro").Get("campo_filtro");
-$extra_data=PostString("extra_data").Get("extra_data");
-$herramienta=PostString("herramienta").Get("herramienta");
-$campo_save=PostString("campo_save").Get("campo_save");
+$schema = getPGVar("schema");
+$type_inf = getPGVar("type_inf");
+$campo_filtro = getPGVar("campo_filtro");
+$extra_data = getPGVar("extra_data");
+$herramienta = getPGVar("herramienta");
+$campo_save = getPGVar("campo_save");
 if($schema!="")
 {
 	if($schema=="minuta_incio")
@@ -327,10 +327,10 @@ if($type_inf!="" && $campo_filtro!="" && $herramienta!="")
 }
 if($campo_save!="" && $herramienta!="" && $type_inf!="")
 {
-	$datos=PostString("filtrado")!=""?PostString("filtrado"):Get("filtrado");
+	$datos = getPostVar("filtrado") != "" ? getPostVar("filtrado") : getGetVar("filtrado");
 	if($type_inf=="cg")
 	{
-		$aux=CTabla("herr_pant_filtros");
+		$aux = CTabla("herr_pant_filtros");
 		$aux->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."' and campo='$campo_save'");
 		if($datos!="" && count($datos>0))
 		{
@@ -342,7 +342,7 @@ if($campo_save!="" && $herramienta!="" && $type_inf!="")
 	}
 	else if($type_inf=="texto")
 	{
-		$aux=CTabla("herr_pant_filtros");
+		$aux = CTabla("herr_pant_filtros");
 		$aux->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."' and campo='$campo_save'");
 		if($datos!="" && count($datos>0))
 		{
@@ -354,7 +354,7 @@ if($campo_save!="" && $herramienta!="" && $type_inf!="")
 	}
 	else if($type_inf=="persona")
 	{
-		$aux=CTabla("herr_pant_filtros");
+		$aux = CTabla("herr_pant_filtros");
 		$aux->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."' and campo='$campo_save'");
 		if($datos!="" && count($datos>0))
 		{
@@ -366,12 +366,12 @@ if($campo_save!="" && $herramienta!="" && $type_inf!="")
 	}
 	else if($type_inf=="fecha")
 	{
-		$aux=CTabla("herr_pant_filtros");
+		$aux = CTabla("herr_pant_filtros");
 		$aux->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."' and campo='$campo_save'");
-		$filtro_desde=PostString("filtro_desde").Get("filtro_desde");
-		$filtro_hasta=PostString("filtro_hasta").Get("filtro_hasta");
+		$filtro_desde = getPGVar("filtro_desde");
+		$filtro_hasta = getPGVar("filtro_hasta");
 		if($filtro_desde!="") $aux->insert(array("campo"=>$campo_save, "operador"=>">", "valor"=>$filtro_desde, "usuario"=>$_SESSION["id_usr"], "herramienta"=>$herramienta));
-		if($filtro_hasta) $aux->insert(array("campo"=>$campo_save, "operador"=>"<", "valor"=>$filtro_hasta, "usuario"=>$_SESSION["id_usr"], "herramienta"=>$herramienta));		
+		if($filtro_hasta) $aux->insert(array("campo"=>$campo_save, "operador"=>"<", "valor"=>$filtro_hasta, "usuario"=>$_SESSION["id_usr"], "herramienta"=>$herramienta));
 	}
 }
 function IsCheck($registros, $verificador)

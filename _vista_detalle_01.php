@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$proyecto=PostString("proyecto").Get("proyecto");
+$proyecto = getPGVar("proyecto");
 $meses=0;
 ?>
 
@@ -205,8 +205,3 @@ $data_1=@mysqli_fetch_array(consulta_directa("select nombre, lider from proyecto
 </table>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

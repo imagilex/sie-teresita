@@ -6,10 +6,10 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$id_usuario=Get("id_usuario").PostString("id_usuario");
-$id_reporte=Get("id_reporte").PostString("id_reporte");
-$fecha=Get("fecha").PostString("fecha");
-$fecha_reporte=Get("fecha_reporte").PostString("fecha_reporte");
+$id_usuario = getPGVar("id_usuario");
+$id_reporte = getPGVar("id_reporte");
+$fecha = getPGVar("fecha");
+$fecha_reporte = getPGVar("fecha_reporte");
 
 $usr=mysqli_fetch_array(consulta_directa("select clave as `usuario` from usuario where clave='$id_usuario'"));
 $usuario=$usr["usuario"];
@@ -26,7 +26,4 @@ else
 }
 
 echo NoAcute($comentario["comentario"]);
-
-mysqli_close($Con);
-
 ?>

@@ -307,6 +307,3 @@ BH_Ayuda('','');
   <iframe align="middle" src="" name="frame3" allowtransparency="true" frameborder="0" width="1187" height="70" scrolling="no"></iframe>
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

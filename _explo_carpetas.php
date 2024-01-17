@@ -10,8 +10,8 @@ header("Pragma: no-cache");
 include("apoyo.php");
 
 $Con=Conectar();
-$proyecto=PostString("proyecto").Get("proyecto");
-$raiz=PostString("raiz").Get("raiz");
+$proyecto = getPGVar("proyecto");
+$raiz = getPGVar("raiz");
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -72,4 +72,3 @@ function MuestraDirs($ruta, $directorio,$espacio="")
 ?>
 </body>
 </html>
-<?php mysqli_close($Con); ?>

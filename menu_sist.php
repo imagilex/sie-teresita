@@ -62,16 +62,16 @@ BarraHerramientas();
 </div>
 <?php
 BH_Ayuda('0.4.51.1','5');
-$menu_actual=PostString("menu_opc");
+$menu_actual = getPostVar("menu_opc");
 
-$prefijos=PostString("prefijo");
-$opciones=PostString("opcion");
-$cambios=PostString("cambio");
+$prefijos = getPostVar("prefijo");
+$opciones = getPostVar("opcion");
+$cambios = getPostVar("cambio");
 
-$pos=PostString("pos");
-$descr=PostString("descr");
+$pos = getPostVar("pos");
+$descr = getPostVar("descr");
 
-$total=max( count($prefijos), count($opciones), count($cambios), count($pos), count($descr));
+$total = max( count($prefijos), count($opciones), count($cambios), count($pos), count($descr));
 
 for($x=0; $x<$total; $x++)
 {
@@ -147,8 +147,3 @@ for($x=0; $x<$total; $x++)
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

@@ -4,9 +4,9 @@ session_start();
 
 include("apoyo.php");
 
-$Con=Conectar();
-$proyecto=PostString("proyecto").Get("proyecto");
-$ruta=addslashes(PostString("ruta").Get("ruta"));
+$Con = Conectar();
+$proyecto = getPGVar("proyecto");
+$ruta = addslashes(getPGVar("ruta"));
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -106,4 +106,3 @@ if(@count($archivos_fechas)>0)
 
 </body>
 </html>
-<?php mysqli_close($Con); ?>

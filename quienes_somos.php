@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$ira=PostString("seccion");
+$ira = getPostVar("seccion");
 
 if($ira=="")
 	$ira="1";
@@ -95,6 +95,3 @@ BH_Ayuda('0.4',$ira);
 </table>
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

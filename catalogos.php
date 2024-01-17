@@ -41,8 +41,3 @@ BH_Ayuda('0.4.','');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

@@ -87,8 +87,8 @@ if(!isset($_SESSION["tipo"]))
 <?php
 //B_reportes();
 BH_Ayuda('','');
-$id_mapa=PostString("id_mapa").Get("id_mapa");
-$contenido=PostString("cont").Get("cont");
+$id_mapa = getPGVar("id_mapa");
+$contenido = getPGVar("cont");
 ?>
 <tr><td align="center">
 <?php
@@ -207,8 +207,3 @@ if(isset($area[1]))
 }
 ?>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

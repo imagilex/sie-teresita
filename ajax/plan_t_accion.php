@@ -22,7 +22,7 @@ class campo_sql
 		$this->SetParam("posicion","");
 	}
 	public function SetParam($param,$valor) {$this->$param=$valor;}
-	public function GetParam($param) {return $this->$param;}	
+	public function GetParam($param) {return $this->$param;}
 }
 
 function Add_From(&$arreglo, $elemento, &$from)
@@ -75,8 +75,8 @@ function Campos_Filtro($herr)
 		$aux=$hpf->registro($reg1);
 		$retorno[$x]->SetParam("campo",$aux["campo"]);
 		$retorno[$x]->SetParam("tabla",$aux["tabla"]);
-		$retorno[$x]->SetParam("tipo",$aux["tipo"]);	
-		$retorno[$x]->SetParam("criterio",$campo["operador"]."'".$campo["valor"]."'");	
+		$retorno[$x]->SetParam("tipo",$aux["tipo"]);
+		$retorno[$x]->SetParam("criterio",$campo["operador"]."'".$campo["valor"]."'");
 		$x++;
 	}
 	return $retorno;
@@ -90,7 +90,7 @@ function Forma_Select($campos, &$tablas_from, &$from, &$virtual, &$order)
 		Add_From($tablas_from,$campo->GetParam("tabla"),$from);
 		$tvirtual="tbl_virtual_".($virtual++);
 		if($campo->GetParam("tipo")=="cg")
-		{				
+		{
 			if($campo->GetParam("campo")=="origen" && $campo->GetParam("tabla")=="docto_general")
 			{
 				$select .= "\n\t$tvirtual.descripcion as '".$campo->GetParam("etiqueta")."', ";
@@ -161,14 +161,14 @@ function Forma_Where($campos, &$tablas_from, &$from)
 	return $where.= " ";
 }
 
-$accion=PostString("accion").Get("accion");
-$id_documento=PostString("docto").Get("docto");
-$new_val=PostString("new_val").Get("new_val");
-$includes_id=PostString("includes").Get("includes");
+$accion = getPGVar("accion");
+$id_documento = getPGVar("docto");
+$new_val = getPGVar("new_val");
+$includes_id = getPGVar("includes");
 if($includes_id!="") $includes_id="'".str_replace(",","','",$includes_id)."'";
 if($accion!="")
 {
-	$tbl=CTabla("docto_general");
+	$tbl = CTabla("docto_general");
 	if($accion=="ver_regs_minuta_inicio")
 	{
 		// id_herramienta = 1
@@ -181,7 +181,7 @@ if($accion!="")
 		$x=0;
 		$virtual=0;
 		$tbl_cont=CTabla("docto1");
-		Add_From($tables_from,"docto_general",$from);		
+		Add_From($tables_from,"docto_general",$from);
 		$select .= Forma_Select(Campos_Select("1"), $tables_from, $from, $virtual, $order);
 		$where .= Forma_Where(Campos_Filtro("1"), $tables_from, $from);
 		//Ajuste de lineas del query
@@ -212,7 +212,7 @@ if($accion!="")
 										$val='<img src="Imagenes/iconografia/status_star.png" height="15" style="background-color:#'.$valor.'" onclick="CambioEstatusMinuta('."'".$id_docto."'".','."'".$valor."'".');" />';
 								}
 								else $val=htmlentities($val);
-								if($y==0) 
+								if($y==0)
 								{
 									$id_docto = $val;
 									$cuantos=$tbl_cont->select("count(*) as n","id_documento='$id_docto'");
@@ -228,8 +228,8 @@ if($accion!="")
 							echo "</tr><tr onmousemove=\"javascript: this.style.backgroundColor='#EBF1DE';\" onmouseout=\"javascript: this.style.backgroundColor='#FFFFFF';\"  ondblclick=\"seeMinViva('$clave_documento;')\">$lin";
 						}
 						else
-						{	
-							$y=0;											
+						{
+							$y=0;
 							foreach($reg as $val)
 							{
 								if(count(explode("=",$val))==2)
@@ -242,7 +242,7 @@ if($accion!="")
 								if($y==0) {$id_docto = $val; $cuantos=$tbl_cont->select("count(*) as n","id_documento='$id_docto'");}
 								?><td onClick="CheckRow(<?php echo $x; ?>)"><?php echo ($y==0?'<input class="ckb" type="checkbox" id="ckb_'.$x.'" value="'.$val.'" /><img src="Imagenes/iconografia/selecb.png" id="img_ckb_'.$x.'" height="15"> <img src="Imagenes/iconografia/plus.png" id="img_docto_'.$id_docto.'" onclick="Expande('.$x.','."'".$id_docto."'".')"><td align="center" valign="middle" width="15" style="background-image:url(Imagenes/iconografia/circle.png); background-repeat:no-repeat;"><font size="-1">'.$cuantos[0]["n"].'</font></td>':$val); ?></td><?php
 								$y++;
-							}							
+							}
 						}
 					?></tr><tr><td colspan="<?php echo $y+5; ?>"><div id="subminutas<?php echo $x; ?>"></div></td></tr><?php
 				}
@@ -291,7 +291,7 @@ if($accion!="")
 										$val='<img src="Imagenes/iconografia/status_star.png" height="15" style="background-color:#'.$valor.'" onclick="CambioEstatusMinuta('."'".$id_docto."'".','."'".$valor."'".');" />';
 								}
 								else $val=htmlentities($val);
-								if($y==0) 
+								if($y==0)
 								{
 									$id_docto = $val;
 									$cuantos=$tbl_cont->select("count(*) as n","id_documento='$id_docto'");
@@ -302,14 +302,14 @@ if($accion!="")
 									?><th align="left" style="font-size:.75em;"><?php echo htmlentities($key); ?></th><?php
 								}
 								$lin .= "<td onclick='CheckRow($x)'>".($y==0?'<input class="ckb" type="checkbox" id="ckb_'.$x.'" value="'.$val.'" /><img src="Imagenes/iconografia/selecb.png" id="img_ckb_'.$x.'" height="15">':$val)."</td>";
-								
+
 								$y++;
 							}
 							echo "</tr><tr onmousemove=\"javascript: this.style.backgroundColor='#EBF1DE';\" onmouseout=\"javascript: this.style.backgroundColor='#FFFFFF';\"  ondblclick=\"seeMinuta('$clave_documento;')\">$lin";
 						}
 						else
-						{	
-							$y=0;											
+						{
+							$y=0;
 							foreach($reg as $val)
 							{
 								if(count(explode("=",$val))==2)
@@ -322,7 +322,7 @@ if($accion!="")
 								if($y==0) {$id_docto = $val; $cuantos=$tbl_cont->select("count(*) as n","id_documento='$id_docto'");}
 								?><td onClick="CheckRow(<?php echo $x; ?>)"><?php echo ($y==0?'<input class="ckb" type="checkbox" id="ckb_'.$x.'" value="'.$val.'" /><img src="Imagenes/iconografia/selecb.png" id="img_ckb_'.$x.'" height="15">':$val); ?></td><?php
 								$y++;
-							}							
+							}
 						}
 					?></tr><?php
 				}
@@ -334,43 +334,43 @@ if($accion!="")
 		// id_herramienta = 3
 	}
 	else if($accion=="ver_regs_minuta_subcontenido_generales")
-	{	
+	{
 		// id_herramienta = 4
 	}
 	else if($accion=="ver_regs_minuta_subcontenido_komps")
-	{	
+	{
 		// id_herramienta = 5
 	}
 	else if($accion=="ver_regs_minuta_subcontenido_tareas")
-	{	
+	{
 		// id_herramienta = 6
 	}
 	else if($accion=="ver_regs_minuta_subcontenido_acuerdos")
-	{	
+	{
 		// id_herramienta = 7
 	}
 	else if($accion=="ver_regs_minuta_preview_generales")
-	{	
+	{
 		// id_herramienta = 8
 	}
 	else if($accion=="ver_regs_minuta_preview_komps")
-	{	
+	{
 		// id_herramienta = 9
 	}
 	else if($accion=="ver_regs_minuta_preview_tareas")
-	{	
+	{
 		// id_herramienta = 10
 	}
 	else if($accion=="ver_regs_minuta_preview_todo_viva")
-	{	
+	{
 		// id_herramienta = 11
 	}
 	else if($accion=="ver_regs_minuta_preview_todo")
-	{	
+	{
 		// id_herramienta = 12
 	}
 	else if($accion=="ver_minuta_preview_todo_viva" && $id_documento!="")
-	{	
+	{
 		$tdg=CTabla("docto_general");
 		$td1=CTabla("docto1");
 		$td3=Ctabla("docto3");
@@ -409,7 +409,7 @@ if($accion!="")
 								<td align="right" width="150">Coordinador:</td>
 								<td align="left" width="150"><?php echo htmlentities($coord[0]["nomb"]); ?></td>
 								<td align="right" width="150">D&iacute;as Activa:</td>
-								<td align="left" width="150"><?php echo htmlentities($dias_act[0]["da"]); ?></td>								
+								<td align="left" width="150"><?php echo htmlentities($dias_act[0]["da"]); ?></td>
 							</tr>
 						</table>
 					</td></tr>
@@ -495,19 +495,19 @@ if($accion!="")
 		$aux->update(array('estatus'=>$new_val),"id_documento like '$id_documento'");
 	}
 	else if($accion=="ver_columnas_minuta_inicio" && $id_documento!="")
-	{	
+	{
 	}
 	else if($accion=="ver_filtros_minuta_inicio" && $id_documento!="")
-	{	
+	{
 	}
 	else if($accion=="actualiza_columnas_minuta_inicio" && $id_documento!="")
-	{	
+	{
 	}
 	else if($accion=="actualiza_filtros_minuta_inicio" && $id_documento!="")
-	{	
+	{
 	}
 	else if($accion=="ver_captura_minuta_inicio")
-	{	
+	{
 		?>
 		<form id="form_minuta_nivel0">
 		<table border="0" align="center">
@@ -548,12 +548,12 @@ if($accion!="")
 	}
 	else if($accion=="agrega_minuta_inicio")
 	{
-		$organizacion=PostString("organizacion").Get("organizacion");
-		$fecha=PostString("fecha").Get("fecha");
-		$dias_activa=PostString("dias_activa").Get("dias_activa");
-		$coordinador=PostString("coordinador").Get("coordinador");
-		$participante=PostString("participante")!=""?PostString("participante"):Get("participante");
-		$agrupador=PostString("agrupador").Get("agrupador");
+		$organizacion = getPGVar("organizacion");
+		$fecha = getPGVar("fecha");
+		$dias_activa = getPGVar("dias_activa");
+		$coordinador = getPGVar("coordinador");
+		$participante = getPostVar("participante") != "" ? getPostVar("participante") : getGetVar("participante");
+		$agrupador = getPGVar("agrupador");
 		if($fecha!="" && $coordinador!="" && $agrupador!="")
 		{
 			$aux=CTabla("docto_general");

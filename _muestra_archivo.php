@@ -2,9 +2,9 @@
 
 include("apoyo.php");
 
-$Con=Conectar();
+$Con = Conectar();
 
-$informacion=pathinfo($archivo=$Dir.Get("archivo"));
+$informacion = pathinfo($archivo = $Dir.getGetVar("archivo"));
 
 if($archivo!="" && file_exists($archivo))
 {
@@ -28,7 +28,4 @@ if($archivo!="" && file_exists($archivo))
 	}
 }
 else {trigger_error("Archivo no encontrado: $archivo");}
-
-mysqli_close($Con);
-
 ?>

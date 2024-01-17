@@ -8,7 +8,7 @@ if(isset($_SESSION["id_persona_usr"])) unset($_SESSION["id_persona_usr"]);
 
 include "apoyo.php";
 
-$ira=PostString("ira").Get("ira");;
+$ira = getPGVar("ira");;
 
 $Con=Conectar();
 
@@ -274,6 +274,3 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 <!--Finaliza piede página-->
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

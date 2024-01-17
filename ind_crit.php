@@ -15,17 +15,17 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 date_default_timezone_set('America/Mexico_City');
-$hoy=getdate();
-@list($anio,$mes)=explode("-",PostString("fecha_seleccionada"));
-$ant=PostString("ant");
-$sig=PostString("sig");
-$indicador=PostString("indicador");
-$nivel=PostString("nivel");
+$hoy = getdate();
+@list($anio,$mes) = explode("-",getPostVar("fecha_seleccionada"));
+$ant = getPostVar("ant");
+$sig = getPostVar("sig");
+$indicador = getPostVar("indicador");
+$nivel = getPostVar("nivel");
 if($indicador=="")
 	$indicador="M01";
 
-$btn_ant=((PostString("ant_ind")!="")?(true):(false));
-$btn_sig=((PostString("sig_ind")!="")?(true):(false));
+$btn_ant=((getPostVar("ant_ind")!="")?(true):(false));
+$btn_sig=((getPostVar("sig_ind")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
@@ -64,7 +64,7 @@ if($btn_ant || $btn_sig)
 	$indicador=$ind[$x];
 }
 
-if(PostString("indicador_actual")!=$indicador)
+if(getPostVar("indicador_actual")!=$indicador)
 {
 	$nivel="";
 }
@@ -430,8 +430,3 @@ BH_Ayuda('0.4','2');
 </script>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

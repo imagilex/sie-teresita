@@ -21,8 +21,8 @@ if(!isset($_SESSION["tipo"]))
 	header("location: index.php?noCache=".rand(0,32000));
 	exit();
 }
-$cont=PostString("cont").Get("cont");
-list($area,$lista)=explode("-",$cont);
+$cont = getPGVar("cont");
+list($area,$lista) = explode("-",$cont);
 if(!$lista) $lista="";
 
 
@@ -52,16 +52,16 @@ $li_aux=$lista;
 <link href="estilos.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="prototype.js"></script>
 <?php
-$txt_nombre_aux=Get("txt_nombre");
-$txt_area_aux=Get("txt_area");
-$txt_puesto_aux=Get("txt_puesto");
-$txt_nombre=$txt_area=$txt_puesto="";
-$txt_nombre=$txt_nombre_aux[0];
-$txt_area=$txt_area_aux[0];
-$txt_puesto=$txt_puesto_aux[0];
+$txt_nombre_aux = getGetVar("txt_nombre");
+$txt_area_aux = getGetVar("txt_area");
+$txt_puesto_aux = getGetVar("txt_puesto");
+$txt_nombre = $txt_area = $txt_puesto = "";
+$txt_nombre = $txt_nombre_aux[0];
+$txt_area = $txt_area_aux[0];
+$txt_puesto = $txt_puesto_aux[0];
 
-$enc=array("","","Nombre".addslashes(' <br /><input type="text" size="10" name="txt_nombre[]" onclick="Foco(this)" value="'.$txt_nombre.'" />'),"Area".addslashes(' <br /><input type="text" size="10" name="txt_area[]" onclick="Foco(this)" value="'.$txt_area.'" />'),"Puesto".addslashes(' <br /><input type="text" size="10" name="txt_puesto[]" onclick="Foco(this)" value="'.$txt_puesto.'" />'));
-$cue=array();
+$enc = array("","","Nombre".addslashes(' <br /><input type="text" size="10" name="txt_nombre[]" onclick="Foco(this)" value="'.$txt_nombre.'" />'),"Area".addslashes(' <br /><input type="text" size="10" name="txt_area[]" onclick="Foco(this)" value="'.$txt_area.'" />'),"Puesto".addslashes(' <br /><input type="text" size="10" name="txt_puesto[]" onclick="Foco(this)" value="'.$txt_puesto.'" />'));
+$cue = array();
 $query="select persona.clave as clav, concat(persona.nombre, ' ', persona.apaterno) as nomb, puesto.descripcion as pues, cg.descripcion as area, persona.imagen as imag
 from persona inner join puesto on puesto.clave=persona.puesto_actual left join codigos_generales as cg on cg.campo='area' and cg.valor=puesto.area where persona.clave in ( select persona from lista_persona where lista='$lista' ) and concat(persona.nombre, ' ', persona.apaterno) like '%$txt_nombre%' and (cg.descripcion like '%$txt_area%' or cg.descripcion is null) and (puesto.descripcion like '%$txt_puesto%' or puesto.descripcion is null) order by concat(persona.nombre, ' ', persona.apaterno, ' ', persona.amaterno)";
 if($regs=consulta_directa($query))

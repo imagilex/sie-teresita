@@ -69,15 +69,15 @@ BarraHerramientas();
 <?php
 
 BH_Ayuda('0.4.51.1','3');
-$tipo_usr=PostString("tipo_usr");
-if($tipo_usr!="" && PostString("sincambios")!='yes')
+$tipo_usr = getPostVar("tipo_usr");
+if($tipo_usr!="" && getPostVar("sincambios")!='yes')
 {
-	$total=intval(PostString("total"));
+	$total=intval(getPostVar("total"));
 	if($total>0)
 		consulta_directa("delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
 	for($x=1;$x<=$total;$x++)
 	{
-		$dato=PostString("Reg$x");
+		$dato = getPostVar("Reg$x");
 		if($dato!="")
 			consulta_directa("insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
 	}
@@ -129,8 +129,3 @@ if($tipo_usr!="" && PostString("sincambios")!='yes')
 </form>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

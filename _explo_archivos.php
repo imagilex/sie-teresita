@@ -11,21 +11,21 @@ include("apoyo.php");
 include_once("u_tabla/tabla.php");
 include "libreria/funciones_ger.php";
 
-$Con=Conectar();
-$proyecto=PostString("proyecto").Get("proyecto");
-$ruta=addslashes(PostString("ruta").Get("ruta"));
+$Con = Conectar();
+$proyecto = getPGVar("proyecto");
+$ruta = addslashes(getPGVar("ruta"));
  $CarpetaR = $_GET["CarpetaR"];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion=PostString("accion");
-$Carpeta=PostString("Carpeta");
+$accion = getPostVar("accion");
+$Carpeta = getPostVar("Carpeta");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -156,7 +156,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos=PostString("archivo");
+		$archivos = getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)
@@ -169,7 +169,7 @@ case 0:
 	}
 	else if($accion=="BorraCarpeta")
 	{
-		$Carpeta=PostString("Carpeta");
+		$Carpeta = getPostVar("Carpeta");
 		if($Carpeta!="")
 		{
 		rmdir($Carpeta);
@@ -178,7 +178,7 @@ case 0:
 	}
 	else if($accion=="BorraArchivo")
 	{
-		$Carpeta=PostString("Carpeta");
+		$Carpeta = getPostVar("Carpeta");
 		if($Carpeta!="")
 		{
 		unlink($Carpeta);
@@ -1420,4 +1420,3 @@ $tbl = new tabla();
 </form>
 </body>
 </html>
-<?php mysqli_close($Con); ?>

@@ -1,24 +1,24 @@
 <?php
 session_start();
 include("../../apoyo.php");
-$tabla=CTabla("docto1");
-$accion=PostString("accion").Get("accion");
-$documento=PostString("documento").Get("documento");
-$consecutivo=PostString("consecutivo").Get("consecutivo");
+$tabla = CTabla("docto1");
+$accion = getPGVar("accion");
+$documento = getPGVar("documento");
+$consecutivo = getPGVar("consecutivo");
 if($accion!="")
 {
 	if($accion=="inserta")
 	{
-	
+
 	}
 	else if($accion=="actualiza")
 	{
-	
+
 	}
 	else if($accion=="elimina")
 	{
-	
-	}	
+
+	}
 	else if($accion=="get_xml")
 	{
 		if($documento=="")
