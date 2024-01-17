@@ -8,13 +8,13 @@ $esta=false;
 
 $Con=Conectar();
 
-$comentario = getPGVar("comentario");
-$id_usuario = getPGVar("id_usuario");
-$indicador = getPGVar("indicador");
-$id_indicador_nivel = getPGVar("nivel");
-$anio = getPGVar("anio");
-$mes = getPGVar("mes");
-$fecha = getPGVar("fecha");
+$comentario = Get_Vars_Helper::getPGVar("comentario");
+$id_usuario = Get_Vars_Helper::getPGVar("id_usuario");
+$indicador = Get_Vars_Helper::getPGVar("indicador");
+$id_indicador_nivel = Get_Vars_Helper::getPGVar("nivel");
+$anio = Get_Vars_Helper::getPGVar("anio");
+$mes = Get_Vars_Helper::getPGVar("mes");
+$fecha = Get_Vars_Helper::getPGVar("fecha");
 
 if($comentario != "" && $indicador != "" && $id_indicador_nivel != "" && $id_usuario != "")
 {

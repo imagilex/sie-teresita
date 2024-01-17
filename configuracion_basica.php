@@ -17,13 +17,13 @@ if(!isset($_SESSION["tipo"]) )
 
 $id_seccion=$elemento="";
 
-$datos = getPostVar("datos");
+$datos = Get_Vars_Helper::getPostVar("datos");
 if($datos!="")
 {
 	list($id_seccion,$elemento)=explode(" ",$datos);
 }
 
-	$tipo_contenido = getPostVar("tipo_contenido");
+	$tipo_contenido = Get_Vars_Helper::getPostVar("tipo_contenido");
 	if($tipo_contenido=="archivo de texto")
 	{
 		if(isset($_FILES["valor"]["name"]) && $_FILES["valor"]["name"]!="")
@@ -68,8 +68,8 @@ if($datos!="")
 	}
 	else if($tipo_contenido=="texto")
 	{
-		if(getPostVar("valor")!="")
-			consulta_directa("update seccion set valor='".getPostVar("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
+		if(Get_Vars_Helper::getPostVar("valor")!="")
+			consulta_directa("update seccion set valor='".Get_Vars_Helper::getPostVar("valor")."' where id_seccion='$id_seccion' and elemento='$elemento'");
 	}
 ?>
 

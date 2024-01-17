@@ -15,15 +15,15 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$persona_form = getPostVar("persona");
-if(getPostVar("Guardar")!="" || getPostVar("save")!="")
+$persona_form = Get_Vars_Helper::getPostVar("persona");
+if(Get_Vars_Helper::getPostVar("Guardar")!="" || Get_Vars_Helper::getPostVar("save")!="")
 {
-	$clave = getPostVar("clave");
-	$nombre = getPostVar("nombre");
-	$email = getPostVar("email");
-	$tipo_pers = getPostVar("tipo");
-	$estatus = getPostVar("estatus");
-	$fecha = getPostDate("fecha");
+	$clave = Get_Vars_Helper::getPostVar("clave");
+	$nombre = Get_Vars_Helper::getPostVar("nombre");
+	$email = Get_Vars_Helper::getPostVar("email");
+	$tipo_pers = Get_Vars_Helper::getPostVar("tipo");
+	$estatus = Get_Vars_Helper::getPostVar("estatus");
+	$fecha = Get_Vars_Helper::getPostDate("fecha");
 	if($clave!="" && isset($_FILES["foto"]["name"]) && $_FILES["foto"]["name"]!="")
 	{
 		$info=pathinfo($_FILES["foto"]["name"]);
@@ -34,7 +34,7 @@ if(getPostVar("Guardar")!="" || getPostVar("save")!="")
 	{
 		$foto="";
 	}
-	if(getPostVar("add")=="yes" && $clave!="")
+	if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
 	{
 		consulta_directa("insert into persona (clave, nombre, email, tipo_persona, estatus, fecha, imagen) values ('$clave', '$nombre', '$email', '$tipo_pers', '$estatus', '$fecha', '$foto')");
 	}
@@ -94,7 +94,7 @@ BarraHerramientas();
 </div>
 <?php
 BH_Ayuda('0.4.51.1','1');
-if(getPostVar("Nuevo")=="")
+if(Get_Vars_Helper::getPostVar("Nuevo")=="")
 {
 ?>
 <form action="personas.php" method="post" enctype="multipart/form-data" name="datos">

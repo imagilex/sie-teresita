@@ -1,11 +1,11 @@
 <?php session_start();
 
 include_once("../apoyo.php");
-$vista = getPGVar("vista");
-$origen = getPGVar("origen");
-$estatus = getPGVar("estatus");
-$accion = getPGVar("accion");
-$documento = getPGVar("documento");
+$vista = Get_Vars_Helper::getPGVar("vista");
+$origen = Get_Vars_Helper::getPGVar("origen");
+$estatus = Get_Vars_Helper::getPGVar("estatus");
+$accion = Get_Vars_Helper::getPGVar("accion");
+$documento = Get_Vars_Helper::getPGVar("documento");
 if($accion!="")
 {
 	if($accion=="activar" && $documento!="")

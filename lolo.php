@@ -4,7 +4,7 @@ include("apoyo.php");
 
 $Con=Conectar();
 
-$Archivo=$Dir."/".getPGVar("archivo");
+$Archivo=$Dir."/".Get_Vars_Helper::getPGVar("archivo");
 
 if(file_exists($Archivo))
 {
@@ -23,6 +23,6 @@ if(file_exists($Archivo))
 	}
 	else if($info["extension"]=="jpg" || $info["extension"]=="png" || $info["extension"]=="bmp" || $info["extension"]=="wmf" || $info["extension"]=="gif")
 	{
-		?><img border="0" src="<?php echo getGetVar("archivo"); ?>" /><?php
+		?><img border="0" src="<?php echo Get_Vars_Helper::getGetVar("archivo"); ?>" /><?php
 	}
 }

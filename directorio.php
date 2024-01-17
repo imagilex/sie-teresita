@@ -21,7 +21,7 @@ if(!isset($_SESSION["tipo"]))
 	header("location: index.php?noCache=".rand(0,32000));
 	exit();
 }
-$cont = getPGVar("cont");
+$cont = Get_Vars_Helper::getPGVar("cont");
 list($area,$lista) = explode("-",$cont);
 if(!$lista) $lista="";
 
@@ -52,9 +52,9 @@ $li_aux=$lista;
 <link href="estilos.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="prototype.js"></script>
 <?php
-$txt_nombre_aux = getGetVar("txt_nombre");
-$txt_area_aux = getGetVar("txt_area");
-$txt_puesto_aux = getGetVar("txt_puesto");
+$txt_nombre_aux = Get_Vars_Helper::getGetVar("txt_nombre");
+$txt_area_aux = Get_Vars_Helper::getGetVar("txt_area");
+$txt_puesto_aux = Get_Vars_Helper::getGetVar("txt_puesto");
 $txt_nombre = $txt_area = $txt_puesto = "";
 $txt_nombre = $txt_nombre_aux[0];
 $txt_area = $txt_area_aux[0];

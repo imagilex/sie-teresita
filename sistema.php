@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$seccion = getPostVar("seccion");
+$seccion = Get_Vars_Helper::getPostVar("seccion");
 if($seccion!="")
 {
 	if($seccion=="1")

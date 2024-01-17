@@ -9,9 +9,9 @@ header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 include("apoyo.php");
 $Con=Conectar();
-$raiz = getPGVar("raiz");
-$proyecto = getPGVar("proyecto");
-$ruta_expl = getPGVar("ruta_expl");
+$raiz = Get_Vars_Helper::getPGVar("raiz");
+$proyecto = Get_Vars_Helper::getPGVar("proyecto");
+$ruta_expl = Get_Vars_Helper::getPGVar("ruta_expl");
 if($ruta_expl!="")
 {
 	$pos=strpos($ruta_expl,"Archivos_Informacion");
@@ -21,13 +21,13 @@ if($ruta_expl!="")
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion = getPostVar("accion");
+$accion = Get_Vars_Helper::getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -158,7 +158,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)

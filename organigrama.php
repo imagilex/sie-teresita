@@ -87,8 +87,8 @@ if(!isset($_SESSION["tipo"]))
 <?php
 //B_reportes();
 BH_Ayuda('','');
-$id_mapa = getPGVar("id_mapa");
-$contenido = getPGVar("cont");
+$id_mapa = Get_Vars_Helper::getPGVar("id_mapa");
+$contenido = Get_Vars_Helper::getPGVar("cont");
 ?>
 <tr><td align="center">
 <?php

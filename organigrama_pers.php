@@ -19,14 +19,14 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$persona = getPostVar("clave");
+$persona = Get_Vars_Helper::getPostVar("clave");
 
 $basic_data = mysqli_fetch_array($db->consulta("select clave, concat(nombre, ' ', apaterno) as nomb, imagen, puesto_actual from persona where clave = '$persona'"));
 
-$accion = getPostVar("accion");
+$accion = Get_Vars_Helper::getPostVar("accion");
 if($accion=="add_docto")
 {
-	$nombre = getPostVar("nombre");
+	$nombre = Get_Vars_Helper::getPostVar("nombre");
 	if($persona!="" && $nombre!="" && isset($_FILES["archivo"]["name"]) && $_FILES["archivo"]["name"]!="")
 	{
 		$arch="pers$persona@".basename($_FILES["archivo"]["name"]);
@@ -36,7 +36,7 @@ if($accion=="add_docto")
 }
 else if($accion=="del_docto")
 {
-	$docto = getPostVar("docto");
+	$docto = Get_Vars_Helper::getPostVar("docto");
 	if($docto!="")
 	{
 		$arch=mysqli_fetch_array($db->consulta("select archivo from documento where id_docto='$docto'"));
@@ -291,7 +291,7 @@ BH_Ayuda('','');
 <td align="right" valign="baseline">
 	<div id="container">
 		<div>
-			<img src="Imagenes/back.png" onclick="javascript: history.go(-<?php echo getPGVar("ret"); ?>);" />
+			<img src="Imagenes/back.png" onclick="javascript: history.go(-<?php echo Get_Vars_Helper::getPGVar("ret"); ?>);" />
 			<input type="button" name="btnAddDocto" id="btnAddDocto" value="Anexar" style="width:75px; height:25px;" />
 			<input type="button" name="btnDelDocto" id="btnDelDocto" value="Borrar" style="width:75px; height:25px;" />
 		</div>
@@ -301,7 +301,7 @@ BH_Ayuda('','');
 				<div align="center">
 				<form action="organigrama_pers.php?clave=<?php echo $persona?>" method="post" id="frm_add_docto" enctype="multipart/form-data">
 					<input type="hidden" name="accion" value="add_docto" />
-					<input type="hidden" name="ret" value="<?php echo intval(getPGVar("ret"))+1; ?>" />
+					<input type="hidden" name="ret" value="<?php echo intval(Get_Vars_Helper::getPGVar("ret"))+1; ?>" />
 					<table border="0">
 						<tr><td align="right">Nombre:</td><td align="left"><input type="text" name="nombre" /></td></tr>
 						<tr><td align="right">Archivo:</td><td align="left"><input type="file" name="archivo" /></td></tr>
@@ -324,7 +324,7 @@ BH_Ayuda('','');
 				<form action="organigrama_pers.php?clave=<?php echo $persona; ?>" method="post" id="frm_del_docto">
 					<input type="hidden" name="accion" id="accion" value="del_docto" />
 					<input type="hidden" name="docto" id="docto" value="" />
-					<input type="hidden" name="ret" value="<?php echo intval(getPGVar("ret"))+1; ?>" />
+					<input type="hidden" name="ret" value="<?php echo intval(Get_Vars_Helper::getPGVar("ret"))+1; ?>" />
 					<input type="submit" value="Si" />
 					<input type="button" id="NotDelDocto" value="No" />
 				</form>

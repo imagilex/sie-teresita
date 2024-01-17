@@ -14,26 +14,26 @@ if(!isset($_SESSION["id_usr"])) $_SESSION["id_usr"]="0";
 if(!isset($_SESSION["tipo"])) $_SESSION["tipo"]="-1";
 $sid_usuario = $_SESSION["id_usr"];
 $stipo_usuario = $_SESSION["tipo"];
-$lista = getPGVar("lista");
-$sublista = getPGVar("sublista");
-$accion = getPGVar("accion");
-$ql = stripslashes(getPGVar("ql"));
-$qsl = stripslashes(getPGVar("qsl"));
-$actlist = getPGVar("actlist");
-$actsublist = getPGVar("actsublist");
+$lista = Get_Vars_Helper::getPGVar("lista");
+$sublista = Get_Vars_Helper::getPGVar("sublista");
+$accion = Get_Vars_Helper::getPGVar("accion");
+$ql = stripslashes(Get_Vars_Helper::getPGVar("ql"));
+$qsl = stripslashes(Get_Vars_Helper::getPGVar("qsl"));
+$actlist = Get_Vars_Helper::getPGVar("actlist");
+$actsublist = Get_Vars_Helper::getPGVar("actsublist");
 
-$activity = getGetVar("activity");
+$activity = Get_Vars_Helper::getGetVar("activity");
 if($activity!="")
 	{
-    $total = getGetVar("total_currs");
-	$lista = getGetVar("lista");
-    $new_name = getGetVar("new_name");
-    $list_name = getGetVar("list_name");
+    $total = Get_Vars_Helper::getGetVar("total_currs");
+	$lista = Get_Vars_Helper::getGetVar("lista");
+    $new_name = Get_Vars_Helper::getGetVar("new_name");
+    $list_name = Get_Vars_Helper::getGetVar("list_name");
 	if($activity=="del_single" && $sublista!="")
     {
 		for($x=1;$x<=$total;$x++)
     	{
-       		$curr = explode(" ", getGetVar("id_curr$x"));
+       		$curr = explode(" ", Get_Vars_Helper::getGetVar("id_curr$x"));
 	       	Del_to_list($sublista, $curr[0], $curr[1]);
     	}
 	}
@@ -86,7 +86,7 @@ if($activity!="")
 		$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr = explode(" ",getGetVar("id_curr$x"));
+			$curr = explode(" ",Get_Vars_Helper::getGetVar("id_curr$x"));
 			Move_to_list($sublista, $id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -110,7 +110,7 @@ if($activity!="")
 		$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr = explode(" ", getGetVar("id_curr$x"));
+			$curr = explode(" ", Get_Vars_Helper::getGetVar("id_curr$x"));
 			Copy_to_list($lista, $id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -138,7 +138,7 @@ if($activity!="")
 			$id_lista=$id_list["lista"];
 		for($x=1;$x<=$total;$x++)
 		{
-			$curr = explode(" ", getGetVar("id_curr$x"));
+			$curr = explode(" ", Get_Vars_Helper::getGetVar("id_curr$x"));
 			Add_to_list($id_lista, $curr[0], $curr[1]);
 		}
 	}
@@ -186,7 +186,7 @@ if($activity!="")
 	header("location: catalogos_01.php?$ruta");
 }
 
-$pantalla = getPGVar("pantalla");
+$pantalla = Get_Vars_Helper::getPGVar("pantalla");
 if($pantalla=="") $pantalla = "Códigos";
 
 $query_list="";

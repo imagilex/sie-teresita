@@ -12,20 +12,20 @@ include_once("u_tabla/tabla.php");
 include "libreria/funciones_ger.php";
 
 $Con = Conectar();
-$proyecto = getPGVar("proyecto");
-$ruta = addslashes(getPGVar("ruta"));
+$proyecto = Get_Vars_Helper::getPGVar("proyecto");
+$ruta = addslashes(Get_Vars_Helper::getPGVar("ruta"));
  $CarpetaR = $_GET["CarpetaR"];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion = getPostVar("accion");
-$Carpeta = getPostVar("Carpeta");
+$accion = Get_Vars_Helper::getPostVar("accion");
+$Carpeta = Get_Vars_Helper::getPostVar("Carpeta");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -156,7 +156,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)
@@ -169,7 +169,7 @@ case 0:
 	}
 	else if($accion=="BorraCarpeta")
 	{
-		$Carpeta = getPostVar("Carpeta");
+		$Carpeta = Get_Vars_Helper::getPostVar("Carpeta");
 		if($Carpeta!="")
 		{
 		rmdir($Carpeta);
@@ -178,7 +178,7 @@ case 0:
 	}
 	else if($accion=="BorraArchivo")
 	{
-		$Carpeta = getPostVar("Carpeta");
+		$Carpeta = Get_Vars_Helper::getPostVar("Carpeta");
 		if($Carpeta!="")
 		{
 		unlink($Carpeta);

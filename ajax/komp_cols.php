@@ -2,8 +2,8 @@
 session_start();
 include_once("../apoyo.php");
 
-$act = getPGVar("act");
-if(getPGVar("display_page")=="true") $display_page=true;
+$act = Get_Vars_Helper::getPGVar("act");
+if(Get_Vars_Helper::getPGVar("display_page")=="true") $display_page=true;
 else $display_page=false;
 $tcols_def = CTabla("docto3_columnas_alias");
 $tcols = CTabla("docto3_columnas");
@@ -11,10 +11,10 @@ if($act!="")
 {
 	if($act=="modify_cols")
 	{
-		$col = getGetVar("col");
-		$eti = getGetVar("eti");
-		$pos = getGetVar("pos");
-		$ord = getGetVar("ord");
+		$col = Get_Vars_Helper::getGetVar("col");
+		$eti = Get_Vars_Helper::getGetVar("eti");
+		$pos = Get_Vars_Helper::getGetVar("pos");
+		$ord = Get_Vars_Helper::getGetVar("ord");
 		$tcols->delete("usuario='".$_SESSION["id_usr"]."'");
 		for($x=0;$x<count($col);$x++)
 		{
@@ -24,8 +24,8 @@ if($act!="")
 	}
 	if($act=="display_sql")
 	{
-		$lista=getPGVar("lista");
-		$usuar=getPGVar("usuario");
+		$lista=Get_Vars_Helper::getPGVar("lista");
+		$usuar=Get_Vars_Helper::getPGVar("usuario");
 		echo DisplaySQLD3($lista,$usuar);
 	}
 	exit();

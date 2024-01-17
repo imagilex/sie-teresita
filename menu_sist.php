@@ -62,14 +62,14 @@ BarraHerramientas();
 </div>
 <?php
 BH_Ayuda('0.4.51.1','5');
-$menu_actual = getPostVar("menu_opc");
+$menu_actual = Get_Vars_Helper::getPostVar("menu_opc");
 
-$prefijos = getPostVar("prefijo");
-$opciones = getPostVar("opcion");
-$cambios = getPostVar("cambio");
+$prefijos = Get_Vars_Helper::getPostVar("prefijo");
+$opciones = Get_Vars_Helper::getPostVar("opcion");
+$cambios = Get_Vars_Helper::getPostVar("cambio");
 
-$pos = getPostVar("pos");
-$descr = getPostVar("descr");
+$pos = Get_Vars_Helper::getPostVar("pos");
+$descr = Get_Vars_Helper::getPostVar("descr");
 
 $total = max( count($prefijos), count($opciones), count($cambios), count($pos), count($descr));
 

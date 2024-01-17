@@ -8,7 +8,7 @@ if(isset($_SESSION["id_persona_usr"])) unset($_SESSION["id_persona_usr"]);
 
 include "apoyo.php";
 
-$ira = getPGVar("ira");;
+$ira = Get_Vars_Helper::getPGVar("ira");;
 
 $Con=Conectar();
 

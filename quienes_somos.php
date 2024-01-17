@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$ira = getPostVar("seccion");
+$ira = Get_Vars_Helper::getPostVar("seccion");
 
 if($ira=="")
 	$ira="1";

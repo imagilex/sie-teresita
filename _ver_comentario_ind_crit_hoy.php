@@ -6,12 +6,12 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$id_usuario = getPGVar("id_usuario");
-$indicador = getPGVar("indicador");
-$id_indicador_nivel = getPGVar("nivel");
-$anio = getPGVar("anio");
-$mes = getPGVar("mes");
-$fecha = getPGVar("fecha");
+$id_usuario = Get_Vars_Helper::getPGVar("id_usuario");
+$indicador = Get_Vars_Helper::getPGVar("indicador");
+$id_indicador_nivel = Get_Vars_Helper::getPGVar("nivel");
+$anio = Get_Vars_Helper::getPGVar("anio");
+$mes = Get_Vars_Helper::getPGVar("mes");
+$fecha = Get_Vars_Helper::getPGVar("fecha");
 
 $usr=mysqli_fetch_array(consulta_directa("select clave as `usuario` from usuario where clave='$id_usuario'"));
 $usuario=$usr["usuario"];

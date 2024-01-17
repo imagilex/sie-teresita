@@ -18,12 +18,12 @@ if(!isset($_SESSION["tipo"]))
 	header("location: index.php?noCache=".rand(0,32000));
 	exit();
 }
-$pto = getPGVar("pto");
+$pto = Get_Vars_Helper::getPGVar("pto");
 
-$accion = getPGVar("accion");
+$accion = Get_Vars_Helper::getPGVar("accion");
 if($accion=="add_docto")
 {
-	$nombre = getPGVar("nombre");
+	$nombre = Get_Vars_Helper::getPGVar("nombre");
 	if($pto!="" && $nombre!="" && isset($_FILES["archivo"]["name"]) && $_FILES["archivo"]["name"]!="")
 	{
 		$arch="pto$pto".basename($_FILES["archivo"]["name"]);
@@ -33,7 +33,7 @@ if($accion=="add_docto")
 }
 else if($accion=="del_docto")
 {
-	$docto = getPGVar("docto");
+	$docto = Get_Vars_Helper::getPGVar("docto");
 	if($docto!="")
 	{
 		$arch=mysqli_fetch_array($db->consulta("select archivo from documento where id_docto='$docto'"));
@@ -288,7 +288,7 @@ BH_Ayuda('','');
 <table width="95%" align="center"><tr><td valign="bottom" align="right" height="75">
 	<div id="container">
 		<div>
-			<img src="Imagenes/back.png" border="0" onclick="javascript: history.go(-<?php echo (intval(getPGVar("ret"))>0?intval(getPGVar("ret"))+1:"1"); ?>);" />
+			<img src="Imagenes/back.png" border="0" onclick="javascript: history.go(-<?php echo (intval(Get_Vars_Helper::getPGVar("ret"))>0?intval(Get_Vars_Helper::getPGVar("ret"))+1:"1"); ?>);" />
 			<input type="button" name="btnAddDocto" id="btnAddDocto" value="Anexar" style="width:75px; height:25px;" />
 			<input type="button" name="btnDelDocto" id="btnDelDocto" value="Borrar" style="width:75px; height:25px;" />
 			<input type="button" name="btnPrintDescPto" id="btnPrintDescPto" value="Imprimir" style="widows:75px; height:25px;" onclick="javascrip: window.open('ajax/puesto_descriptivo.php?pto=<?php echo $pto; ?>'); " />
@@ -299,7 +299,7 @@ BH_Ayuda('','');
 				<div align="center">
 				<form action="organigrama_puesto.php?pto=<?php echo $pto?>" method="post" id="frm_add_docto" enctype="multipart/form-data">
 					<input type="hidden" name="accion" value="add_docto" />
-					<input type="hidden" name="ret" value="<?php echo intval(getPGVar("ret"))+1; ?>" />
+					<input type="hidden" name="ret" value="<?php echo intval(Get_Vars_Helper::getPGVar("ret"))+1; ?>" />
 					<table border="0">
 						<tr><td align="right">Nombre:</td><td align="left"><input type="text" name="nombre" /></td></tr>
 						<tr><td align="right">Archivo:</td><td align="left"><input type="file" name="archivo" /></td></tr>
@@ -322,7 +322,7 @@ BH_Ayuda('','');
 				<form action="organigrama_puesto.php?pto=<?php echo $pto?>" method="post" id="frm_del_docto">
 					<input type="hidden" name="accion" id="accion" value="del_docto" />
 					<input type="hidden" name="docto" id="docto" value="" />
-					<input type="hidden" name="ret" value="<?php echo intval(getPGVar("ret"))+1; ?>" />
+					<input type="hidden" name="ret" value="<?php echo intval(Get_Vars_Helper::getPGVar("ret"))+1; ?>" />
 					<input type="submit" value="Si" />
 					<input type="button" id="NotDelDocto" value="No" />
 				</form>

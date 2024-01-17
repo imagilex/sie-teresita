@@ -3,9 +3,9 @@ include("apoyo.php");
 $Con=Conectar();
 
 $title="";
-if(getGetVar("file")!="")
+if(Get_Vars_Helper::getGetVar("file")!="")
 {
-	$titul=@mysqli_fetch_array(consulta_directa("select descripcion from ayuda where archivo='".getGetVar("file")."'"));
+	$titul=@mysqli_fetch_array(consulta_directa("select descripcion from ayuda where archivo='".Get_Vars_Helper::getGetVar("file")."'"));
 	if($titul["descripcion"]!="") $title=$titul["descripcion"];
 }
 ?>
@@ -22,12 +22,12 @@ if(getGetVar("file")!="")
 
 BarraHerramientas();
 
-if(getGetVar("file")!="")
+if(Get_Vars_Helper::getGetVar("file")!="")
 {
 	?>
 	<table border="0" width="65%" align="center"><tr><td><?php
 
-	$archivo = getGetVar("file");
+	$archivo = Get_Vars_Helper::getGetVar("file");
 
 	$info = pathinfo($Dir."/Ayuda/".$archivo);
 

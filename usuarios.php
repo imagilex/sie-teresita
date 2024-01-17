@@ -16,17 +16,17 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$usuario_form = getPostVar("usuario");
+$usuario_form = Get_Vars_Helper::getPostVar("usuario");
 
-if(getPostVar("Guardar")!="")
+if(Get_Vars_Helper::getPostVar("Guardar")!="")
 {
-	$clave = getPostVar("clave");
-	$password = getPostVar("password");
-	$persona = getPostVar("persona");
-	$tipo_usuario = getPostVar("tipo_usuario");
-	$estatus = getPostVar("estatus");
-	$fecha_alta = getPostDate("fecha_alta");
-	if(getPostVar("add")=="yes" && $clave!="")
+	$clave = Get_Vars_Helper::getPostVar("clave");
+	$password = Get_Vars_Helper::getPostVar("password");
+	$persona = Get_Vars_Helper::getPostVar("persona");
+	$tipo_usuario = Get_Vars_Helper::getPostVar("tipo_usuario");
+	$estatus = Get_Vars_Helper::getPostVar("estatus");
+	$fecha_alta = Get_Vars_Helper::getPostDate("fecha_alta");
+	if(Get_Vars_Helper::getPostVar("add")=="yes" && $clave!="")
 	{
 		consulta_directa("insert into usuario (clave, password, estatus, tipo_usuario, persona, fecha_alta) values ('$clave', '$password', '$estatus', '$tipo_usuario', '$persona', '$fecha_alta')");
 		consulta_directa("insert into lista (nombre, lista_nivel, usuario, fecha, posicion, estatus) values ('$persona', 'C', '$clave', curdate(), '1', 'A')");
@@ -119,7 +119,7 @@ $datos=@mysqli_fetch_array(consulta_directa("select * from usuario where clave='
 <?php
 
 BH_Ayuda('0.4.51.1','2');
-if(getPostVar("Nuevo")=="")
+if(Get_Vars_Helper::getPostVar("Nuevo")=="")
 {
 ?>
 <form method="post" enctype="multipart/form-data" name="datos" action="usuarios.php">

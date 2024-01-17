@@ -90,32 +90,32 @@ if(!isset($_SESSION["tipo"]) )
 <?php
 BarraHerramientas();
 
-$Campo = getPostVar("campo");
-$total = intval(getPostVar("total"));
+$Campo = Get_Vars_Helper::getPostVar("campo");
+$total = intval(Get_Vars_Helper::getPostVar("total"));
 
 if($total>0 && $Campo!="")
 	for($x=1;$x<=$total;$x++)
 	{
-		if(getPostVar("cambio$x")=="S")
+		if(Get_Vars_Helper::getPostVar("cambio$x")=="S")
 		{
-			$id = getPostVar("id$x");
-			$desc = getPostVar("Des$x");
-			$val = getPostVar("Val$x");
+			$id = Get_Vars_Helper::getPostVar("id$x");
+			$desc = Get_Vars_Helper::getPostVar("Des$x");
+			$val = Get_Vars_Helper::getPostVar("Val$x");
 			$val = ($val!="")?($val):($id);
-			$pos = getPostVar("pos$x");
-			$otr = getPostVar("otr$x");
-			$estatus = getPostVar("estatus$x");
+			$pos = Get_Vars_Helper::getPostVar("pos$x");
+			$otr = Get_Vars_Helper::getPostVar("otr$x");
+			$estatus = Get_Vars_Helper::getPostVar("estatus$x");
 			consulta_directa("update codigos_generales set descripcion='$desc',valor='$val',posicion='$pos',otro='$otr',estatus='$estatus' where campo='$Campo' and valor='$id'");
 		}
 	}
 
 for($x=1;$x<=10;$x++)
 {
-	$id = getPostVar("Clave$x");
-	$desc = getPostVar("Descrip$x");
-	$posi = getPostVar("posi$x");
-	$otro = getPostVar("otro$x");
-	$estatus = getPostVar("estat$x");
+	$id = Get_Vars_Helper::getPostVar("Clave$x");
+	$desc = Get_Vars_Helper::getPostVar("Descrip$x");
+	$posi = Get_Vars_Helper::getPostVar("posi$x");
+	$otro = Get_Vars_Helper::getPostVar("otro$x");
+	$estatus = Get_Vars_Helper::getPostVar("estat$x");
 	if($id!="" && $desc!="")
 	{
 		$registros_repetidos=mysqli_fetch_array(consulta_directa("select count(*) as n from codigos_generales where campo like '$Campo' and descripcion = '$desc'"));
@@ -126,16 +126,16 @@ for($x=1;$x<=10;$x++)
 
 
 $altas_usr=false;
-if(getPostVar("btnAltaUsuarios")=="Altas Usuarios")
+if(Get_Vars_Helper::getPostVar("btnAltaUsuarios")=="Altas Usuarios")
 {
 	$altas_usr=true;
 }
 $query = "select * from codigos_generales where campo='$Campo'";
-$clave_b = getPostVar("clave_b");
-$desc_b = getPostVar("descr_b");
-$pos_b = getPostVar("pos_b");
-$otro_b = getPostVar("otro_b");
-$estatus_b = getPostVar("estatus_b");
+$clave_b = Get_Vars_Helper::getPostVar("clave_b");
+$desc_b = Get_Vars_Helper::getPostVar("descr_b");
+$pos_b = Get_Vars_Helper::getPostVar("pos_b");
+$otro_b = Get_Vars_Helper::getPostVar("otro_b");
+$estatus_b = Get_Vars_Helper::getPostVar("estatus_b");
 if($clave_b!="")
 	$query=$query." and valor = '$clave_b'";
 if($desc_b!="")

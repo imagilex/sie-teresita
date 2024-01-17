@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$secc = getPostVar("secc");
+$secc = Get_Vars_Helper::getPostVar("secc");
 
 if($secc=="1") //¿Como usar un mapa?
 {

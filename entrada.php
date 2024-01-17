@@ -11,7 +11,7 @@ $namelogin=isset($_SESSION["id_usr"]) ? $_SESSION["id_usr"] : "";
 include("apoyo.php");
 $Con=Conectar();
 
-$ira = getPostVar("ira_cons").getPostVar("ira_adm").getGetVar("ir_a");
+$ira = Get_Vars_Helper::getPostVar("ira_cons").Get_Vars_Helper::getPostVar("ira_adm").Get_Vars_Helper::getGetVar("ir_a");
 
 if($ira!="")
 {
@@ -248,8 +248,8 @@ AddNewFolder('c:\\','WT');
 if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 {
 
-	$usr = getPGVar("usr");
-	$pass = getPGVar("pass");
+	$usr = Get_Vars_Helper::getPGVar("usr");
+	$pass = Get_Vars_Helper::getPGVar("pass");
 	$id_usr_usr = "";
 	$tipo_usr = "";
 

@@ -1,8 +1,8 @@
 <?php
 session_start();
 include("../apoyo.php");
-$accion = getPGVar("accion");
-$herramienta = getPGVar("herramienta");
+$accion = Get_Vars_Helper::getPGVar("accion");
+$herramienta = Get_Vars_Helper::getPGVar("herramienta");
 
 if($accion!="" && $herramienta!="")
 {
@@ -98,14 +98,14 @@ if($accion!="" && $herramienta!="")
 	}
 	else if($accion=="salvar")
 	{
-		$total = getPGVar("total_cols");
+		$total = Get_Vars_Helper::getPGVar("total_cols");
 		$thpp->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."'");
 		for($x=1;$x<=$total;$x++)
 		{
-			$campo = getPGVar("vis_".$x);
-			$etiqueta = getPGVar("eti_".$x);
-			$posicion = getPGVar("pos_".$x);
-			$orden = getPGVar("ord_".$x);
+			$campo = Get_Vars_Helper::getPGVar("vis_".$x);
+			$etiqueta = Get_Vars_Helper::getPGVar("eti_".$x);
+			$posicion = Get_Vars_Helper::getPGVar("pos_".$x);
+			$orden = Get_Vars_Helper::getPGVar("ord_".$x);
 			if($campo!="")
 			{
 				$thpp->insert(array("campo"=>$campo, "etiqueta"=>$etiqueta, "usuario"=>$_SESSION["id_usr"], "orden"=>$orden, "posicion"=>$posicion, "herramienta"=>$herramienta));

@@ -30,7 +30,7 @@ include("apoyo.php");
 
 $Con=Conectar();
 
-$informacion=pathinfo($archivo=$Dir.getGetVar("archivo"));
+$informacion=pathinfo($archivo=$Dir.Get_Vars_Helper::getGetVar("archivo"));
 
 if($archivo!="" && file_exists($archivo) && isset($informacion["extension"]))
 {

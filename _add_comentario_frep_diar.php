@@ -4,15 +4,15 @@ session_start();
 
 include "apoyo.php";
 
-$esta=false;
+$esta = false;
 
-$Con=Conectar();
+$Con = Conectar();
 
-$comentario=getPGVar("comentario");
-$id_usuario=getPGVar("id_usuario");
-$id_reporte=getPGVar("id_reporte");
-$fecha=getPGVar("fecha");
-$fecha_reporte=getPGVar("fecha_reporte");
+$comentario = Get_Vars_Helper::getPGVar("comentario");
+$id_usuario = Get_Vars_Helper::getPGVar("id_usuario");
+$id_reporte = Get_Vars_Helper::getPGVar("id_reporte");
+$fecha = Get_Vars_Helper::getPGVar("fecha");
+$fecha_reporte = Get_Vars_Helper::getPGVar("fecha_reporte");
 
 if($comentario != "" && $id_reporte != "" && $id_usuario != "" && $fecha_reporte!="")
 {

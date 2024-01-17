@@ -311,8 +311,8 @@ class documento
 	}
 }
 
-$id_docto = getPGVar("id_docto");
-$act = getPGVar("act");
+$id_docto = Get_Vars_Helper::getPGVar("id_docto");
+$act = Get_Vars_Helper::getPGVar("act");
 if($act!="")
 {
 	if($act=="display_all")

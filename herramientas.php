@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$ira = getPGVar("seccion");
+$ira = Get_Vars_Helper::getPGVar("seccion");
 
 if($ira!="")
 {

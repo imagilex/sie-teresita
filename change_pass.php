@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]))
 	exit();
 }
 
-$newp = getPGVar("newp");
+$newp = Get_Vars_Helper::getPGVar("newp");
 if($newp!="")
 {
 	$query="update usuario set password = '$newp' where clave = '".$_SESSION["id_usr"]."' and persona = '".$_SESSION["id_persona_usr"]."'";

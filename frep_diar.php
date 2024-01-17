@@ -7,7 +7,7 @@ include "util_dir/directorio.php";
 
 $Con=Conectar();
 
-$tipo_reporte = getPGVar("tipo_rep");
+$tipo_reporte = Get_Vars_Helper::getPGVar("tipo_rep");
 if($tipo_reporte=="") $tipo_reporte="RD";
 
 $carp=@mysqli_fetch_array(consulta_directa("select otro from codigos_generales where campo = 'Reporte_tipo' and valor = '$tipo_reporte'"));
@@ -19,12 +19,12 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$id_reporte = getPostVar("reporte");
-$nivel = getPostVar("nivel");
-$fecha = getPostVar("fecha_reporte");
+$id_reporte = Get_Vars_Helper::getPostVar("reporte");
+$nivel = Get_Vars_Helper::getPostVar("nivel");
+$fecha = Get_Vars_Helper::getPostVar("fecha_reporte");
 
-$btn_ant = ((getPostVar("ant_rep")!="")?(true):(false));
-$btn_sig = ((getPostVar("sig_rep")!="")?(true):(false));
+$btn_ant = ((Get_Vars_Helper::getPostVar("ant_rep")!="")?(true):(false));
+$btn_sig = ((Get_Vars_Helper::getPostVar("sig_rep")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
@@ -60,7 +60,7 @@ if($btn_ant || $btn_sig)
 	$id_reporte=$reportes[$x];
 }
 
-if(getPostVar("reporte_actual")!=$id_reporte)
+if(Get_Vars_Helper::getPostVar("reporte_actual")!=$id_reporte)
 	$nivel="";
 
 ?>

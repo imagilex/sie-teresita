@@ -15,9 +15,9 @@ if(!isset($_SESSION["tipo"])  )
 	exit();
 }
 
-if(getPostVar("add")=='yes')
+if(Get_Vars_Helper::getPostVar("add")=='yes')
 {
-	$nombre = getPostVar("nombre");
+	$nombre = Get_Vars_Helper::getPostVar("nombre");
 	$cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from reporte where nombre = '$nombre'"));
 	if(intval($cuantos["n"])>0)
 	{
@@ -29,12 +29,12 @@ if(getPostVar("add")=='yes')
 		ErrorMySQLAlert();
 		$id = mysqli_fetch_array(consulta_directa("select id_reporte from reporte where nombre =  '$nombre'"));
 		$id_reporte = $id["id_reporte"];
-		$num_secc = getPostVar("num_secc");
+		$num_secc = Get_Vars_Helper::getPostVar("num_secc");
 		for($x=2;$x<=$num_secc;$x++)
 		{
-			$seccion = getPostVar("nom$x");
-			$posicion = getPostVar("pos$x");
-			$mostrar = ((getPostVar("mos$x")=="S")?(1):(0));
+			$seccion = Get_Vars_Helper::getPostVar("nom$x");
+			$posicion = Get_Vars_Helper::getPostVar("pos$x");
+			$mostrar = ((Get_Vars_Helper::getPostVar("mos$x")=="S")?(1):(0));
 			if($seccion!="" && isset($_FILES["arc$x"]["name"]) && $_FILES["arc$x"]["name"]!="")
 			{
 				$info=pathinfo($Dir."/Archivos_Reportes/".$_FILES["arc$x"]["name"]);
@@ -43,9 +43,9 @@ if(getPostVar("add")=='yes')
 				consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 			}
 		}
-		$seccion = getPostVar("nom1");
-		$posicion = getPostVar("pos1");
-		$mostrar = getPostVar("mos1");
+		$seccion = Get_Vars_Helper::getPostVar("nom1");
+		$posicion = Get_Vars_Helper::getPostVar("pos1");
+		$mostrar = Get_Vars_Helper::getPostVar("mos1");
 		consulta_directa("insert into reporte_detalle (id_reporte, seccion, archivo, posicion, mostrar) values ('$id_reporte', '$seccion', '$archivo', '$posicion', '$mostrar')");
 	}
 }

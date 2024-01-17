@@ -12,18 +12,18 @@ include_once("u_tabla/tabla.php");
 include "libreria/funciones_ger.php";
 
 $Con=Conectar();
-$proyecto=getPGVar("proyecto");
-$ruta=addslashes(getPGVar("ruta"));
+$proyecto=Get_Vars_Helper::getPGVar("proyecto");
+$ruta=addslashes(Get_Vars_Helper::getPGVar("ruta"));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion = getPostVar("accion");
+$accion = Get_Vars_Helper::getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="add_files")
 	{
 
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		$arch=$archivos;
 		if($archivos!="")
 		{
@@ -154,7 +154,7 @@ case 0:
 	}
 	else if($accion=="free_files")
 	{
-		$archivos = getPostVar("archivo");
+		$archivos = Get_Vars_Helper::getPostVar("archivo");
 		if($archivos!="")
 		{
 			foreach($archivos as $arch)

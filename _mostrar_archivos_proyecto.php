@@ -2,8 +2,8 @@
 include "apoyo.php";
 $Con=Conectar();
 
-$proyecto = getPostVar("proyecto");
-$accion = getPostVar("accion");
+$proyecto = Get_Vars_Helper::getPostVar("proyecto");
+$accion = Get_Vars_Helper::getPostVar("accion");
 
 $arch=false;
 

@@ -6,10 +6,10 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$id_usuario = getPGVar("id_usuario");
-$id_reporte = getPGVar("id_reporte");
-$fecha = getPGVar("fecha");
-$fecha_reporte = getPGVar("fecha_reporte");
+$id_usuario = Get_Vars_Helper::getPGVar("id_usuario");
+$id_reporte = Get_Vars_Helper::getPGVar("id_reporte");
+$fecha = Get_Vars_Helper::getPGVar("fecha");
+$fecha_reporte = Get_Vars_Helper::getPGVar("fecha_reporte");
 
 $usr=mysqli_fetch_array(consulta_directa("select clave as `usuario` from usuario where clave='$id_usuario'"));
 $usuario=$usr["usuario"];

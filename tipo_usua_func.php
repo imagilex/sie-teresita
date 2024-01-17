@@ -69,15 +69,15 @@ BarraHerramientas();
 <?php
 
 BH_Ayuda('0.4.51.1','3');
-$tipo_usr = getPostVar("tipo_usr");
-if($tipo_usr!="" && getPostVar("sincambios")!='yes')
+$tipo_usr = Get_Vars_Helper::getPostVar("tipo_usr");
+if($tipo_usr!="" && Get_Vars_Helper::getPostVar("sincambios")!='yes')
 {
-	$total=intval(getPostVar("total"));
+	$total=intval(Get_Vars_Helper::getPostVar("total"));
 	if($total>0)
 		consulta_directa("delete from tipo_usuario_funcion where tipo_usuario='$tipo_usr'");
 	for($x=1;$x<=$total;$x++)
 	{
-		$dato = getPostVar("Reg$x");
+		$dato = Get_Vars_Helper::getPostVar("Reg$x");
 		if($dato!="")
 			consulta_directa("insert into tipo_usuario_funcion (tipo_usuario, funcion) values ('$tipo_usr', '$dato')");
 	}

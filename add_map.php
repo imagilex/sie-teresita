@@ -3,20 +3,20 @@ include_once("apoyo.php");
 include_once("u_db/data_base.php");
 include_once("u_mapa/mapa.php");
 $db = new data_base("root","localhost","pass","mapas");
-$accion = getPGVar("accion");
+$accion = Get_Vars_Helper::getPGVar("accion");
 if($accion=="add_map"){
-	$nombre = getPostVar("nombre");
-	$comentarios = getPostVar("comentarios");
-	$tipo = getPostVar("tipo");
-	$contenido = getPostVar("contenido");
+	$nombre = Get_Vars_Helper::getPostVar("nombre");
+	$comentarios = Get_Vars_Helper::getPostVar("comentarios");
+	$tipo = Get_Vars_Helper::getPostVar("tipo");
+	$contenido = Get_Vars_Helper::getPostVar("contenido");
 	$db->consulta("insert into mapa (nombre,comentarios,tipo,contenido) values ('$nombre','$comentarios','$tipo','$contenido')");
 }else if($accion=="add_rel"){
-	$mapa_padre = getPostVar("mapa_padre");
-	$mapa_hijo = getPostVar("mapa_hijo");
-	$figura = getPostVar("figura");
-	$coordenadas = getPostVar("coordenadas");
-	$posicion = getPostVar("posicion");
-	$preposicion = getPostVar("preposicion");
+	$mapa_padre = Get_Vars_Helper::getPostVar("mapa_padre");
+	$mapa_hijo = Get_Vars_Helper::getPostVar("mapa_hijo");
+	$figura = Get_Vars_Helper::getPostVar("figura");
+	$coordenadas = Get_Vars_Helper::getPostVar("coordenadas");
+	$posicion = Get_Vars_Helper::getPostVar("posicion");
+	$preposicion = Get_Vars_Helper::getPostVar("preposicion");
 	for($x=0;$x<@count($mapa_hijo);$x++){
 		if($mapa_hijo[$x]!="" && ($figura[$x]!="" || $coordenadas[$x]!="" || $posicion[$x]!="" || $preposicion[$x]!="")){
 			$query="insert into mapa_submapa (mapa_padre,mapa_hijo,figura,coordenadas,posicion,preposicion) values ('$mapa_padre','".$mapa_hijo[$x]."','".$figura[$x]."','".$coordenadas[$x]."','".$posicion[$x]."','".$preposicion[$x]."')";
@@ -25,10 +25,10 @@ if($accion=="add_map"){
 		}
 	}
 }else if($accion=="add_docto"){
-	$id_mapa = getPostVar("id_mapa");
-	$nombre_documento = getPostVar("nombre_documento");
-	$contenido = getPostVar("contenido");
-	$tipo_documento = getPostVar("tipo_documento");
+	$id_mapa = Get_Vars_Helper::getPostVar("id_mapa");
+	$nombre_documento = Get_Vars_Helper::getPostVar("nombre_documento");
+	$contenido = Get_Vars_Helper::getPostVar("contenido");
+	$tipo_documento = Get_Vars_Helper::getPostVar("tipo_documento");
 	for($x=0;$x<@count($nombre);$x++){
 		if($nombre_documento[$x]!=""){
 			$db->consulta("insert into mapa_documento (nombre_documento,contenido,tipo_documento,fecha) values ('".$nombre_documento[$x]."','".$contenido[$x]."','".$tipo_documento[$x]."',currdate())");

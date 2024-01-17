@@ -4,8 +4,8 @@ include("apoyo.php");
 
 $Con=Conectar();
 
-$nombre = getPostVar("nombre");
-$apaterno = getPostVar("apaterno");
+$nombre = Get_Vars_Helper::getPostVar("nombre");
+$apaterno = Get_Vars_Helper::getPostVar("apaterno");
 $usuario=substr($nombre,0,1).$apaterno;
 $usuario=str_replace("á","a",$usuario);$usuario=str_replace("é","e",$usuario);$usuario=str_replace("í","i",$usuario);$usuario=str_replace("ó","o",$usuario);
 $usuario=str_replace("ú","u",$usuario);$usuario=str_replace("Á","a",$usuario);$usuario=str_replace("É","e",$usuario);$usuario=str_replace("Í","i",$usuario);

@@ -3,9 +3,9 @@ session_start();
 include("../../apoyo.php");
 $tabla = CTabla("docto8");
 
-$accion = getPostVar("accion");
-$documento = getPostVar("documento");
-$consecutivo = getPostVar("consecutivo");
+$accion = Get_Vars_Helper::getPostVar("accion");
+$documento = Get_Vars_Helper::getPostVar("documento");
+$consecutivo = Get_Vars_Helper::getPostVar("consecutivo");
 if($accion!="")
 {
 	if($accion=="inserta")

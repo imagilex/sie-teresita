@@ -63,8 +63,8 @@ if(!isset($_SESSION["tipo"]))
 //B_reportes();
 BH_Ayuda('','');
 
-$id_mapa = getPostVar("id_mapa");
-$docto = getPostVar("docto");
+$id_mapa = Get_Vars_Helper::getPostVar("id_mapa");
+$docto = Get_Vars_Helper::getPostVar("docto");
 
 $superiores= array();
 $inferiores="";

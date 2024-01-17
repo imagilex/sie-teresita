@@ -6,7 +6,7 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$accion = getPostVar("accion");
+$accion = Get_Vars_Helper::getPostVar("accion");
 if($accion!="")
 {
 	if($accion=="1")

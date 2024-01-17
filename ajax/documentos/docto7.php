@@ -3,9 +3,9 @@ session_start();
 include("../../apoyo.php");
 $tabla = CTabla("docto7");
 
-$accion = getPGVar("accion");
-$documento = getPGVar("documento");
-$consecutivo = getPGVar("consecutivo");
+$accion = Get_Vars_Helper::getPGVar("accion");
+$documento = Get_Vars_Helper::getPGVar("documento");
+$consecutivo = Get_Vars_Helper::getPGVar("consecutivo");
 if($accion!="")
 {
 	if($accion=="inserta")

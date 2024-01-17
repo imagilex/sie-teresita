@@ -16,17 +16,17 @@ if(!isset($_SESSION["tipo"]) )
 }
 
 $hoy = getdate();
-@list($anio,$mes)=explode("-",getPostVar("fecha_seleccionada"));
-$ant = getPostVar("ant");
-$sig = getPostVar("sig");
-$indicador = getPostVar("indicador");
-$nivel = getPostVar("nivel");
+@list($anio,$mes)=explode("-",Get_Vars_Helper::getPostVar("fecha_seleccionada"));
+$ant = Get_Vars_Helper::getPostVar("ant");
+$sig = Get_Vars_Helper::getPostVar("sig");
+$indicador = Get_Vars_Helper::getPostVar("indicador");
+$nivel = Get_Vars_Helper::getPostVar("nivel");
 
 if($indicador=="")
 	$indicador="F01";
 
-$btn_ant=((getPostVar("ant_ind")!="")?(true):(false));
-$btn_sig=((getPostVar("sig_ind")!="")?(true):(false));
+$btn_ant=((Get_Vars_Helper::getPostVar("ant_ind")!="")?(true):(false));
+$btn_sig=((Get_Vars_Helper::getPostVar("sig_ind")!="")?(true):(false));
 
 if($btn_ant || $btn_sig)
 {
@@ -65,7 +65,7 @@ if($btn_ant || $btn_sig)
 	$indicador=$ind[$x];
 }
 
-if(getPostVar("indicador_actual")!=$indicador)
+if(Get_Vars_Helper::getPostVar("indicador_actual")!=$indicador)
 {
 	$nivel="";
 }

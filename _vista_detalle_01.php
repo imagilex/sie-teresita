@@ -15,7 +15,7 @@ if(!isset($_SESSION["tipo"]) )
 	exit();
 }
 
-$proyecto = getPGVar("proyecto");
+$proyecto = Get_Vars_Helper::getPGVar("proyecto");
 $meses=0;
 ?>
 

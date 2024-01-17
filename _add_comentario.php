@@ -4,9 +4,9 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-$comentario = getPGVar("comentario");
-$id_reporte = getPGVar("id_reporte");
-$id_usuario = getPGVar("id_usuario");
+$comentario = Get_Vars_Helper::getPGVar("comentario");
+$id_reporte = Get_Vars_Helper::getPGVar("id_reporte");
+$id_usuario = Get_Vars_Helper::getPGVar("id_usuario");
 
 $date_actual=getdate();
 $fecha=$date_actual["year"]."-".$date_actual["mon"]."-".$date_actual["mday"];

@@ -36,8 +36,8 @@ if(!isset($_SESSION["tipo"]) )
 <?php
 $regs = mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Logo'"));
 $Logo = $regs["valor"];
-$pto = getPGVar("pto");
-$persona = getPGVar("persona");
+$pto = Get_Vars_Helper::getPGVar("pto");
+$persona = Get_Vars_Helper::getPGVar("persona");
 ?>
 <body>
 <?php

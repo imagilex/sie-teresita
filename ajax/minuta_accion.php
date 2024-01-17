@@ -161,10 +161,10 @@ function Forma_Where($campos, &$tablas_from, &$from)
 	return $where.= " ";
 }
 
-$accion = getPGVar("accion");
-$id_documento = getPGVar("docto");
-$new_val = getPGVar("new_val");
-$includes_id = getPGVar("includes");
+$accion = Get_Vars_Helper::getPGVar("accion");
+$id_documento = Get_Vars_Helper::getPGVar("docto");
+$new_val = Get_Vars_Helper::getPGVar("new_val");
+$includes_id = Get_Vars_Helper::getPGVar("includes");
 if($includes_id!="") $includes_id="'".str_replace(",","','",$includes_id)."'";
 if($accion!="")
 {
@@ -548,12 +548,12 @@ if($accion!="")
 	}
 	else if($accion=="agrega_minuta_inicio")
 	{
-		$organizacion = getPGVar("organizacion");
-		$fecha = getPGVar("fecha");
-		$dias_activa = getPGVar("dias_activa");
-		$coordinador = getPGVar("coordinador");
-		$participante = getPostVar("participante") != "" ? getPostVar("participante") : getGetVar("participante");
-		$agrupador = getPGVar("agrupador");
+		$organizacion = Get_Vars_Helper::getPGVar("organizacion");
+		$fecha = Get_Vars_Helper::getPGVar("fecha");
+		$dias_activa = Get_Vars_Helper::getPGVar("dias_activa");
+		$coordinador = Get_Vars_Helper::getPGVar("coordinador");
+		$participante = Get_Vars_Helper::getPostVar("participante") != "" ? Get_Vars_Helper::getPostVar("participante") : Get_Vars_Helper::getGetVar("participante");
+		$agrupador = Get_Vars_Helper::getPGVar("agrupador");
 		if($fecha!="" && $coordinador!="" && $agrupador!="")
 		{
 			$aux = CTabla("docto_general");

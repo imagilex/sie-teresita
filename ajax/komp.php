@@ -8,9 +8,9 @@ header("Pragma: no-cache");
 
 include("../apoyo.php");
 
-$id_documento = getPGVar("id_documento");
-$fase = getPGVar("fase");
-$consecutivo = getPGVar("consecutivo");
+$id_documento = Get_Vars_Helper::getPGVar("id_documento");
+$fase = Get_Vars_Helper::getPGVar("fase");
+$consecutivo = Get_Vars_Helper::getPGVar("consecutivo");
 
 $tbl_comps = CTabla("docto3");
 $tbl_parts = CTabla("docto_participantes");

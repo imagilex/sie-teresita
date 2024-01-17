@@ -125,10 +125,10 @@ BarraHerramientas();
 <?php
 BH_Ayuda('0.4.51.1','4');
 
-$funcion = getPostVar("funcion");
-if(getPostVar("sincambios")!="yes" && $funcion!="")
+$funcion = Get_Vars_Helper::getPostVar("funcion");
+if(Get_Vars_Helper::getPostVar("sincambios")!="yes" && $funcion!="")
 {
-	$registros = getPostVar("Reg");
+	$registros = Get_Vars_Helper::getPostVar("Reg");
 	$total=count($registros);
 	if($total>0)
 	{

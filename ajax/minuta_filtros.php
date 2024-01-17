@@ -67,12 +67,12 @@ session_start();
 
 */
 include("../apoyo.php");
-$schema = getPGVar("schema");
-$type_inf = getPGVar("type_inf");
-$campo_filtro = getPGVar("campo_filtro");
-$extra_data = getPGVar("extra_data");
-$herramienta = getPGVar("herramienta");
-$campo_save = getPGVar("campo_save");
+$schema = Get_Vars_Helper::getPGVar("schema");
+$type_inf = Get_Vars_Helper::getPGVar("type_inf");
+$campo_filtro = Get_Vars_Helper::getPGVar("campo_filtro");
+$extra_data = Get_Vars_Helper::getPGVar("extra_data");
+$herramienta = Get_Vars_Helper::getPGVar("herramienta");
+$campo_save = Get_Vars_Helper::getPGVar("campo_save");
 if($schema!="")
 {
 	if($schema=="minuta_incio")
@@ -327,7 +327,7 @@ if($type_inf!="" && $campo_filtro!="" && $herramienta!="")
 }
 if($campo_save!="" && $herramienta!="" && $type_inf!="")
 {
-	$datos = getPostVar("filtrado") != "" ? getPostVar("filtrado") : getGetVar("filtrado");
+	$datos = Get_Vars_Helper::getPostVar("filtrado") != "" ? Get_Vars_Helper::getPostVar("filtrado") : Get_Vars_Helper::getGetVar("filtrado");
 	if($type_inf=="cg")
 	{
 		$aux = CTabla("herr_pant_filtros");
@@ -368,8 +368,8 @@ if($campo_save!="" && $herramienta!="" && $type_inf!="")
 	{
 		$aux = CTabla("herr_pant_filtros");
 		$aux->delete("herramienta='$herramienta' and usuario='".$_SESSION["id_usr"]."' and campo='$campo_save'");
-		$filtro_desde = getPGVar("filtro_desde");
-		$filtro_hasta = getPGVar("filtro_hasta");
+		$filtro_desde = Get_Vars_Helper::getPGVar("filtro_desde");
+		$filtro_hasta = Get_Vars_Helper::getPGVar("filtro_hasta");
 		if($filtro_desde!="") $aux->insert(array("campo"=>$campo_save, "operador"=>">", "valor"=>$filtro_desde, "usuario"=>$_SESSION["id_usr"], "herramienta"=>$herramienta));
 		if($filtro_hasta) $aux->insert(array("campo"=>$campo_save, "operador"=>"<", "valor"=>$filtro_hasta, "usuario"=>$_SESSION["id_usr"], "herramienta"=>$herramienta));
 	}
