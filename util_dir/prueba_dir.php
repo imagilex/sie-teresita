@@ -5,92 +5,92 @@
 <title>..:: DIRECTORIOS ::..</title>
 <script language="javascript" src="prototype.js"></script>
 <script language="javascript">
-	var ruta="<?php echo addslashes(dirname(__FILE__));?>/documento";
-	function LimpiaCbo(id_obj)
-	{
-		var obj=$(id_obj),x;
-		for(x=obj.childNodes.length-1;x>=0;x--)
-		{
-			obj.removeChild(obj.childNodes[x]);
-		}
-	}
-	function Doctos()
-	{
-		obj=new Ajax.Request("dirs.php",{
-			postBody: "directorio="+ruta,
-			onSuccess: function(xhr)
-			{
-				var dirs=eval("("+xhr.responseText+")"),x,opt;
-				LimpiaCbo('fecha');
-				for(x=0;x<dirs.length;x++)
-				{
-					if(dirs[x]!="." && dirs[x]!="..")
-					{
-						opt=document.createElement("option");
-						opt.value=dirs[x];
-						opt.innerHTML=dirs[x];
-						$('doctos').appendChild(opt);
-						Fechas();
-					}
-				}
-			},
-			onFailure: function()
-			{
-				alert("Error en la carga de documentos");
-			}
-		});
-	}
-	function Fechas()
-	{
-		obj=new Ajax.Request("dirs.php",{
-			postBody: "directorio="+ruta+"/"+$F('doctos')+"/",
-			onSuccess: function(xhr)
-			{
-				var dirs=eval("("+xhr.responseText+")"),x,opt;
-				LimpiaCbo('fecha');
-				for(x=0;x<dirs.length;x++)
-				{
-					if(dirs[x]!="." && dirs[x]!="..")
-					{
-						opt=document.createElement("option");
-						opt.value=dirs[x];
-						opt.innerHTML=dirs[x];
-						$('fecha').appendChild(opt);
-						Archivos();
-					}
-				}
-			},
-			onFailure: function()
-			{
-				alert("Error en la carga de documentos");
-			}
-		});
-	}
-	function Archivos()
-	{
-		obj=new Ajax.Request("archs.php",{
-			postBody: "directorio="+ruta+"/"+$F('doctos')+"/"+$F('fecha')+"/",
-			onSuccess: function(xhr)
-			{
-				var dirs=eval("("+xhr.responseText+")"),x,opt;
-				LimpiaCbo('referencia');
-				for(x=0;x<dirs.length;x++)
-				{
-					if(dirs[x]!="." && dirs[x]!="..")
-					{
-						opt=document.createElement("option");
-						opt.value=dirs[x];
-						opt.innerHTML=dirs[x];
-						$('referencia').appendChild(opt);
-					}
-				}
-			},
-			onFailure: function()
-			{
-				alert("Error en la carga de documentos");
-			}
-		});
-	}
+    var ruta="<?php echo addslashes(dirname(__FILE__));?>/documento";
+    function LimpiaCbo(id_obj)
+    {
+        var obj=$(id_obj),x;
+        for(x=obj.childNodes.length-1;x>=0;x--)
+        {
+            obj.removeChild(obj.childNodes[x]);
+        }
+    }
+    function Doctos()
+    {
+        obj=new Ajax.Request("dirs.php",{
+            postBody: "directorio="+ruta,
+            onSuccess: function(xhr)
+            {
+                var dirs=eval("("+xhr.responseText+")"),x,opt;
+                LimpiaCbo('fecha');
+                for(x=0;x<dirs.length;x++)
+                {
+                    if(dirs[x]!="." && dirs[x]!="..")
+                    {
+                        opt=document.createElement("option");
+                        opt.value=dirs[x];
+                        opt.innerHTML=dirs[x];
+                        $('doctos').appendChild(opt);
+                        Fechas();
+                    }
+                }
+            },
+            onFailure: function()
+            {
+                alert("Error en la carga de documentos");
+            }
+        });
+    }
+    function Fechas()
+    {
+        obj=new Ajax.Request("dirs.php",{
+            postBody: "directorio="+ruta+"/"+$F('doctos')+"/",
+            onSuccess: function(xhr)
+            {
+                var dirs=eval("("+xhr.responseText+")"),x,opt;
+                LimpiaCbo('fecha');
+                for(x=0;x<dirs.length;x++)
+                {
+                    if(dirs[x]!="." && dirs[x]!="..")
+                    {
+                        opt=document.createElement("option");
+                        opt.value=dirs[x];
+                        opt.innerHTML=dirs[x];
+                        $('fecha').appendChild(opt);
+                        Archivos();
+                    }
+                }
+            },
+            onFailure: function()
+            {
+                alert("Error en la carga de documentos");
+            }
+        });
+    }
+    function Archivos()
+    {
+        obj=new Ajax.Request("archs.php",{
+            postBody: "directorio="+ruta+"/"+$F('doctos')+"/"+$F('fecha')+"/",
+            onSuccess: function(xhr)
+            {
+                var dirs=eval("("+xhr.responseText+")"),x,opt;
+                LimpiaCbo('referencia');
+                for(x=0;x<dirs.length;x++)
+                {
+                    if(dirs[x]!="." && dirs[x]!="..")
+                    {
+                        opt=document.createElement("option");
+                        opt.value=dirs[x];
+                        opt.innerHTML=dirs[x];
+                        $('referencia').appendChild(opt);
+                    }
+                }
+            },
+            onFailure: function()
+            {
+                alert("Error en la carga de documentos");
+            }
+        });
+    }
 </script>
 </head>
 

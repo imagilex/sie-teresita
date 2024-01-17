@@ -18,11 +18,11 @@ version: 2.8.0r4
 
     * Config is a utility used within an Object to allow the implementer to
 
-    * maintain a list of local configuration properties and listen for changes 
+    * maintain a list of local configuration properties and listen for changes
 
-    * to those properties dynamically using CustomEvent. The initial values are 
+    * to those properties dynamically using CustomEvent. The initial values are
 
-    * also maintained so that the configuration can be reset at any given point 
+    * also maintained so that the configuration can be reset at any given point
 
     * to its initial state.
 
@@ -82,7 +82,7 @@ version: 2.8.0r4
 
     Config.CONFIG_CHANGED_EVENT = "configChanged";
 
-    
+
 
     /**
 
@@ -100,11 +100,11 @@ version: 2.8.0r4
 
     Config.BOOLEAN_TYPE = "boolean";
 
-    
+
 
     Config.prototype = {
 
-     
+
 
         /**
 
@@ -118,11 +118,11 @@ version: 2.8.0r4
 
         owner: null,
 
-        
+
 
         /**
 
-        * Boolean flag that specifies whether a queue is currently 
+        * Boolean flag that specifies whether a queue is currently
 
         * being executed
 
@@ -134,11 +134,11 @@ version: 2.8.0r4
 
         queueInProgress: false,
 
-        
+
 
         /**
 
-        * Maintains the local collection of configuration property objects and 
+        * Maintains the local collection of configuration property objects and
 
         * their specified values
 
@@ -148,15 +148,15 @@ version: 2.8.0r4
 
         * @type Object
 
-        */ 
+        */
 
         config: null,
 
-        
+
 
         /**
 
-        * Maintains the local collection of configuration property objects as 
+        * Maintains the local collection of configuration property objects as
 
         * they were initially applied.
 
@@ -168,11 +168,11 @@ version: 2.8.0r4
 
         * @type Object
 
-        */ 
+        */
 
         initialConfig: null,
 
-        
+
 
         /**
 
@@ -184,15 +184,15 @@ version: 2.8.0r4
 
         * @type Object
 
-        */ 
+        */
 
         eventQueue: null,
 
-        
+
 
         /**
 
-        * Custom Event, notifying subscribers when Config properties are set 
+        * Custom Event, notifying subscribers when Config properties are set
 
         * (setProperty is called without the silent flag
 
@@ -202,7 +202,7 @@ version: 2.8.0r4
 
         configChangedEvent: null,
 
-    
+
 
         /**
 
@@ -210,7 +210,7 @@ version: 2.8.0r4
 
         * @method init
 
-        * @param {Object} owner The owner Object to which this Config 
+        * @param {Object} owner The owner Object to which this Config
 
         * Object belongs
 
@@ -218,17 +218,17 @@ version: 2.8.0r4
 
         init: function (owner) {
 
-    
+
 
             this.owner = owner;
 
-    
 
-            this.configChangedEvent = 
+
+            this.configChangedEvent =
 
                 this.createEvent(Config.CONFIG_CHANGED_EVENT);
 
-    
+
 
             this.configChangedEvent.signature = CustomEvent.LIST;
 
@@ -240,11 +240,11 @@ version: 2.8.0r4
 
             this.eventQueue = [];
 
-        
+
 
         },
 
-        
+
 
         /**
 
@@ -256,7 +256,7 @@ version: 2.8.0r4
 
         * @return {Boolean} true, if the value is valid
 
-        */ 
+        */
 
         checkBoolean: function (val) {
 
@@ -264,7 +264,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -284,11 +284,11 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Fires a configuration property event using the specified value. 
+        * Fires a configuration property event using the specified value.
 
         * @method fireEvent
 
@@ -298,23 +298,23 @@ version: 2.8.0r4
 
         * @param {value} Object The value of the correct type for the property
 
-        */ 
+        */
 
         fireEvent: function ( key, value ) {
 
             var property = this.config[key];
 
-        
+
 
             if (property && property.event) {
 
                 property.event.fire(value);
 
-            } 
+            }
 
         },
 
-        
+
 
         /**
 
@@ -324,7 +324,7 @@ version: 2.8.0r4
 
         * @param {String} key The configuration property's name
 
-        * @param {Object} propertyObject The Object containing all of this 
+        * @param {Object} propertyObject The Object containing all of this
 
         * property's arguments
 
@@ -334,37 +334,37 @@ version: 2.8.0r4
 
             key = key.toLowerCase();
 
-        
+
 
             this.config[key] = propertyObject;
 
-        
+
 
             propertyObject.event = this.createEvent(key, { scope: this.owner });
 
             propertyObject.event.signature = CustomEvent.LIST;
 
-            
 
-            
+
+
 
             propertyObject.key = key;
 
-        
+
 
             if (propertyObject.handler) {
 
-                propertyObject.event.subscribe(propertyObject.handler, 
+                propertyObject.event.subscribe(propertyObject.handler,
 
                     this.owner);
 
             }
 
-        
+
 
             this.setProperty(key, propertyObject.value, true);
 
-            
+
 
             if (! propertyObject.suppressEvent) {
 
@@ -372,15 +372,15 @@ version: 2.8.0r4
 
             }
 
-            
+
 
         },
 
-        
+
 
         /**
 
-        * Returns a key-value configuration map of the values currently set in  
+        * Returns a key-value configuration map of the values currently set in
 
         * the Config Object.
 
@@ -392,7 +392,7 @@ version: 2.8.0r4
 
         getConfig: function () {
 
-        
+
 
             var cfg = {},
 
@@ -402,7 +402,7 @@ version: 2.8.0r4
 
                 property;
 
-                
+
 
             for (prop in currCfg) {
 
@@ -426,7 +426,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -456,7 +456,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -472,25 +472,25 @@ version: 2.8.0r4
 
         resetProperty: function (key) {
 
-    
+
 
             key = key.toLowerCase();
 
-        
+
 
             var property = this.config[key];
 
-    
+
 
             if (property && property.event) {
 
-    
 
-                if (this.initialConfig[key] && 
+
+                if (this.initialConfig[key] &&
 
                     !Lang.isUndefined(this.initialConfig[key])) {
 
-    
+
 
                     this.setProperty(key, this.initialConfig[key]);
 
@@ -498,29 +498,29 @@ version: 2.8.0r4
 
                     return true;
 
-    
+
 
                 }
 
-    
+
 
             } else {
 
-    
+
 
                 return false;
 
             }
 
-    
+
 
         },
 
-        
+
 
         /**
 
-        * Sets the value of a property. If the silent property is passed as 
+        * Sets the value of a property. If the silent property is passed as
 
         * true, the property's event will not be fired.
 
@@ -530,7 +530,7 @@ version: 2.8.0r4
 
         * @param {String} value The value to set the property to
 
-        * @param {Boolean} silent Whether the value should be set silently, 
+        * @param {Boolean} silent Whether the value should be set silently,
 
         * without firing the property event.
 
@@ -540,25 +540,25 @@ version: 2.8.0r4
 
         setProperty: function (key, value, silent) {
 
-        
+
 
             var property;
 
-        
+
 
             key = key.toLowerCase();
 
-        
+
 
             if (this.queueInProgress && ! silent) {
 
-                // Currently running through a queue... 
+                // Currently running through a queue...
 
                 this.queueProperty(key,value);
 
                 return true;
 
-    
+
 
             } else {
 
@@ -596,11 +596,11 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Sets the value of a property and queues its event to execute. If the 
+        * Sets the value of a property and queues its event to execute. If the
 
         * event is already scheduled to execute, it is
 
@@ -612,19 +612,19 @@ version: 2.8.0r4
 
         * @param {String} value The value to set the property to
 
-        * @return {Boolean}  true, if the set was successful, false if 
+        * @return {Boolean}  true, if the set was successful, false if
 
         * it failed.
 
-        */ 
+        */
 
         queueProperty: function (key, value) {
 
-        
+
 
             key = key.toLowerCase();
 
-        
+
 
             var property = this.config[key],
 
@@ -656,13 +656,13 @@ version: 2.8.0r4
 
                 q;
 
-                                
+
 
             if (property && property.event) {
 
-    
 
-                if (!Lang.isUndefined(value) && property.validator && 
+
+                if (!Lang.isUndefined(value) && property.validator &&
 
                     !property.validator(value)) { // validator
 
@@ -670,7 +670,7 @@ version: 2.8.0r4
 
                 } else {
 
-        
+
 
                     if (!Lang.isUndefined(value)) {
 
@@ -682,19 +682,19 @@ version: 2.8.0r4
 
                     }
 
-        
+
 
                     foundDuplicate = false;
 
                     iLen = this.eventQueue.length;
 
-        
+
 
                     for (i = 0; i < iLen; i++) {
 
                         queueItem = this.eventQueue[i];
 
-        
+
 
                         if (queueItem) {
 
@@ -706,29 +706,29 @@ version: 2.8.0r4
 
                             if (queueItemKey == key) {
 
-    
+
 
                                 /*
 
-                                    found a dupe... push to end of queue, null 
+                                    found a dupe... push to end of queue, null
 
                                     current item, and break
 
                                 */
 
-    
+
 
                                 this.eventQueue[i] = null;
 
-    
+
 
                                 this.eventQueue.push(
 
-                                    [key, (!Lang.isUndefined(value) ? 
+                                    [key, (!Lang.isUndefined(value) ?
 
                                     value : queueItemValue)]);
 
-    
+
 
                                 foundDuplicate = true;
 
@@ -740,13 +740,13 @@ version: 2.8.0r4
 
                     }
 
-                    
+
 
                     // this is a refire, or a new property in the queue
 
-    
 
-                    if (! foundDuplicate && !Lang.isUndefined(value)) { 
+
+                    if (! foundDuplicate && !Lang.isUndefined(value)) {
 
                         this.eventQueue.push([key, value]);
 
@@ -754,7 +754,7 @@ version: 2.8.0r4
 
                 }
 
-        
+
 
                 if (property.supercedes) {
 
@@ -788,13 +788,13 @@ version: 2.8.0r4
 
 
 
-                                if (queueItemCheckKey == 
+                                if (queueItemCheckKey ==
 
                                     supercedesCheck.toLowerCase() ) {
 
 
 
-                                    this.eventQueue.push([queueItemCheckKey, 
+                                    this.eventQueue.push([queueItemCheckKey,
 
                                         queueItemCheckValue]);
 
@@ -830,7 +830,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -844,57 +844,57 @@ version: 2.8.0r4
 
         refireEvent: function (key) {
 
-    
+
 
             key = key.toLowerCase();
 
-        
+
 
             var property = this.config[key];
 
-    
 
-            if (property && property.event && 
 
-    
+            if (property && property.event &&
+
+
 
                 !Lang.isUndefined(property.value)) {
 
-    
+
 
                 if (this.queueInProgress) {
 
-    
+
 
                     this.queueProperty(key);
 
-    
+
 
                 } else {
 
-    
+
 
                     this.fireEvent(key, property.value);
 
-    
+
 
                 }
 
-    
+
 
             }
 
         },
 
-        
+
 
         /**
 
-        * Applies a key-value Object literal to the configuration, replacing  
+        * Applies a key-value Object literal to the configuration, replacing
 
         * any existing values, and queueing the property events.
 
-        * Although the values will be set, fireQueue() must be called for their 
+        * Although the values will be set, fireQueue() must be called for their
 
         * associated events to execute.
 
@@ -902,9 +902,9 @@ version: 2.8.0r4
 
         * @param {Object} userConfig The configuration Object literal
 
-        * @param {Boolean} init  When set to true, the initialConfig will 
+        * @param {Boolean} init  When set to true, the initialConfig will
 
-        * be set to the userConfig passed in, so that calling a reset will 
+        * be set to the userConfig passed in, so that calling a reset will
 
         * reset the properties to the passed values.
 
@@ -912,7 +912,7 @@ version: 2.8.0r4
 
         applyConfig: function (userConfig, init) {
 
-        
+
 
             var sKey,
 
@@ -952,11 +952,11 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Refires the events for all configuration properties using their 
+        * Refires the events for all configuration properties using their
 
         * current values.
 
@@ -984,7 +984,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -996,9 +996,9 @@ version: 2.8.0r4
 
         fireQueue: function () {
 
-        
 
-            var i, 
+
+            var i,
 
                 queueItem,
 
@@ -1008,7 +1008,7 @@ version: 2.8.0r4
 
                 property;
 
-        
+
 
             this.queueInProgress = true;
 
@@ -1018,7 +1018,7 @@ version: 2.8.0r4
 
                 if (queueItem) {
 
-        
+
 
                     key = queueItem[0];
 
@@ -1032,7 +1032,7 @@ version: 2.8.0r4
 
 
 
-                    // Clear out queue entry, to avoid it being 
+                    // Clear out queue entry, to avoid it being
 
                     // re-added to the queue by any queueProperty/supercedes
 
@@ -1048,7 +1048,7 @@ version: 2.8.0r4
 
             }
 
-            
+
 
             this.queueInProgress = false;
 
@@ -1056,23 +1056,23 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Subscribes an external handler to the change event for any 
+        * Subscribes an external handler to the change event for any
 
-        * given property. 
+        * given property.
 
         * @method subscribeToConfigEvent
 
         * @param {String} key The property name
 
-        * @param {Function} handler The handler function to use subscribe to 
+        * @param {Function} handler The handler function to use subscribe to
 
         * the property's event
 
-        * @param {Object} obj The Object to use for scoping the event handler 
+        * @param {Object} obj The Object to use for scoping the event handler
 
         * (see CustomEvent documentation)
 
@@ -1082,19 +1082,19 @@ version: 2.8.0r4
 
         * method.
 
-        * @return {Boolean} True, if the subscription was successful, 
+        * @return {Boolean} True, if the subscription was successful,
 
         * otherwise false.
 
-        */ 
+        */
 
         subscribeToConfigEvent: function (key, handler, obj, overrideContext) {
 
-    
+
 
             var property = this.config[key.toLowerCase()];
 
-    
+
 
             if (property && property.event) {
 
@@ -1112,31 +1112,31 @@ version: 2.8.0r4
 
             }
 
-    
+
 
         },
 
-        
+
 
         /**
 
-        * Unsubscribes an external handler from the change event for any 
+        * Unsubscribes an external handler from the change event for any
 
-        * given property. 
+        * given property.
 
         * @method unsubscribeFromConfigEvent
 
         * @param {String} key The property name
 
-        * @param {Function} handler The handler function to use subscribe to 
+        * @param {Function} handler The handler function to use subscribe to
 
         * the property's event
 
-        * @param {Object} obj The Object to use for scoping the event 
+        * @param {Object} obj The Object to use for scoping the event
 
         * handler (see CustomEvent documentation)
 
-        * @return {Boolean} True, if the unsubscription was successful, 
+        * @return {Boolean} True, if the unsubscription was successful,
 
         * otherwise false.
 
@@ -1158,7 +1158,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -1184,17 +1184,17 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Returns a string representation of the Config object's current 
+        * Returns a string representation of the Config object's current
 
         * CustomEvent queue
 
         * @method outputEventQueue
 
-        * @return {String} The string list of CustomEvents currently queued 
+        * @return {String} The string list of CustomEvents currently queued
 
         * for execution
 
@@ -1212,7 +1212,7 @@ version: 2.8.0r4
 
                 nQueue = this.eventQueue.length;
 
-              
+
 
             for (q = 0; q < nQueue; q++) {
 
@@ -1234,7 +1234,7 @@ version: 2.8.0r4
 
         /**
 
-        * Sets all properties to null, unsubscribes all listeners from each 
+        * Sets all properties to null, unsubscribes all listeners from each
 
         * property's change event and all listeners from the configChangedEvent.
 
@@ -1258,7 +1258,7 @@ version: 2.8.0r4
 
             for (sProperty in oConfig) {
 
-            
+
 
                 if (Lang.hasOwnProperty(oConfig, sProperty)) {
 
@@ -1276,15 +1276,15 @@ version: 2.8.0r4
 
                 }
 
-            
+
 
             }
 
-            
+
 
             this.configChangedEvent.unsubscribeAll();
 
-            
+
 
             this.configChangedEvent = null;
 
@@ -1296,7 +1296,7 @@ version: 2.8.0r4
 
             this.eventQueue = null;
 
-        
+
 
         }
 
@@ -1304,15 +1304,15 @@ version: 2.8.0r4
 
     };
 
-    
 
-    
 
-    
+
+
+
 
     /**
 
-    * Checks to determine if a particular function/Object pair are already 
+    * Checks to determine if a particular function/Object pair are already
 
     * subscribed to the specified CustomEvent
 
@@ -1320,7 +1320,7 @@ version: 2.8.0r4
 
     * @static
 
-    * @param {YAHOO.util.CustomEvent} evt The CustomEvent for which to check 
+    * @param {YAHOO.util.CustomEvent} evt The CustomEvent for which to check
 
     * the subscriptions
 
@@ -1328,7 +1328,7 @@ version: 2.8.0r4
 
     * @param {Object} obj The execution scope Object for the subscription
 
-    * @return {Boolean} true, if the function/Object pair is already subscribed 
+    * @return {Boolean} true, if the function/Object pair is already subscribed
 
     * to the CustomEvent passed in
 
@@ -1336,7 +1336,7 @@ version: 2.8.0r4
 
     Config.alreadySubscribed = function (evt, fn, obj) {
 
-    
+
 
         var nSubscribers = evt.subscribers.length,
 
@@ -1388,15 +1388,15 @@ version: 2.8.0r4
 
     /**
 
-    * The Container family of components is designed to enable developers to 
+    * The Container family of components is designed to enable developers to
 
-    * create different kinds of content-containing modules on the web. Module 
+    * create different kinds of content-containing modules on the web. Module
 
-    * and Overlay are the most basic containers, and they can be used directly 
+    * and Overlay are the most basic containers, and they can be used directly
 
-    * or extended to build custom containers. Also part of the Container family 
+    * or extended to build custom containers. Also part of the Container family
 
-    * are four UI controls that extend Module and Overlay: Tooltip, Panel, 
+    * are four UI controls that extend Module and Overlay: Tooltip, Panel,
 
     * Dialog, and SimpleDialog.
 
@@ -1404,25 +1404,25 @@ version: 2.8.0r4
 
     * @title Container
 
-    * @requires yahoo, dom, event 
+    * @requires yahoo, dom, event
 
     * @optional dragdrop, animation, button
 
     */
 
-    
+
 
     /**
 
-    * Module is a JavaScript representation of the Standard Module Format. 
+    * Module is a JavaScript representation of the Standard Module Format.
 
-    * Standard Module Format is a simple standard for markup containers where 
+    * Standard Module Format is a simple standard for markup containers where
 
-    * child nodes representing the header, body, and footer of the content are 
+    * child nodes representing the header, body, and footer of the content are
 
-    * denoted using the CSS classes "hd", "bd", and "ft" respectively. 
+    * denoted using the CSS classes "hd", "bd", and "ft" respectively.
 
-    * Module is the base class for all other classes in the YUI 
+    * Module is the base class for all other classes in the YUI
 
     * Container package.
 
@@ -1436,9 +1436,9 @@ version: 2.8.0r4
 
     * @param {HTMLElement} el The element representing the Module
 
-    * @param {Object} userConfig The configuration Object literal containing 
+    * @param {Object} userConfig The configuration Object literal containing
 
-    * the configuration that should be set for this module. See configuration 
+    * the configuration that should be set for this module. See configuration
 
     * documentation for more details.
 
@@ -1528,7 +1528,7 @@ version: 2.8.0r4
 
         },
 
-            
+
 
         /**
 
@@ -1546,15 +1546,15 @@ version: 2.8.0r4
 
         DEFAULT_CONFIG = {
 
-        
 
-            "VISIBLE": { 
 
-                key: "visible", 
+            "VISIBLE": {
 
-                value: true, 
+                key: "visible",
 
-                validator: YAHOO.lang.isBoolean 
+                value: true,
+
+                validator: YAHOO.lang.isBoolean
 
             },
 
@@ -1610,7 +1610,7 @@ version: 2.8.0r4
 
     Module.IMG_ROOT = null;
 
-    
+
 
     /**
 
@@ -1628,7 +1628,7 @@ version: 2.8.0r4
 
     Module.IMG_ROOT_SSL = null;
 
-    
+
 
     /**
 
@@ -1646,7 +1646,7 @@ version: 2.8.0r4
 
     Module.CSS_MODULE = "yui-module";
 
-    
+
 
     /**
 
@@ -1682,7 +1682,7 @@ version: 2.8.0r4
 
     Module.CSS_BODY = "bd";
 
-    
+
 
     /**
 
@@ -1700,11 +1700,11 @@ version: 2.8.0r4
 
     Module.CSS_FOOTER = "ft";
 
-    
+
 
     /**
 
-    * Constant representing the url for the "src" attribute of the iframe 
+    * Constant representing the url for the "src" attribute of the iframe
 
     * used to monitor changes to the browser's base font size
 
@@ -1730,7 +1730,7 @@ version: 2.8.0r4
 
     * offscreen by an amount eqaul to its offsetHeight + the buffer value.
 
-    * 
+    *
 
     * @property YAHOO.widget.Module.RESIZE_MONITOR_BUFFER
 
@@ -1750,7 +1750,7 @@ version: 2.8.0r4
 
     * Singleton CustomEvent fired when the font size is changed in the browser.
 
-    * Opera's "zoom" functionality currently does not support text 
+    * Opera's "zoom" functionality currently does not support text
 
     * size detection.
 
@@ -1764,7 +1764,7 @@ version: 2.8.0r4
 
     /**
 
-     * Helper utility method, which forces a document level 
+     * Helper utility method, which forces a document level
 
      * redraw for Opera, which can help remove repaint
 
@@ -1802,13 +1802,13 @@ version: 2.8.0r4
 
             m_oModuleTemplate = document.createElement("div");
 
-            
 
-            m_oModuleTemplate.innerHTML = ("<div class=\"" + 
 
-                Module.CSS_HEADER + "\"></div>" + "<div class=\"" + 
+            m_oModuleTemplate.innerHTML = ("<div class=\"" +
 
-                Module.CSS_BODY + "\"></div><div class=\"" + 
+                Module.CSS_HEADER + "\"></div>" + "<div class=\"" +
+
+                Module.CSS_BODY + "\"></div><div class=\"" +
 
                 Module.CSS_FOOTER + "\"></div>");
 
@@ -1888,7 +1888,7 @@ version: 2.8.0r4
 
         constructor: Module,
 
-        
+
 
         /**
 
@@ -1982,7 +1982,7 @@ version: 2.8.0r4
 
         /**
 
-        * Initializes the custom events for Module which are fired 
+        * Initializes the custom events for Module which are fired
 
         * automatically at appropriate times by the Module class.
 
@@ -2004,7 +2004,7 @@ version: 2.8.0r4
 
             * @event beforeInitEvent
 
-            * @param {class} classRef class reference of the initializing 
+            * @param {class} classRef class reference of the initializing
 
             * class, such as this.beforeInitEvent.fire(Module)
 
@@ -2022,11 +2022,11 @@ version: 2.8.0r4
 
             * @event initEvent
 
-            * @param {class} classRef class reference of the initializing 
+            * @param {class} classRef class reference of the initializing
 
             * class, such as this.beforeInitEvent.fire(Module)
 
-            */  
+            */
 
             this.initEvent = this.createEvent(EVENT_TYPES.INIT);
 
@@ -2060,7 +2060,7 @@ version: 2.8.0r4
 
             this.beforeRenderEvent.signature = SIGNATURE;
 
-        
+
 
             /**
 
@@ -2074,17 +2074,17 @@ version: 2.8.0r4
 
             this.renderEvent.signature = SIGNATURE;
 
-        
+
 
             /**
 
-            * CustomEvent fired when the header content of the Module 
+            * CustomEvent fired when the header content of the Module
 
             * is modified
 
             * @event changeHeaderEvent
 
-            * @param {String/HTMLElement} content String/element representing 
+            * @param {String/HTMLElement} content String/element representing
 
             * the new header content
 
@@ -2094,7 +2094,7 @@ version: 2.8.0r4
 
             this.changeHeaderEvent.signature = SIGNATURE;
 
-            
+
 
             /**
 
@@ -2102,27 +2102,27 @@ version: 2.8.0r4
 
             * @event changeBodyEvent
 
-            * @param {String/HTMLElement} content String/element representing 
+            * @param {String/HTMLElement} content String/element representing
 
             * the new body content
 
-            */  
+            */
 
             this.changeBodyEvent = this.createEvent(EVENT_TYPES.CHANGE_BODY);
 
             this.changeBodyEvent.signature = SIGNATURE;
 
-            
+
 
             /**
 
-            * CustomEvent fired when the footer content of the Module 
+            * CustomEvent fired when the footer content of the Module
 
             * is modified
 
             * @event changeFooterEvent
 
-            * @param {String/HTMLElement} content String/element representing 
+            * @param {String/HTMLElement} content String/element representing
 
             * the new footer content
 
@@ -2132,7 +2132,7 @@ version: 2.8.0r4
 
             this.changeFooterEvent.signature = SIGNATURE;
 
-        
+
 
             /**
 
@@ -2216,7 +2216,7 @@ version: 2.8.0r4
 
             this.hideEvent.signature = SIGNATURE;
 
-        }, 
+        },
 
 
 
@@ -2252,7 +2252,7 @@ version: 2.8.0r4
 
         }(),
 
-        
+
 
         /**
 
@@ -2278,7 +2278,7 @@ version: 2.8.0r4
 
             */
 
-            if (ua.indexOf('opera') != -1) { 
+            if (ua.indexOf('opera') != -1) {
 
                 return 'opera';
 
@@ -2290,7 +2290,7 @@ version: 2.8.0r4
 
                 return 'ie';
 
-            } else if (ua.indexOf('safari') != -1) { 
+            } else if (ua.indexOf('safari') != -1) {
 
                 return 'safari';
 
@@ -2306,11 +2306,11 @@ version: 2.8.0r4
 
         }(),
 
-        
+
 
         /**
 
-        * Boolean representing whether or not the current browsing context is 
+        * Boolean representing whether or not the current browsing context is
 
         * secure (https)
 
@@ -2334,11 +2334,11 @@ version: 2.8.0r4
 
         }(),
 
-        
+
 
         /**
 
-        * Initializes the custom events for Module which are fired 
+        * Initializes the custom events for Module which are fired
 
         * automatically at appropriate times by the Module class.
 
@@ -2362,9 +2362,9 @@ version: 2.8.0r4
 
             this.cfg.addProperty(DEFAULT_CONFIG.VISIBLE.key, {
 
-                handler: this.configVisible, 
+                handler: this.configVisible,
 
-                value: DEFAULT_CONFIG.VISIBLE.value, 
+                value: DEFAULT_CONFIG.VISIBLE.value,
 
                 validator: DEFAULT_CONFIG.VISIBLE.validator
 
@@ -2376,7 +2376,7 @@ version: 2.8.0r4
 
             * <p>
 
-            * Object or array of objects representing the ContainerEffect 
+            * Object or array of objects representing the ContainerEffect
 
             * classes that are active for animating the container.
 
@@ -2384,15 +2384,15 @@ version: 2.8.0r4
 
             * <p>
 
-            * <strong>NOTE:</strong> Although this configuration 
+            * <strong>NOTE:</strong> Although this configuration
 
             * property is introduced at the Module level, an out of the box
 
             * implementation is not shipped for the Module class so setting
 
-            * the proroperty on the Module class has no effect. The Overlay 
+            * the proroperty on the Module class has no effect. The Overlay
 
-            * class is the first class to provide out of the box ContainerEffect 
+            * class is the first class to provide out of the box ContainerEffect
 
             * support.
 
@@ -2408,7 +2408,7 @@ version: 2.8.0r4
 
             this.cfg.addProperty(DEFAULT_CONFIG.EFFECT.key, {
 
-                suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
 
@@ -2418,7 +2418,7 @@ version: 2.8.0r4
 
             /**
 
-            * Specifies whether to create a special proxy iframe to monitor 
+            * Specifies whether to create a special proxy iframe to monitor
 
             * for user font resizing in the document
 
@@ -2442,7 +2442,7 @@ version: 2.8.0r4
 
             /**
 
-            * Specifies if the module should be rendered as the first child 
+            * Specifies if the module should be rendered as the first child
 
             * of document.body or appended as the last child when render is called
 
@@ -2450,15 +2450,15 @@ version: 2.8.0r4
 
             * <p>
 
-            * Appending to the body while the DOM is still being constructed can 
+            * Appending to the body while the DOM is still being constructed can
 
-            * lead to Operation Aborted errors in IE hence this flag is set to 
+            * lead to Operation Aborted errors in IE hence this flag is set to
 
             * false by default.
 
             * </p>
 
-            * 
+            *
 
             * @config appendtodocumentbody
 
@@ -2482,11 +2482,11 @@ version: 2.8.0r4
 
         * The Module class's initialization method, which is executed for
 
-        * Module and all of its subclasses. This method is automatically 
+        * Module and all of its subclasses. This method is automatically
 
-        * called by the constructor, and  sets up all DOM references for 
+        * called by the constructor, and  sets up all DOM references for
 
-        * pre-existing markup, and creates required markup if it is not 
+        * pre-existing markup, and creates required markup if it is not
 
         * already present.
 
@@ -2504,9 +2504,9 @@ version: 2.8.0r4
 
         * @param {HTMLElement} el The element representing the Module
 
-        * @param {Object} userConfig The configuration Object literal 
+        * @param {Object} userConfig The configuration Object literal
 
-        * containing the configuration that should be set for this module. 
+        * containing the configuration that should be set for this module.
 
         * See configuration documentation for more details.
 
@@ -2528,7 +2528,7 @@ version: 2.8.0r4
 
             /**
 
-            * The Module's Config object used for monitoring 
+            * The Module's Config object used for monitoring
 
             * configuration properties.
 
@@ -2634,13 +2634,13 @@ version: 2.8.0r4
 
             /*
 
-                Subscribe to the fireQueue() method of Config so that any 
+                Subscribe to the fireQueue() method of Config so that any
 
-                queued configuration changes are excecuted upon render of 
+                queued configuration changes are excecuted upon render of
 
                 the Module
 
-            */ 
+            */
 
 
 
@@ -2660,7 +2660,7 @@ version: 2.8.0r4
 
         /**
 
-        * Initialize an empty IFRAME that is placed out of the visible area 
+        * Initialize an empty IFRAME that is placed out of the visible area
 
         * that can be used to detect text resize.
 
@@ -2676,7 +2676,7 @@ version: 2.8.0r4
 
             if (isGeckoWin) {
 
-                // Help prevent spinning loading icon which 
+                // Help prevent spinning loading icon which
 
                 // started with FireFox 2.0.0.8/Win
 
@@ -2698,7 +2698,7 @@ version: 2.8.0r4
 
          * Create and initialize the text resize monitoring iframe.
 
-         * 
+         *
 
          * @protected
 
@@ -2710,9 +2710,9 @@ version: 2.8.0r4
 
 
 
-            var oDoc, 
+            var oDoc,
 
-                oIFrame, 
+                oIFrame,
 
                 sHTML;
 
@@ -2782,11 +2782,11 @@ version: 2.8.0r4
 
                     /*
 
-                        Need to set "position" property before inserting the 
+                        Need to set "position" property before inserting the
 
-                        iframe into the document or Safari's status bar will 
+                        iframe into the document or Safari's status bar will
 
-                        forever indicate the iframe is loading 
+                        forever indicate the iframe is loading
 
                         (See YUILibrary bug #1723064)
 
@@ -2816,11 +2816,11 @@ version: 2.8.0r4
 
                     // Setting the background color fixes an issue with IE6/IE7, where
 
-                    // elements in the DOM, with -ve margin-top which positioned them 
+                    // elements in the DOM, with -ve margin-top which positioned them
 
                     // offscreen (so they would be overlapped by the iframe and its -ve top
 
-                    // setting), would have their -ve margin-top ignored, when the iframe 
+                    // setting), would have their -ve margin-top ignored, when the iframe
 
                     // was added.
 
@@ -2878,9 +2878,9 @@ version: 2.8.0r4
 
                                 /*
 
-                                     This will fail in IE if document.domain has 
+                                     This will fail in IE if document.domain has
 
-                                     changed, so we must change the listener to 
+                                     changed, so we must change the listener to
 
                                      use the oIFrame element instead
 
@@ -2912,7 +2912,7 @@ version: 2.8.0r4
 
          * Determines if the browser supports resize events on iframe content windows.
 
-         * 
+         *
 
          * @private
 
@@ -2980,21 +2980,21 @@ version: 2.8.0r4
 
         /**
 
-        * Sets the Module's header content to the string specified, or appends 
+        * Sets the Module's header content to the string specified, or appends
 
-        * the passed element to the header. If no header is present, one will 
+        * the passed element to the header. If no header is present, one will
 
         * be automatically created. An empty string can be passed to the method
 
         * to clear the contents of the header.
 
-        * 
+        *
 
         * @method setHeader
 
         * @param {String} headerContent The string used to set the header.
 
-        * As a convenience, non HTMLElement objects can also be passed into 
+        * As a convenience, non HTMLElement objects can also be passed into
 
         * the method, and will be treated as strings, with the header innerHTML
 
@@ -3002,11 +3002,11 @@ version: 2.8.0r4
 
         * <em>OR</em>
 
-        * @param {HTMLElement} headerContent The HTMLElement to append to 
+        * @param {HTMLElement} headerContent The HTMLElement to append to
 
         * <em>OR</em>
 
-        * @param {DocumentFragment} headerContent The document fragment 
+        * @param {DocumentFragment} headerContent The document fragment
 
         * containing elements which are to be added to the header
 
@@ -3052,13 +3052,13 @@ version: 2.8.0r4
 
         /**
 
-        * Appends the passed element to the header. If no header is present, 
+        * Appends the passed element to the header. If no header is present,
 
         * one will be automatically created.
 
         * @method appendToHeader
 
-        * @param {HTMLElement | DocumentFragment} element The element to 
+        * @param {HTMLElement | DocumentFragment} element The element to
 
         * append to the header. In the case of a document fragment, the
 
@@ -3088,21 +3088,21 @@ version: 2.8.0r4
 
         /**
 
-        * Sets the Module's body content to the HTML specified. 
+        * Sets the Module's body content to the HTML specified.
 
-        * 
+        *
 
-        * If no body is present, one will be automatically created. 
+        * If no body is present, one will be automatically created.
 
-        * 
+        *
 
         * An empty string can be passed to the method to clear the contents of the body.
 
         * @method setBody
 
-        * @param {String} bodyContent The HTML used to set the body. 
+        * @param {String} bodyContent The HTML used to set the body.
 
-        * As a convenience, non HTMLElement objects can also be passed into 
+        * As a convenience, non HTMLElement objects can also be passed into
 
         * the method, and will be treated as strings, with the body innerHTML
 
@@ -3116,7 +3116,7 @@ version: 2.8.0r4
 
         * <em>OR</em>
 
-        * @param {DocumentFragment} bodyContent The document fragment 
+        * @param {DocumentFragment} bodyContent The document fragment
 
         * containing elements which are to be added to the body
 
@@ -3160,19 +3160,19 @@ version: 2.8.0r4
 
         /**
 
-        * Appends the passed element to the body. If no body is present, one 
+        * Appends the passed element to the body. If no body is present, one
 
         * will be automatically created.
 
         * @method appendToBody
 
-        * @param {HTMLElement | DocumentFragment} element The element to 
+        * @param {HTMLElement | DocumentFragment} element The element to
 
         * append to the body. In the case of a document fragment, the
 
         * children of the fragment will be appended to the body.
 
-        * 
+        *
 
         */
 
@@ -3180,7 +3180,7 @@ version: 2.8.0r4
 
             var oBody = this.body || (this.body = createBody());
 
-        
+
 
             oBody.appendChild(element);
 
@@ -3194,13 +3194,13 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Sets the Module's footer content to the HTML specified, or appends 
+        * Sets the Module's footer content to the HTML specified, or appends
 
-        * the passed element to the footer. If no footer is present, one will 
+        * the passed element to the footer. If no footer is present, one will
 
         * be automatically created. An empty string can be passed to the method
 
@@ -3208,9 +3208,9 @@ version: 2.8.0r4
 
         * @method setFooter
 
-        * @param {String} footerContent The HTML used to set the footer 
+        * @param {String} footerContent The HTML used to set the footer
 
-        * As a convenience, non HTMLElement objects can also be passed into 
+        * As a convenience, non HTMLElement objects can also be passed into
 
         * the method, and will be treated as strings, with the footer innerHTML
 
@@ -3218,13 +3218,13 @@ version: 2.8.0r4
 
         * <em>OR</em>
 
-        * @param {HTMLElement} footerContent The HTMLElement to append to 
+        * @param {HTMLElement} footerContent The HTMLElement to append to
 
         * the footer
 
         * <em>OR</em>
 
-        * @param {DocumentFragment} footerContent The document fragment containing 
+        * @param {DocumentFragment} footerContent The document fragment containing
 
         * elements which are to be added to the footer
 
@@ -3270,13 +3270,13 @@ version: 2.8.0r4
 
         /**
 
-        * Appends the passed element to the footer. If no footer is present, 
+        * Appends the passed element to the footer. If no footer is present,
 
         * one will be automatically created.
 
         * @method appendToFooter
 
-        * @param {HTMLElement | DocumentFragment} element The element to 
+        * @param {HTMLElement | DocumentFragment} element The element to
 
         * append to the footer. In the case of a document fragment, the
 
@@ -3308,19 +3308,19 @@ version: 2.8.0r4
 
         /**
 
-        * Renders the Module by inserting the elements that are not already 
+        * Renders the Module by inserting the elements that are not already
 
-        * in the main Module into their correct places. Optionally appends 
+        * in the main Module into their correct places. Optionally appends
 
-        * the Module to the specified node prior to the render's execution. 
+        * the Module to the specified node prior to the render's execution.
 
         * <p>
 
-        * For Modules without existing markup, the appendToNode argument 
+        * For Modules without existing markup, the appendToNode argument
 
-        * is REQUIRED. If this argument is ommitted and the current element is 
+        * is REQUIRED. If this argument is ommitted and the current element is
 
-        * not present in the document, the function will return false, 
+        * not present in the document, the function will return false,
 
         * indicating that the render was a failure.
 
@@ -3330,13 +3330,13 @@ version: 2.8.0r4
 
         * NOTE: As of 2.3.1, if the appendToNode is the document's body element
 
-        * then the module is rendered as the first child of the body element, 
+        * then the module is rendered as the first child of the body element,
 
-        * and not appended to it, to avoid Operation Aborted errors in IE when 
+        * and not appended to it, to avoid Operation Aborted errors in IE when
 
-        * rendering the module before window's load event is fired. You can 
+        * rendering the module before window's load event is fired. You can
 
-        * use the appendtodocumentbody configuration property to change this 
+        * use the appendtodocumentbody configuration property to change this
 
         * to append to document.body if required.
 
@@ -3344,15 +3344,15 @@ version: 2.8.0r4
 
         * @method render
 
-        * @param {String} appendToNode The element id to which the Module 
+        * @param {String} appendToNode The element id to which the Module
 
         * should be appended to prior to rendering <em>OR</em>
 
-        * @param {HTMLElement} appendToNode The element to which the Module 
+        * @param {HTMLElement} appendToNode The element to which the Module
 
         * should be appended to prior to rendering
 
-        * @param {HTMLElement} moduleElement OPTIONAL. The element that 
+        * @param {HTMLElement} moduleElement OPTIONAL. The element that
 
         * represents the actual Standard Module container.
 
@@ -3406,7 +3406,7 @@ version: 2.8.0r4
 
                 appendTo(appendToNode);
 
-            } else { 
+            } else {
 
                 // No node was passed in. If the element is not already in the Dom, this fails
 
@@ -3442,13 +3442,13 @@ version: 2.8.0r4
 
         /**
 
-         * Renders the currently set header into it's proper position under the 
+         * Renders the currently set header into it's proper position under the
 
-         * module element. If the module element is not provided, "this.element" 
+         * module element. If the module element is not provided, "this.element"
 
          * is used.
 
-         * 
+         *
 
          * @method _renderHeader
 
@@ -3490,13 +3490,13 @@ version: 2.8.0r4
 
         /**
 
-         * Renders the currently set body into it's proper position under the 
+         * Renders the currently set body into it's proper position under the
 
-         * module element. If the module element is not provided, "this.element" 
+         * module element. If the module element is not provided, "this.element"
 
          * is used.
 
-         * 
+         *
 
          * @method _renderBody
 
@@ -3534,13 +3534,13 @@ version: 2.8.0r4
 
         /**
 
-         * Renders the currently set footer into it's proper position under the 
+         * Renders the currently set footer into it's proper position under the
 
-         * module element. If the module element is not provided, "this.element" 
+         * module element. If the module element is not provided, "this.element"
 
          * is used.
 
-         * 
+         *
 
          * @method _renderFooter
 
@@ -3570,7 +3570,7 @@ version: 2.8.0r4
 
         /**
 
-        * Removes the Module element from the DOM and sets all child elements 
+        * Removes the Module element from the DOM and sets all child elements
 
         * to null.
 
@@ -3602,7 +3602,7 @@ version: 2.8.0r4
 
             }
 
-        
+
 
             this.element = null;
 
@@ -3632,9 +3632,9 @@ version: 2.8.0r4
 
         /**
 
-        * Shows the Module element by setting the visible configuration 
+        * Shows the Module element by setting the visible configuration
 
-        * property to true. Also fires two events: beforeShowEvent prior to 
+        * property to true. Also fires two events: beforeShowEvent prior to
 
         * the visibility change, and showEvent after.
 
@@ -3652,9 +3652,9 @@ version: 2.8.0r4
 
         /**
 
-        * Hides the Module element by setting the visible configuration 
+        * Hides the Module element by setting the visible configuration
 
-        * property to false. Also fires two events: beforeHideEvent prior to 
+        * property to false. Also fires two events: beforeHideEvent prior to
 
         * the visibility change, and hideEvent after.
 
@@ -3668,15 +3668,15 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         // BUILT-IN EVENT HANDLERS FOR MODULE //
 
         /**
 
-        * Default event handler for changing the visibility property of a 
+        * Default event handler for changing the visibility property of a
 
-        * Module. By default, this is achieved by switching the "display" style 
+        * Module. By default, this is achieved by switching the "display" style
 
         * between "block" and "none".
 
@@ -3684,11 +3684,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -3728,11 +3728,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -3762,9 +3762,9 @@ version: 2.8.0r4
 
         /**
 
-         * This method is a protected helper, used when constructing the DOM structure for the module 
+         * This method is a protected helper, used when constructing the DOM structure for the module
 
-         * to account for situations which may cause Operation Aborted errors in IE. It should not 
+         * to account for situations which may cause Operation Aborted errors in IE. It should not
 
          * be used for general DOM construction.
 
@@ -3842,15 +3842,15 @@ version: 2.8.0r4
 
     /**
 
-    * Overlay is a Module that is absolutely positioned above the page flow. It 
+    * Overlay is a Module that is absolutely positioned above the page flow. It
 
-    * has convenience methods for positioning and sizing, as well as options for 
+    * has convenience methods for positioning and sizing, as well as options for
 
-    * controlling zIndex and constraining the Overlay's position to the current 
+    * controlling zIndex and constraining the Overlay's position to the current
 
-    * visible viewport. Overlay also contains a dynamicly generated IFRAME which 
+    * visible viewport. Overlay also contains a dynamicly generated IFRAME which
 
-    * is placed beneath it for Internet Explorer 6 and 5.x so that it will be 
+    * is placed beneath it for Internet Explorer 6 and 5.x so that it will be
 
     * properly rendered above SELECT elements.
 
@@ -3864,9 +3864,9 @@ version: 2.8.0r4
 
     * @param {HTMLElement} el The element representing the Overlay
 
-    * @param {Object} userConfig The configuration object literal containing 
+    * @param {Object} userConfig The configuration object literal containing
 
-    * the configuration that should be set for this Overlay. See configuration 
+    * the configuration that should be set for this Overlay. See configuration
 
     * documentation for more details.
 
@@ -3954,27 +3954,13 @@ version: 2.8.0r4
 
 
 
-            "X": { 
+            "X": {
 
-                key: "x", 
+                key: "x",
 
-                validator: Lang.isNumber, 
+                validator: Lang.isNumber,
 
-                suppressEvent: true, 
-
-                supercedes: ["iframe"]
-
-            },
-
-
-
-            "Y": { 
-
-                key: "y", 
-
-                validator: Lang.isNumber, 
-
-                suppressEvent: true, 
+                suppressEvent: true,
 
                 supercedes: ["iframe"]
 
@@ -3982,43 +3968,57 @@ version: 2.8.0r4
 
 
 
-            "XY": { 
+            "Y": {
 
-                key: "xy", 
+                key: "y",
 
-                suppressEvent: true, 
+                validator: Lang.isNumber,
 
-                supercedes: ["iframe"] 
+                suppressEvent: true,
 
-            },
-
-
-
-            "CONTEXT": { 
-
-                key: "context", 
-
-                suppressEvent: true, 
-
-                supercedes: ["iframe"] 
+                supercedes: ["iframe"]
 
             },
 
 
 
-            "FIXED_CENTER": { 
+            "XY": {
 
-                key: "fixedcenter", 
+                key: "xy",
 
-                value: false, 
+                suppressEvent: true,
 
-                supercedes: ["iframe", "visible"] 
+                supercedes: ["iframe"]
 
             },
 
 
 
-            "WIDTH": { 
+            "CONTEXT": {
+
+                key: "context",
+
+                suppressEvent: true,
+
+                supercedes: ["iframe"]
+
+            },
+
+
+
+            "FIXED_CENTER": {
+
+                key: "fixedcenter",
+
+                value: false,
+
+                supercedes: ["iframe", "visible"]
+
+            },
+
+
+
+            "WIDTH": {
 
                 key: "width",
 
@@ -4026,17 +4026,17 @@ version: 2.8.0r4
 
                 supercedes: ["context", "fixedcenter", "iframe"]
 
-            }, 
+            },
 
 
 
-            "HEIGHT": { 
+            "HEIGHT": {
 
-                key: "height", 
+                key: "height",
 
-                suppressEvent: true, 
+                suppressEvent: true,
 
-                supercedes: ["context", "fixedcenter", "iframe"] 
+                supercedes: ["context", "fixedcenter", "iframe"]
 
             },
 
@@ -4054,39 +4054,39 @@ version: 2.8.0r4
 
 
 
-            "ZINDEX": { 
+            "ZINDEX": {
 
-                key: "zindex", 
+                key: "zindex",
 
-                value: null 
+                value: null
 
             },
 
 
 
-            "CONSTRAIN_TO_VIEWPORT": { 
+            "CONSTRAIN_TO_VIEWPORT": {
 
-                key: "constraintoviewport", 
+                key: "constraintoviewport",
 
-                value: false, 
+                value: false,
 
-                validator: Lang.isBoolean, 
+                validator: Lang.isBoolean,
 
                 supercedes: ["iframe", "x", "y", "xy"]
 
-            }, 
+            },
 
 
 
-            "IFRAME": { 
+            "IFRAME": {
 
-                key: "iframe", 
+                key: "iframe",
 
-                value: (UA.ie == 6 ? true : false), 
+                value: (UA.ie == 6 ? true : false),
 
-                validator: Lang.isBoolean, 
+                validator: Lang.isBoolean,
 
-                supercedes: ["zindex"] 
+                supercedes: ["zindex"]
 
             },
 
@@ -4098,7 +4098,7 @@ version: 2.8.0r4
 
                 value: false,
 
-                validator: Lang.isBoolean,  
+                validator: Lang.isBoolean,
 
                 supercedes: ["constraintoviewport"]
 
@@ -4130,7 +4130,7 @@ version: 2.8.0r4
 
     /**
 
-    * Number representing how much the iframe shim should be offset from each 
+    * Number representing how much the iframe shim should be offset from each
 
     * side of an Overlay instance, in pixels.
 
@@ -4152,7 +4152,7 @@ version: 2.8.0r4
 
     /**
 
-    * Number representing the minimum distance an Overlay instance should be 
+    * Number representing the minimum distance an Overlay instance should be
 
     * positioned relative to the boundaries of the browser's viewport, in pixels.
 
@@ -4174,7 +4174,7 @@ version: 2.8.0r4
 
     /**
 
-    * Constant representing the top left corner of an element, used for 
+    * Constant representing the top left corner of an element, used for
 
     * configuring the context element alignment
 
@@ -4194,7 +4194,7 @@ version: 2.8.0r4
 
     /**
 
-    * Constant representing the top right corner of an element, used for 
+    * Constant representing the top right corner of an element, used for
 
     * configuring the context element alignment
 
@@ -4214,7 +4214,7 @@ version: 2.8.0r4
 
     /**
 
-    * Constant representing the top bottom left corner of an element, used for 
+    * Constant representing the top bottom left corner of an element, used for
 
     * configuring the context element alignment
 
@@ -4234,7 +4234,7 @@ version: 2.8.0r4
 
     /**
 
-    * Constant representing the bottom right corner of an element, used for 
+    * Constant representing the bottom right corner of an element, used for
 
     * configuring the context element alignment
 
@@ -4264,7 +4264,7 @@ version: 2.8.0r4
 
     };
 
-            
+
 
     Overlay.PREVENT_OVERLAP_Y = {
 
@@ -4300,7 +4300,7 @@ version: 2.8.0r4
 
     /**
 
-    * Constant representing the default hidden CSS class used for an Overlay. This class is 
+    * Constant representing the default hidden CSS class used for an Overlay. This class is
 
     * applied to the overlay's outer DIV whenever it's hidden.
 
@@ -4324,7 +4324,7 @@ version: 2.8.0r4
 
     * Constant representing the default CSS class used for an Overlay iframe shim.
 
-    * 
+    *
 
     * @property YAHOO.widget.Overlay.CSS_IFRAME
 
@@ -4362,7 +4362,7 @@ version: 2.8.0r4
 
     /**
 
-    * A singleton CustomEvent used for reacting to the DOM event for 
+    * A singleton CustomEvent used for reacting to the DOM event for
 
     * window scroll
 
@@ -4414,9 +4414,9 @@ version: 2.8.0r4
 
         //
 
-        // Also, when document view is scrolled, IE doesn't provide a target, 
+        // Also, when document view is scrolled, IE doesn't provide a target,
 
-        // rest of the browsers set target to window.document, apart from opera 
+        // rest of the browsers set target to window.document, apart from opera
 
         // which sets target to window.
 
@@ -4436,15 +4436,15 @@ version: 2.8.0r4
 
                 clearTimeout(window.scrollEnd);
 
-        
 
-                window.scrollEnd = setTimeout(function () { 
 
-                    Overlay.windowScrollEvent.fire(); 
+                window.scrollEnd = setTimeout(function () {
+
+                    Overlay.windowScrollEvent.fire();
 
                 }, 1);
 
-        
+
 
             } else {
 
@@ -4490,7 +4490,7 @@ version: 2.8.0r4
 
             window.resizeEnd = setTimeout(function () {
 
-                Overlay.windowResizeEvent.fire(); 
+                Overlay.windowResizeEvent.fire();
 
             }, 100);
 
@@ -4506,7 +4506,7 @@ version: 2.8.0r4
 
     /**
 
-    * A boolean that indicated whether the window resize and scroll events have 
+    * A boolean that indicated whether the window resize and scroll events have
 
     * already been subscribed to.
 
@@ -4538,7 +4538,7 @@ version: 2.8.0r4
 
      * Internal map of special event types, which are provided
 
-     * by the instance. It maps the event type to the custom event 
+     * by the instance. It maps the event type to the custom event
 
      * instance. Contains entries for the "windowScroll", "windowResize" and
 
@@ -4588,7 +4588,7 @@ version: 2.8.0r4
 
          * Overlay which need to define their own set of CONTEXT_TRIGGERS
 
-         * should concatenate their super class's prototype.CONTEXT_TRIGGERS 
+         * should concatenate their super class's prototype.CONTEXT_TRIGGERS
 
          * value with their own array of values.
 
@@ -4602,7 +4602,7 @@ version: 2.8.0r4
 
          * </p>
 
-         * 
+         *
 
          * @property CONTEXT_TRIGGERS
 
@@ -4618,11 +4618,11 @@ version: 2.8.0r4
 
         /**
 
-        * The Overlay initialization method, which is executed for Overlay and  
+        * The Overlay initialization method, which is executed for Overlay and
 
-        * all of its subclasses. This method is automatically called by the 
+        * all of its subclasses. This method is automatically called by the
 
-        * constructor, and  sets up all DOM references for pre-existing markup, 
+        * constructor, and  sets up all DOM references for pre-existing markup,
 
         * and creates required markup if it is not already present.
 
@@ -4632,9 +4632,9 @@ version: 2.8.0r4
 
         * @param {HTMLElement} el The element representing the Overlay
 
-        * @param {Object} userConfig The configuration object literal 
+        * @param {Object} userConfig The configuration object literal
 
-        * containing the configuration that should be set for this Overlay. 
+        * containing the configuration that should be set for this Overlay.
 
         * See configuration documentation for more details.
 
@@ -4684,7 +4684,7 @@ version: 2.8.0r4
 
 
 
-                    this.showEvent.subscribe(this.showMacGeckoScrollbars, 
+                    this.showEvent.subscribe(this.showMacGeckoScrollbars,
 
                         this, true);
 
@@ -4694,13 +4694,13 @@ version: 2.8.0r4
 
 
 
-                if (! Config.alreadySubscribed(this.hideEvent, 
+                if (! Config.alreadySubscribed(this.hideEvent,
 
                     this.hideMacGeckoScrollbars, this)) {
 
 
 
-                    this.hideEvent.subscribe(this.hideMacGeckoScrollbars, 
+                    this.hideEvent.subscribe(this.hideMacGeckoScrollbars,
 
                         this, true);
 
@@ -4716,11 +4716,11 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Initializes the custom events for Overlay which are fired  
+        * Initializes the custom events for Overlay which are fired
 
         * automatically at appropriate times by the Overlay class.
 
@@ -4778,11 +4778,11 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
-        * Initializes the class's configurable properties which can be changed 
+        * Initializes the class's configurable properties which can be changed
 
         * using the Overlay's Config object (cfg).
 
@@ -4792,7 +4792,7 @@ version: 2.8.0r4
 
         initDefaultConfig: function () {
 
-    
+
 
             Overlay.superclass.initDefaultConfig.call(this);
 
@@ -4804,7 +4804,7 @@ version: 2.8.0r4
 
             // Add overlay config properties //
 
-            
+
 
             /**
 
@@ -4818,19 +4818,19 @@ version: 2.8.0r4
 
             */
 
-            cfg.addProperty(DEFAULT_CONFIG.X.key, { 
+            cfg.addProperty(DEFAULT_CONFIG.X.key, {
 
-    
 
-                handler: this.configX, 
 
-                validator: DEFAULT_CONFIG.X.validator, 
+                handler: this.configX,
 
-                suppressEvent: DEFAULT_CONFIG.X.suppressEvent, 
+                validator: DEFAULT_CONFIG.X.validator,
+
+                suppressEvent: DEFAULT_CONFIG.X.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.X.supercedes
 
-    
+
 
             });
 
@@ -4852,11 +4852,11 @@ version: 2.8.0r4
 
 
 
-                handler: this.configY, 
+                handler: this.configY,
 
-                validator: DEFAULT_CONFIG.Y.validator, 
+                validator: DEFAULT_CONFIG.Y.validator,
 
-                suppressEvent: DEFAULT_CONFIG.Y.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.Y.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.Y.supercedes
 
@@ -4880,9 +4880,9 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.XY.key, {
 
-                handler: this.configXY, 
+                handler: this.configXY,
 
-                suppressEvent: DEFAULT_CONFIG.XY.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.XY.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.XY.supercedes
 
@@ -4894,7 +4894,7 @@ version: 2.8.0r4
 
             * <p>
 
-            * The array of context arguments for context-sensitive positioning. 
+            * The array of context arguments for context-sensitive positioning.
 
             * </p>
 
@@ -4918,9 +4918,9 @@ version: 2.8.0r4
 
             * <dt>overlayCorner &#60;String&#62;</dt>
 
-            * <dd>The corner of the overlay which is to be used for alignment. This corner will be aligned to the 
+            * <dd>The corner of the overlay which is to be used for alignment. This corner will be aligned to the
 
-            * corner of the context element defined by the "contextCorner" entry which follows. Supported string values are: 
+            * corner of the context element defined by the "contextCorner" entry which follows. Supported string values are:
 
             * "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left).</dd>
 
@@ -4934,9 +4934,9 @@ version: 2.8.0r4
 
             * <p>
 
-            * By default, context alignment is a one time operation, aligning the Overlay to the context element when context configuration property is set, or when the <a href="#method_align">align</a> 
+            * By default, context alignment is a one time operation, aligning the Overlay to the context element when context configuration property is set, or when the <a href="#method_align">align</a>
 
-            * method is invoked. However, you can use the optional "arrayOfTriggerEvents" entry to define the list of events which should force the overlay to re-align itself with the context element. 
+            * method is invoked. However, you can use the optional "arrayOfTriggerEvents" entry to define the list of events which should force the overlay to re-align itself with the context element.
 
             * This is useful in situations where the layout of the document may change, resulting in the context element's position being modified.
 
@@ -4958,7 +4958,7 @@ version: 2.8.0r4
 
             * A 2 element Array specifying the X and Y pixel amounts by which the Overlay should be offset from the aligned corner. e.g. [5,0] offsets the Overlay 5 pixels to the left, <em>after</em> aligning the given context corners.
 
-            * NOTE: If using this property and no triggers need to be defined, the arrayOfTriggerEvents property should be set to null to maintain correct array positions for the arguments. 
+            * NOTE: If using this property and no triggers need to be defined, the arrayOfTriggerEvents property should be set to null to maintain correct array positions for the arguments.
 
             * </dd>
 
@@ -4968,7 +4968,7 @@ version: 2.8.0r4
 
             * <p>
 
-            * For example, setting this property to <code>["img1", "tl", "bl"]</code> will 
+            * For example, setting this property to <code>["img1", "tl", "bl"]</code> will
 
             * align the Overlay's top left corner to the bottom left corner of the
 
@@ -4978,7 +4978,7 @@ version: 2.8.0r4
 
             * <p>
 
-            * Setting this property to <code>["img1", "tl", "bl", null, [0,5]</code> will 
+            * Setting this property to <code>["img1", "tl", "bl", null, [0,5]</code> will
 
             * align the Overlay's top left corner to the bottom left corner of the
 
@@ -5006,9 +5006,9 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.CONTEXT.key, {
 
-                handler: this.configContext, 
+                handler: this.configContext,
 
-                suppressEvent: DEFAULT_CONFIG.CONTEXT.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.CONTEXT.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.CONTEXT.supercedes
 
@@ -5018,15 +5018,15 @@ version: 2.8.0r4
 
             /**
 
-            * Determines whether or not the Overlay should be anchored 
+            * Determines whether or not the Overlay should be anchored
 
             * to the center of the viewport.
 
-            * 
+            *
 
             * <p>This property can be set to:</p>
 
-            * 
+            *
 
             * <dl>
 
@@ -5038,11 +5038,11 @@ version: 2.8.0r4
 
             * <p>
 
-            * When enabled, the overlay will 
+            * When enabled, the overlay will
 
-            * be positioned in the center of viewport when initially displayed, and 
+            * be positioned in the center of viewport when initially displayed, and
 
-            * will remain in the center of the viewport whenever the window is 
+            * will remain in the center of the viewport whenever the window is
 
             * scrolled or resized.
 
@@ -5050,7 +5050,7 @@ version: 2.8.0r4
 
             * <p>
 
-            * If the overlay is too big for the viewport, 
+            * If the overlay is too big for the viewport,
 
             * it's top left corner will be aligned with the top left corner of the viewport.
 
@@ -5064,7 +5064,7 @@ version: 2.8.0r4
 
             * To disable fixed center positioning.
 
-            * <p>In this case the overlay can still be 
+            * <p>In this case the overlay can still be
 
             * centered as a one-off operation, by invoking the <code>center()</code> method,
 
@@ -5076,15 +5076,15 @@ version: 2.8.0r4
 
             * <dd>To enable fixed center positioning, as with the <code>true</code> option.
 
-            * <p>However, unlike setting the property to <code>true</code>, 
+            * <p>However, unlike setting the property to <code>true</code>,
 
-            * when the property is set to <code>"contained"</code>, if the overlay is 
+            * when the property is set to <code>"contained"</code>, if the overlay is
 
-            * too big for the viewport, it will not get automatically centered when the 
+            * too big for the viewport, it will not get automatically centered when the
 
-            * user scrolls or resizes the window (until the window is large enough to contain the 
+            * user scrolls or resizes the window (until the window is large enough to contain the
 
-            * overlay). This is useful in cases where the Overlay has both header and footer 
+            * overlay). This is useful in cases where the Overlay has both header and footer
 
             * UI controls which the user may need to access.
 
@@ -5108,15 +5108,15 @@ version: 2.8.0r4
 
                 handler: this.configFixedCenter,
 
-                value: DEFAULT_CONFIG.FIXED_CENTER.value, 
+                value: DEFAULT_CONFIG.FIXED_CENTER.value,
 
-                validator: DEFAULT_CONFIG.FIXED_CENTER.validator, 
+                validator: DEFAULT_CONFIG.FIXED_CENTER.validator,
 
                 supercedes: DEFAULT_CONFIG.FIXED_CENTER.supercedes
 
             });
 
-    
+
 
             /**
 
@@ -5132,9 +5132,9 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.WIDTH.key, {
 
-                handler: this.configWidth, 
+                handler: this.configWidth,
 
-                suppressEvent: DEFAULT_CONFIG.WIDTH.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.WIDTH.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.WIDTH.supercedes
 
@@ -5156,9 +5156,9 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.HEIGHT.key, {
 
-                handler: this.configHeight, 
+                handler: this.configHeight,
 
-                suppressEvent: DEFAULT_CONFIG.HEIGHT.suppressEvent, 
+                suppressEvent: DEFAULT_CONFIG.HEIGHT.suppressEvent,
 
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
 
@@ -5184,7 +5184,7 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.AUTO_FILL_HEIGHT.key, {
 
-                handler: this.configAutoFillHeight, 
+                handler: this.configAutoFillHeight,
 
                 value : DEFAULT_CONFIG.AUTO_FILL_HEIGHT.value,
 
@@ -5220,7 +5220,7 @@ version: 2.8.0r4
 
             /**
 
-            * True if the Overlay should be prevented from being positioned 
+            * True if the Overlay should be prevented from being positioned
 
             * out of the viewport.
 
@@ -5236,11 +5236,11 @@ version: 2.8.0r4
 
 
 
-                handler: this.configConstrainToViewport, 
+                handler: this.configConstrainToViewport,
 
-                value: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.value, 
+                value: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.value,
 
-                validator: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.validator, 
+                validator: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.validator,
 
                 supercedes: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.supercedes
 
@@ -5254,11 +5254,11 @@ version: 2.8.0r4
 
             * @config iframe
 
-            * @description Boolean indicating whether or not the Overlay should 
+            * @description Boolean indicating whether or not the Overlay should
 
-            * have an IFRAME shim; used to prevent SELECT elements from 
+            * have an IFRAME shim; used to prevent SELECT elements from
 
-            * poking through an Overlay instance in IE6.  When set to "true", 
+            * poking through an Overlay instance in IE6.  When set to "true",
 
             * the iframe shim is created when the Overlay instance is intially
 
@@ -5274,11 +5274,11 @@ version: 2.8.0r4
 
 
 
-                handler: this.configIframe, 
+                handler: this.configIframe,
 
-                value: DEFAULT_CONFIG.IFRAME.value, 
+                value: DEFAULT_CONFIG.IFRAME.value,
 
-                validator: DEFAULT_CONFIG.IFRAME.validator, 
+                validator: DEFAULT_CONFIG.IFRAME.validator,
 
                 supercedes: DEFAULT_CONFIG.IFRAME.supercedes
 
@@ -5292,9 +5292,9 @@ version: 2.8.0r4
 
             * @config preventcontextoverlap
 
-            * @description Boolean indicating whether or not the Overlay should overlap its 
+            * @description Boolean indicating whether or not the Overlay should overlap its
 
-            * context element (defined using the "context" configuration property) when the 
+            * context element (defined using the "context" configuration property) when the
 
             * "constraintoviewport" configuration property is set to "true".
 
@@ -5306,9 +5306,9 @@ version: 2.8.0r4
 
             cfg.addProperty(DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.key, {
 
-                value: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.value, 
+                value: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.value,
 
-                validator: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.validator, 
+                validator: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.validator,
 
                 supercedes: DEFAULT_CONFIG.PREVENT_CONTEXT_OVERLAP.supercedes
 
@@ -5320,7 +5320,7 @@ version: 2.8.0r4
 
         /**
 
-        * Moves the Overlay to the specified position. This function is  
+        * Moves the Overlay to the specified position. This function is
 
         * identical to calling this.cfg.setProperty("xy", [x,y]);
 
@@ -5342,9 +5342,9 @@ version: 2.8.0r4
 
         /**
 
-        * Adds a CSS class ("hide-scrollbars") and removes a CSS class 
+        * Adds a CSS class ("hide-scrollbars") and removes a CSS class
 
-        * ("show-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
+        * ("show-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X
 
         * (https://bugzilla.mozilla.org/show_bug.cgi?id=187435)
 
@@ -5362,9 +5362,9 @@ version: 2.8.0r4
 
         /**
 
-        * Adds a CSS class ("show-scrollbars") and removes a CSS class 
+        * Adds a CSS class ("show-scrollbars") and removes a CSS class
 
-        * ("hide-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
+        * ("hide-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X
 
         * (https://bugzilla.mozilla.org/show_bug.cgi?id=187435)
 
@@ -5420,7 +5420,7 @@ version: 2.8.0r4
 
         /**
 
-        * The default event handler fired when the "visible" property is 
+        * The default event handler fired when the "visible" property is
 
         * changed.  This method is responsible for firing showEvent
 
@@ -5434,7 +5434,7 @@ version: 2.8.0r4
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -5512,7 +5512,7 @@ version: 2.8.0r4
 
                         eff = effect[i];
 
-                        effectInstances[effectInstances.length] = 
+                        effectInstances[effectInstances.length] =
 
                             eff.effect(this, eff.duration);
 
@@ -5522,7 +5522,7 @@ version: 2.8.0r4
 
                 } else {
 
-                    effectInstances[effectInstances.length] = 
+                    effectInstances[effectInstances.length] =
 
                         effect.effect(this, effect.duration);
 
@@ -5560,7 +5560,7 @@ version: 2.8.0r4
 
                                 if (j === 0 && !alreadySubscribed(
 
-                                        ei.animateInCompleteEvent, 
+                                        ei.animateInCompleteEvent,
 
                                         this.showEvent.fire, this.showEvent)) {
 
@@ -5568,7 +5568,7 @@ version: 2.8.0r4
 
                                     /*
 
-                                         Delegate showEvent until end 
+                                         Delegate showEvent until end
 
                                          of animateInComplete
 
@@ -5640,31 +5640,31 @@ version: 2.8.0r4
 
                             h = effectInstances[k];
 
-    
+
 
                             if (k === 0 && !alreadySubscribed(
 
-                                h.animateOutCompleteEvent, this.hideEvent.fire, 
+                                h.animateOutCompleteEvent, this.hideEvent.fire,
 
                                 this.hideEvent)) {
 
-    
+
 
                                 /*
 
-                                     Delegate hideEvent until end 
+                                     Delegate hideEvent until end
 
                                      of animateOutComplete
 
                                 */
 
-    
+
 
                                 h.animateOutCompleteEvent.subscribe(
 
                                     this.hideEvent.fire, this.hideEvent, true);
 
-    
+
 
                             }
 
@@ -5710,9 +5710,9 @@ version: 2.8.0r4
 
         /**
 
-        * Fixed center event handler used for centering on scroll/resize, but only if 
+        * Fixed center event handler used for centering on scroll/resize, but only if
 
-        * the overlay is visible and, if "fixedcenter" is set to "contained", only if 
+        * the overlay is visible and, if "fixedcenter" is set to "contained", only if
 
         * the overlay fits within the viewport.
 
@@ -5746,11 +5746,11 @@ version: 2.8.0r4
 
         /**
 
-         * Determines if the Overlay (including the offset value defined by Overlay.VIEWPORT_OFFSET) 
+         * Determines if the Overlay (including the offset value defined by Overlay.VIEWPORT_OFFSET)
 
          * will fit entirely inside the viewport, in both dimensions - width and height.
 
-         * 
+         *
 
          * @method fitsInViewport
 
@@ -5782,7 +5782,7 @@ version: 2.8.0r4
 
         /**
 
-        * The default event handler fired when the "fixedcenter" property 
+        * The default event handler fired when the "fixedcenter" property
 
         * is changed.
 
@@ -5790,11 +5790,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -5868,11 +5868,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -5906,11 +5906,11 @@ version: 2.8.0r4
 
          * @param {String} type The CustomEvent type (usually the property name)
 
-         * @param {Object[]} args The CustomEvent arguments. For configuration 
+         * @param {Object[]} args The CustomEvent arguments. For configuration
 
          * handlers, args[0] will equal the newly applied value for the property.
 
-         * @param {Object} obj The scope object. For configuration handlers, 
+         * @param {Object} obj The scope object. For configuration handlers,
 
          * this will usually equal the owner.
 
@@ -5978,11 +5978,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6014,11 +6014,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6084,11 +6084,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6140,11 +6140,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6200,11 +6200,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6250,7 +6250,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -6312,7 +6312,7 @@ version: 2.8.0r4
 
         /**
 
-        * Syncronizes the size and position of iframe shim to that of its 
+        * Syncronizes the size and position of iframe shim to that of its
 
         * corresponding Overlay instance.
 
@@ -6372,19 +6372,19 @@ version: 2.8.0r4
 
          * Sets the zindex of the iframe shim, if it exists, based on the zindex of
 
-         * the Overlay element. The zindex of the iframe is set to be one less 
+         * the Overlay element. The zindex of the iframe is set to be one less
 
          * than the Overlay element's zindex.
 
-         * 
+         *
 
          * <p>NOTE: This method will not bump up the zindex of the Overlay element
 
          * to ensure that the iframe shim has a non-negative zindex.
 
-         * If you require the iframe zindex to be 0 or higher, the zindex of 
+         * If you require the iframe zindex to be 0 or higher, the zindex of
 
-         * the Overlay element should be set to a value greater than 0, before 
+         * the Overlay element should be set to a value greater than 0, before
 
          * this method is called.
 
@@ -6420,11 +6420,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6468,9 +6468,9 @@ version: 2.8.0r4
 
                         /*
 
-                            Set the opacity of the <iframe> to 0 so that it 
+                            Set the opacity of the <iframe> to 0 so that it
 
-                            doesn't modify the opacity of any transparent 
+                            doesn't modify the opacity of any transparent
 
                             elements that may be on top of it (like a shadow).
 
@@ -6482,11 +6482,11 @@ version: 2.8.0r4
 
                             /*
 
-                                 Need to set the "frameBorder" property to 0 
+                                 Need to set the "frameBorder" property to 0
 
-                                 supress the default <iframe> border in IE.  
+                                 supress the default <iframe> border in IE.
 
-                                 Setting the CSS "border" property alone 
+                                 Setting the CSS "border" property alone
 
                                  doesn't supress it.
 
@@ -6544,9 +6544,9 @@ version: 2.8.0r4
 
                 /*
 
-                     Show the <iframe> before positioning it since the "setXY" 
+                     Show the <iframe> before positioning it since the "setXY"
 
-                     method of DOM requires the element be in the document 
+                     method of DOM requires the element be in the document
 
                      and visible.
 
@@ -6558,7 +6558,7 @@ version: 2.8.0r4
 
                 /*
 
-                     Syncronize the size and position of the <iframe> to that 
+                     Syncronize the size and position of the <iframe> to that
 
                      of the Overlay.
 
@@ -6654,15 +6654,15 @@ version: 2.8.0r4
 
          * Set's the container's XY value from DOM if not already set.
 
-         * 
+         *
 
-         * Differs from syncPosition, in that the XY value is only sync'd with DOM if 
+         * Differs from syncPosition, in that the XY value is only sync'd with DOM if
 
          * not already set. The method also refire's the XY config property event, so any
 
          * beforeMove, Move event listeners are invoked.
 
-         * 
+         *
 
          * @method _primeXYFromDOM
 
@@ -6692,7 +6692,7 @@ version: 2.8.0r4
 
         /**
 
-        * The default event handler fired when the "constraintoviewport" 
+        * The default event handler fired when the "constraintoviewport"
 
         * property is changed.
 
@@ -6700,13 +6700,13 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
-        * handlers, args[0] will equal the newly applied value for 
+        * handlers, args[0] will equal the newly applied value for
 
         * the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6756,11 +6756,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -6816,7 +6816,7 @@ version: 2.8.0r4
 
                         this.cfg.setProperty("context", [
 
-                                document.getElementById(contextEl), 
+                                document.getElementById(contextEl),
 
                                 elementMagnetCorner,
 
@@ -6872,13 +6872,13 @@ version: 2.8.0r4
 
          * Custom Event handler for context alignment triggers. Invokes the align method
 
-         * 
+         *
 
          * @method _alignOnTrigger
 
          * @protected
 
-         * 
+         *
 
          * @param {String} type The event type (not used by the default implementation)
 
@@ -6908,7 +6908,7 @@ version: 2.8.0r4
 
          *
 
-         * @param {String|CustomEvent} t Either a CustomEvent, or event type (e.g. "windowScroll") for which a 
+         * @param {String|CustomEvent} t Either a CustomEvent, or event type (e.g. "windowScroll") for which a
 
          * custom event instance needs to be looked up from the Overlay._TRIGGER_MAP.
 
@@ -6936,7 +6936,7 @@ version: 2.8.0r4
 
         /**
 
-         * Utility method that subscribes or unsubscribes the given 
+         * Utility method that subscribes or unsubscribes the given
 
          * function from the list of trigger events provided.
 
@@ -6944,13 +6944,13 @@ version: 2.8.0r4
 
          * @method _processTriggers
 
-         * @protected 
+         * @protected
 
          *
 
-         * @param {Array[String|CustomEvent]} triggers An array of either CustomEvents, event type strings 
+         * @param {Array[String|CustomEvent]} triggers An array of either CustomEvents, event type strings
 
-         * (e.g. "beforeShow", "windowScroll") to/from which the provided function should be 
+         * (e.g. "beforeShow", "windowScroll") to/from which the provided function should be
 
          * subscribed/unsubscribed respectively.
 
@@ -6960,11 +6960,11 @@ version: 2.8.0r4
 
          * we are subscribing or unsubscribing trigger listeners
 
-         * 
+         *
 
          * @param {Function} fn The function to be subscribed/unsubscribed to/from the trigger event.
 
-         * Context is always set to the overlay instance, and no additional object argument 
+         * Context is always set to the overlay instance, and no additional object argument
 
          * get passed to the subscribed function.
 
@@ -7002,25 +7002,25 @@ version: 2.8.0r4
 
         /**
 
-        * Aligns the Overlay to its context element using the specified corner 
+        * Aligns the Overlay to its context element using the specified corner
 
-        * points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, 
+        * points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT,
 
         * and BOTTOM_RIGHT.
 
         * @method align
 
-        * @param {String} elementAlign  The String representing the corner of 
+        * @param {String} elementAlign  The String representing the corner of
 
         * the Overlay that should be aligned to the context element
 
-        * @param {String} contextAlign  The corner of the context element 
+        * @param {String} contextAlign  The corner of the context element
 
         * that the elementAlign corner should stick to.
 
         * @param {Number[]} xyOffset Optional. A 2 element array specifying the x and y pixel offsets which should be applied
 
-        * after aligning the element and context corners. For example, passing in [5, -10] for this value, would offset the 
+        * after aligning the element and context corners. For example, passing in [5, -10] for this value, would offset the
 
         * Overlay by 5 pixels along the X axis (horizontally) and -10 pixels along the Y axis (vertically) after aligning the specified corners.
 
@@ -7052,7 +7052,7 @@ version: 2.8.0r4
 
                 switch (elementAlign) {
 
-    
+
 
                     case Overlay.TOP_LEFT:
 
@@ -7062,7 +7062,7 @@ version: 2.8.0r4
 
                         break;
 
-        
+
 
                     case Overlay.TOP_RIGHT:
 
@@ -7072,7 +7072,7 @@ version: 2.8.0r4
 
                         break;
 
-        
+
 
                     case Overlay.BOTTOM_LEFT:
 
@@ -7082,11 +7082,11 @@ version: 2.8.0r4
 
                         break;
 
-        
+
 
                     case Overlay.BOTTOM_RIGHT:
 
-                        alignX = h - element.offsetWidth; 
+                        alignX = h - element.offsetWidth;
 
                         alignY = v - element.offsetHeight;
 
@@ -7156,7 +7156,7 @@ version: 2.8.0r4
 
                     switch (contextAlign) {
 
-    
+
 
                         case Overlay.TOP_LEFT:
 
@@ -7164,7 +7164,7 @@ version: 2.8.0r4
 
                             break;
 
-        
+
 
                         case Overlay.TOP_RIGHT:
 
@@ -7172,7 +7172,7 @@ version: 2.8.0r4
 
                             break;
 
-        
+
 
                         case Overlay.BOTTOM_LEFT:
 
@@ -7180,7 +7180,7 @@ version: 2.8.0r4
 
                             break;
 
-        
+
 
                         case Overlay.BOTTOM_RIGHT:
 
@@ -7200,7 +7200,7 @@ version: 2.8.0r4
 
         /**
 
-        * The default event handler executed when the moveEvent is fired, if the 
+        * The default event handler executed when the moveEvent is fired, if the
 
         * "constraintoviewport" is set to true.
 
@@ -7208,11 +7208,11 @@ version: 2.8.0r4
 
         * @param {String} type The CustomEvent type (usually the property name)
 
-        * @param {Object[]} args The CustomEvent arguments. For configuration 
+        * @param {Object[]} args The CustomEvent arguments. For configuration
 
         * handlers, args[0] will equal the newly applied value for the property.
 
-        * @param {Object} obj The scope object. For configuration handlers, 
+        * @param {Object} obj The scope object. For configuration handlers,
 
         * this will usually equal the owner.
 
@@ -7240,15 +7240,15 @@ version: 2.8.0r4
 
          * Shared implementation method for getConstrainedX and getConstrainedY.
 
-         * 
+         *
 
          * <p>
 
-         * Given a coordinate value, returns the calculated coordinate required to 
+         * Given a coordinate value, returns the calculated coordinate required to
 
-         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * position the Overlay if it is to be constrained to the viewport, based on the
 
-         * current element size, viewport dimensions, scroll values and preventoverlap 
+         * current element size, viewport dimensions, scroll values and preventoverlap
 
          * settings
 
@@ -7354,7 +7354,7 @@ version: 2.8.0r4
 
         /**
 
-         * Helper method, used to position the Overlap to prevent overlap with the 
+         * Helper method, used to position the Overlap to prevent overlap with the
 
          * context element (used when preventcontextoverlap is enabled)
 
@@ -7382,7 +7382,7 @@ version: 2.8.0r4
 
         _preventOverlap : function(pos, contextEl, overlaySize, viewportSize, docScroll) {
 
-            
+
 
             var x = (pos == "x"),
 
@@ -7456,9 +7456,9 @@ version: 2.8.0r4
 
                             /*
 
-                                 All possible positions and values have been 
+                                 All possible positions and values have been
 
-                                 tried, but none were successful, so fall back 
+                                 tried, but none were successful, so fall back
 
                                  to the original size and position.
 
@@ -7498,9 +7498,9 @@ version: 2.8.0r4
 
         /**
 
-         * Given x coordinate value, returns the calculated x coordinate required to 
+         * Given x coordinate value, returns the calculated x coordinate required to
 
-         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * position the Overlay if it is to be constrained to the viewport, based on the
 
          * current element size, viewport dimensions and scroll values.
 
@@ -7510,7 +7510,7 @@ version: 2.8.0r4
 
          * @return {Number} The constrained x coordinate
 
-         */		
+         */
 
         getConstrainedX: function (x) {
 
@@ -7522,9 +7522,9 @@ version: 2.8.0r4
 
         /**
 
-         * Given y coordinate value, returns the calculated y coordinate required to 
+         * Given y coordinate value, returns the calculated y coordinate required to
 
-         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * position the Overlay if it is to be constrained to the viewport, based on the
 
          * current element size, viewport dimensions and scroll values.
 
@@ -7534,7 +7534,7 @@ version: 2.8.0r4
 
          * @return {Number} The constrained y coordinate
 
-         */		
+         */
 
         getConstrainedY : function (y) {
 
@@ -7546,9 +7546,9 @@ version: 2.8.0r4
 
         /**
 
-         * Given x, y coordinate values, returns the calculated coordinates required to 
+         * Given x, y coordinate values, returns the calculated coordinates required to
 
-         * position the Overlay if it is to be constrained to the viewport, based on the 
+         * position the Overlay if it is to be constrained to the viewport, based on the
 
          * current element size, viewport dimensions and scroll values.
 
@@ -7640,9 +7640,9 @@ version: 2.8.0r4
 
         /**
 
-        * Synchronizes the Panel's "xy", "x", and "y" properties with the 
+        * Synchronizes the Panel's "xy", "x", and "y" properties with the
 
-        * Panel's position in the DOM. This is primarily used to update  
+        * Panel's position in the DOM. This is primarily used to update
 
         * position information during drag & drop.
 
@@ -7774,7 +7774,7 @@ version: 2.8.0r4
 
         /**
 
-         * autofillheight validator. Verifies that the autofill value is either null 
+         * autofillheight validator. Verifies that the autofill value is either null
 
          * or one of the strings : "body", "header" or "footer".
 
@@ -7800,7 +7800,7 @@ version: 2.8.0r4
 
         /**
 
-         * The default custom event handler executed when the overlay's height is changed, 
+         * The default custom event handler executed when the overlay's height is changed,
 
          * if the autofillheight property has been set.
 
@@ -7876,23 +7876,23 @@ version: 2.8.0r4
 
          * <p>
 
-         * Sets the height on the provided header, body or footer element to 
+         * Sets the height on the provided header, body or footer element to
 
-         * fill out the height of the container. It determines the height of the 
+         * fill out the height of the container. It determines the height of the
 
-         * containers content box, based on it's configured height value, and 
+         * containers content box, based on it's configured height value, and
 
-         * sets the height of the autofillheight element to fill out any 
+         * sets the height of the autofillheight element to fill out any
 
-         * space remaining after the other standard module element heights 
+         * space remaining after the other standard module element heights
 
          * have been accounted for.
 
          * </p>
 
-         * <p><strong>NOTE:</strong> This method is not designed to work if an explicit 
+         * <p><strong>NOTE:</strong> This method is not designed to work if an explicit
 
-         * height has not been set on the container, since for an "auto" height container, 
+         * height has not been set on the container, since for an "auto" height container,
 
          * the heights of the header/body/footer will drive the height of the container.</p>
 
@@ -7978,15 +7978,15 @@ version: 2.8.0r4
 
                     }
 
-    
+
 
                     remaining = Math.max(total - filled, 0);
 
-    
+
 
                     Dom.setStyle(el, "height", remaining + "px");
 
-    
+
 
                     // Re-adjust height if required, to account for el padding and border
 
@@ -8008,7 +8008,7 @@ version: 2.8.0r4
 
         /**
 
-        * Places the Overlay on top of all other instances of 
+        * Places the Overlay on top of all other instances of
 
         * YAHOO.widget.Overlay.
 
@@ -8148,7 +8148,7 @@ version: 2.8.0r4
 
         /**
 
-        * Removes the Overlay element from the DOM and sets all child 
+        * Removes the Overlay element from the DOM and sets all child
 
         * elements to null.
 
@@ -8176,7 +8176,7 @@ version: 2.8.0r4
 
                 this.doCenterOnDOMEvent, this);
 
-    
+
 
             Overlay.windowScrollEvent.unsubscribe(
 
@@ -8212,7 +8212,7 @@ version: 2.8.0r4
 
          * <p>
 
-         * By default applies and then removes a 1px bottom margin through the 
+         * By default applies and then removes a 1px bottom margin through the
 
          * application/removal of a "yui-force-redraw" class.
 
@@ -8220,7 +8220,7 @@ version: 2.8.0r4
 
          * <p>
 
-         * It is currently used by Overlay to force a repaint for webkit 
+         * It is currently used by Overlay to force a repaint for webkit
 
          * browsers, when centering.
 
@@ -8274,7 +8274,7 @@ version: 2.8.0r4
 
     /**
 
-    * OverlayManager is used for maintaining the focus status of 
+    * OverlayManager is used for maintaining the focus status of
 
     * multiple Overlays.
 
@@ -8286,11 +8286,11 @@ version: 2.8.0r4
 
     * @constructor
 
-    * @param {Array} overlays Optional. A collection of Overlays to register 
+    * @param {Array} overlays Optional. A collection of Overlays to register
 
     * with the manager.
 
-    * @param {Object} userConfig  The object literal representing the user 
+    * @param {Object} userConfig  The object literal representing the user
 
     * configuration of the OverlayManager
 
@@ -8380,7 +8380,7 @@ version: 2.8.0r4
 
             /**
 
-            * The collection of registered Overlays in use by 
+            * The collection of registered Overlays in use by
 
             * the OverlayManager
 
@@ -8420,11 +8420,11 @@ version: 2.8.0r4
 
         * @method init
 
-        * @param {Overlay[]} overlays Optional. A collection of Overlays to 
+        * @param {Overlay[]} overlays Optional. A collection of Overlays to
 
         * register with the manager.
 
-        * @param {Object} userConfig  The object literal representing the user 
+        * @param {Object} userConfig  The object literal representing the user
 
         * configuration of the OverlayManager
 
@@ -8436,7 +8436,7 @@ version: 2.8.0r4
 
             /**
 
-            * The OverlayManager's Config object used for monitoring 
+            * The OverlayManager's Config object used for monitoring
 
             * configuration properties.
 
@@ -8540,7 +8540,7 @@ version: 2.8.0r4
 
 
 
-                var o = this.find(overlay), 
+                var o = this.find(overlay),
 
                         originalZ;
 
@@ -8660,7 +8660,7 @@ version: 2.8.0r4
 
              * being blurred.
 
-             * 
+             *
 
              * @method _manageBlur
 
@@ -8692,7 +8692,7 @@ version: 2.8.0r4
 
             /**
 
-             * Updates the state of the OverlayManager and overlay, as a result of the overlay 
+             * Updates the state of the OverlayManager and overlay, as a result of the overlay
 
              * receiving focus.
 
@@ -8762,15 +8762,15 @@ version: 2.8.0r4
 
         * @method _onOverlayElementFocus
 
-        * @description Event handler for the DOM event that is used to focus 
+        * @description Event handler for the DOM event that is used to focus
 
-        * the Overlay instance as specified by the "focusevent" 
+        * the Overlay instance as specified by the "focusevent"
 
         * configuration property.
 
         * @private
 
-        * @param {Event} p_oEvent Object representing the DOM event 
+        * @param {Event} p_oEvent Object representing the DOM event
 
         * object passed back by the event utility (Event).
 
@@ -8808,15 +8808,15 @@ version: 2.8.0r4
 
         * @private
 
-        * @param {String} p_sType String representing the name of the event  
+        * @param {String} p_sType String representing the name of the event
 
         * that was fired.
 
-        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * @param {Array} p_aArgs Array of arguments sent when the event
 
         * was fired.
 
-        * @param {Overlay} p_oOverlay Object representing the overlay that 
+        * @param {Overlay} p_oOverlay Object representing the overlay that
 
         * fired the event.
 
@@ -8842,15 +8842,15 @@ version: 2.8.0r4
 
         * @private
 
-        * @param {String} p_sType String representing the name of the event  
+        * @param {String} p_sType String representing the name of the event
 
         * that was fired.
 
-        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * @param {Array} p_aArgs Array of arguments sent when the event
 
         * was fired.
 
-        * @param {Overlay} p_oOverlay Object representing the overlay that 
+        * @param {Overlay} p_oOverlay Object representing the overlay that
 
         * fired the event.
 
@@ -8874,15 +8874,15 @@ version: 2.8.0r4
 
         * @private
 
-        * @param {String} p_sType String representing the name of the event  
+        * @param {String} p_sType String representing the name of the event
 
         * that was fired.
 
-        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * @param {Array} p_aArgs Array of arguments sent when the event
 
         * was fired.
 
-        * @param {Overlay} p_oOverlay Object representing the overlay that 
+        * @param {Overlay} p_oOverlay Object representing the overlay that
 
         * fired the event.
 
@@ -8902,17 +8902,17 @@ version: 2.8.0r4
 
          * monitor focus state.
 
-         * 
+         *
 
-         * If the instance already has a focusEvent (e.g. Menu), OverlayManager will subscribe 
+         * If the instance already has a focusEvent (e.g. Menu), OverlayManager will subscribe
 
          * to the existing focusEvent, however if a focusEvent or focus method does not exist
 
-         * on the instance, the _bindFocus method will add them, and the focus method will 
+         * on the instance, the _bindFocus method will add them, and the focus method will
 
          * update the OverlayManager's state directly.
 
-         * 
+         *
 
          * @method _bindFocus
 
@@ -8982,11 +8982,11 @@ version: 2.8.0r4
 
          *
 
-         * If the instance already has a blurEvent (e.g. Menu), OverlayManager will subscribe 
+         * If the instance already has a blurEvent (e.g. Menu), OverlayManager will subscribe
 
          * to the existing blurEvent, however if a blurEvent or blur method does not exist
 
-         * on the instance, the _bindBlur method will add them, and the blur method 
+         * on the instance, the _bindBlur method will add them, and the blur method
 
          * update the OverlayManager's state directly.
 
@@ -9052,7 +9052,7 @@ version: 2.8.0r4
 
          * to be removed for the OverlayManager when destroyed.
 
-         * 
+         *
 
          * @method _bindDestroy
 
@@ -9108,9 +9108,9 @@ version: 2.8.0r4
 
         /**
 
-        * Registers an Overlay or an array of Overlays with the manager. Upon 
+        * Registers an Overlay or an array of Overlays with the manager. Upon
 
-        * registration, the Overlay receives functions for focus and blur, 
+        * registration, the Overlay receives functions for focus and blur,
 
         * along with CustomEvents for each.
 
@@ -9120,7 +9120,7 @@ version: 2.8.0r4
 
         * @param {Overlay} overlay  An Overlay to register with the manager.
 
-        * @param {Overlay[]} overlay  An array of Overlays to register with 
+        * @param {Overlay[]} overlay  An array of Overlays to register with
 
         * the manager.
 
@@ -9192,21 +9192,21 @@ version: 2.8.0r4
 
         /**
 
-        * Places the specified Overlay instance on top of all other 
+        * Places the specified Overlay instance on top of all other
 
         * Overlay instances.
 
         * @method bringToTop
 
-        * @param {YAHOO.widget.Overlay} p_oOverlay Object representing an 
+        * @param {YAHOO.widget.Overlay} p_oOverlay Object representing an
 
         * Overlay instance.
 
-        * @param {String} p_oOverlay String representing the id of an 
+        * @param {String} p_oOverlay String representing the id of an
 
         * Overlay instance.
 
-        */        
+        */
 
         bringToTop: function (p_oOverlay) {
 
@@ -9298,7 +9298,7 @@ version: 2.8.0r4
 
         * @param {String} overlay  An Overlay id to locate within the manager
 
-        * @return {Overlay} The requested Overlay, if found, or null if it 
+        * @return {Overlay} The requested Overlay, if found, or null if it
 
         * cannot be located.
 
@@ -9356,7 +9356,7 @@ version: 2.8.0r4
 
         * @private
 
-        * @return {Number} 0, 1, or -1, depending on where the Overlay should 
+        * @return {Number} 0, 1, or -1, depending on where the Overlay should
 
         * fall in the stacking order.
 
@@ -9484,7 +9484,7 @@ version: 2.8.0r4
 
     /**
 
-    * ContainerEffect encapsulates animation transitions that are executed when 
+    * ContainerEffect encapsulates animation transitions that are executed when
 
     * an Overlay is shown or hidden.
 
@@ -9494,31 +9494,31 @@ version: 2.8.0r4
 
     * @constructor
 
-    * @param {YAHOO.widget.Overlay} overlay The Overlay that the animation 
+    * @param {YAHOO.widget.Overlay} overlay The Overlay that the animation
 
     * should be associated with
 
-    * @param {Object} attrIn The object literal representing the animation 
+    * @param {Object} attrIn The object literal representing the animation
 
-    * arguments to be used for the animate-in transition. The arguments for 
+    * arguments to be used for the animate-in transition. The arguments for
 
-    * this literal are: attributes(object, see YAHOO.util.Anim for description), 
-
-    * duration(Number), and method(i.e. Easing.easeIn).
-
-    * @param {Object} attrOut The object literal representing the animation 
-
-    * arguments to be used for the animate-out transition. The arguments for  
-
-    * this literal are: attributes(object, see YAHOO.util.Anim for description), 
+    * this literal are: attributes(object, see YAHOO.util.Anim for description),
 
     * duration(Number), and method(i.e. Easing.easeIn).
 
-    * @param {HTMLElement} targetElement Optional. The target element that  
+    * @param {Object} attrOut The object literal representing the animation
+
+    * arguments to be used for the animate-out transition. The arguments for
+
+    * this literal are: attributes(object, see YAHOO.util.Anim for description),
+
+    * duration(Number), and method(i.e. Easing.easeIn).
+
+    * @param {HTMLElement} targetElement Optional. The target element that
 
     * should be animated during the transition. Defaults to overlay.element.
 
-    * @param {class} Optional. The animation class to instantiate. Defaults to 
+    * @param {class} Optional. The animation class to instantiate. Defaults to
 
     * YAHOO.util.Anim. Other options include YAHOO.util.Motion.
 
@@ -9548,7 +9548,7 @@ version: 2.8.0r4
 
         this.overlay = overlay;
 
-    
+
 
         /**
 
@@ -9562,7 +9562,7 @@ version: 2.8.0r4
 
         this.attrIn = attrIn;
 
-    
+
 
         /**
 
@@ -9576,7 +9576,7 @@ version: 2.8.0r4
 
         this.attrOut = attrOut;
 
-    
+
 
         /**
 
@@ -9590,7 +9590,7 @@ version: 2.8.0r4
 
         this.targetElement = targetElement || overlay.element;
 
-    
+
 
         /**
 
@@ -9604,7 +9604,7 @@ version: 2.8.0r4
 
         this.animClass = animClass;
 
-    
+
 
     };
 
@@ -9624,7 +9624,7 @@ version: 2.8.0r4
 
     /**
 
-    * A pre-configured ContainerEffect instance that can be used for fading 
+    * A pre-configured ContainerEffect instance that can be used for fading
 
     * an overlay in and out.
 
@@ -9800,13 +9800,13 @@ version: 2.8.0r4
 
     };
 
-    
 
-    
+
+
 
     /**
 
-    * A pre-configured ContainerEffect instance that can be used for sliding an 
+    * A pre-configured ContainerEffect instance that can be used for sliding an
 
     * overlay in and out.
 
@@ -9838,13 +9838,13 @@ version: 2.8.0r4
 
 
 
-            sin =  { 
+            sin =  {
 
                 attributes: { points: { to: [x, y] } },
 
                 duration: dur,
 
-                method: Easing.easeIn 
+                method: Easing.easeIn
 
             },
 
@@ -9856,7 +9856,7 @@ version: 2.8.0r4
 
                 duration: dur,
 
-                method: Easing.easeOut 
+                method: Easing.easeOut
 
             },
 
@@ -9878,7 +9878,7 @@ version: 2.8.0r4
 
         slide.handleTweenAnimateIn = function (type, args, obj) {
 
-        
+
 
             var pos = Dom.getXY(obj.overlay.element),
 
@@ -9886,9 +9886,9 @@ version: 2.8.0r4
 
                 currentY = pos[1];
 
-        
 
-            if (Dom.getStyle(obj.overlay.element, "visibility") == 
+
+            if (Dom.getStyle(obj.overlay.element, "visibility") ==
 
                 "hidden" && currentX < x) {
 
@@ -9900,7 +9900,7 @@ version: 2.8.0r4
 
             }
 
-        
+
 
             obj.overlay.cfg.setProperty("xy", [currentX, currentY], true);
 
@@ -9908,7 +9908,7 @@ version: 2.8.0r4
 
         };
 
-        
+
 
         slide.handleCompleteAnimateIn = function (type, args, obj) {
 
@@ -9924,11 +9924,11 @@ version: 2.8.0r4
 
         };
 
-        
+
 
         slide.handleStartAnimateOut = function (type, args, obj) {
 
-    
+
 
             var vw = Dom.getViewportWidth(),
 
@@ -9936,17 +9936,17 @@ version: 2.8.0r4
 
                 yso = pos[1];
 
-    
+
 
             obj.animOut.attributes.points.to = [(vw + 25), yso];
 
         };
 
-        
+
 
         slide.handleTweenAnimateOut = function (type, args, obj) {
 
-    
+
 
             var pos = Dom.getXY(obj.overlay.element),
 
@@ -9954,7 +9954,7 @@ version: 2.8.0r4
 
                 yto = pos[1];
 
-        
+
 
             obj.overlay.cfg.setProperty("xy", [xto, yto], true);
 
@@ -9962,7 +9962,7 @@ version: 2.8.0r4
 
         };
 
-        
+
 
         slide.handleCompleteAnimateOut = function (type, args, obj) {
 
@@ -10006,31 +10006,31 @@ version: 2.8.0r4
 
             this.beforeAnimateInEvent.signature = CustomEvent.LIST;
 
-            
+
 
             this.beforeAnimateOutEvent = this.createEvent("beforeAnimateOut");
 
             this.beforeAnimateOutEvent.signature = CustomEvent.LIST;
 
-        
+
 
             this.animateInCompleteEvent = this.createEvent("animateInComplete");
 
             this.animateInCompleteEvent.signature = CustomEvent.LIST;
 
-        
 
-            this.animateOutCompleteEvent = 
+
+            this.animateOutCompleteEvent =
 
                 this.createEvent("animateOutComplete");
 
             this.animateOutCompleteEvent.signature = CustomEvent.LIST;
 
-        
 
-            this.animIn = new this.animClass(this.targetElement, 
 
-                this.attrIn.attributes, this.attrIn.duration, 
+            this.animIn = new this.animClass(this.targetElement,
+
+                this.attrIn.attributes, this.attrIn.duration,
 
                 this.attrIn.method);
 
@@ -10042,15 +10042,15 @@ version: 2.8.0r4
 
 
 
-            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn, 
+            this.animIn.onComplete.subscribe(this.handleCompleteAnimateIn,
 
                 this);
 
-        
 
-            this.animOut = new this.animClass(this.targetElement, 
 
-                this.attrOut.attributes, this.attrOut.duration, 
+            this.animOut = new this.animClass(this.targetElement,
+
+                this.attrOut.attributes, this.attrOut.duration,
 
                 this.attrOut.method);
 
@@ -10060,7 +10060,7 @@ version: 2.8.0r4
 
             this.animOut.onTween.subscribe(this.handleTweenAnimateOut, this);
 
-            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut, 
+            this.animOut.onComplete.subscribe(this.handleCompleteAnimateOut,
 
                 this);
 
@@ -10068,7 +10068,7 @@ version: 2.8.0r4
 
         },
 
-        
+
 
         /**
 
@@ -10212,7 +10212,7 @@ version: 2.8.0r4
 
         handleCompleteAnimateOut: function (type, args, obj) { },
 
-        
+
 
         /**
 
@@ -10249,4 +10249,3 @@ version: 2.8.0r4
 })();
 
 YAHOO.register("containercore", YAHOO.widget.Module, {version: "2.8.0r4", build: "2449"});
-

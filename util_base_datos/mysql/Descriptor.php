@@ -1,41 +1,39 @@
-<?php include("../../apoyo.php"); ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php require_once "../../includes/loader.php"; ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Descriptor de Bases de Datos</title>
-</head>
-
-<body>
-<?php
-$tbls=CTabla("codigos_generales");
-if($regs_tablas=$tbls->query("show tables"));
-{
-	?>
-	<table border="1" cellpadding="0" cellspacing="0" align="left">
-	<?php
-	while($tabla=$tbls->registro($regs_tablas))
-	{
-		?>
-		<tr><td><table border="0" align="left"><tr><td align="left" colspan="2"><strong><?php echo $tabla["Tables_in_".BD_BD]; ?></strong></td></tr><tr style="font-size:small;"><th>Campo</th><th>Tipo</th></tr>
-			<?php
-			if($regs_fields=$tbls->query("describe ".$tabla["Tables_in_".BD_BD]))
-			{
-				while($reg=$tbls->registro($regs_fields))
-				{
-					?>
-					<tr style="font-size:small;"><td><?php echo $reg["Field"]; ?></td><td><?php echo $reg["Type"]; ?></td></tr>
-					<?php
-				}
-			}
-			?>
-		</table>
-		</td></tr><tr><td>&nbsp;</td></tr>
-		<?php
-	}
-	?>
-	</table>
-	<?php
-}
-?>
-</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <title>Descriptor de Bases de Datos</title>
+        <style type="text/css">
+            p.table-title {
+                font-weight: bold;
+                font-size: 1em;
+            }
+            table.tbl-campos {
+                border-collapse: collapse;
+                border: 1px solid silver;
+            }
+            table.tbl-campos td {
+                padding: 5px;
+                border: 1px solid silver;
+                font-size: 0.75em;
+            }
+            table.tbl-campos thead td, table.tbl-campos tfoot td {
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+        </style>
+    </head>
+    <body>
+        <?php
+        $descriptor = new DB_Descriptor(
+            MAIN_DB->host, MAIN_DB->usr, MAIN_DB->pass, MAIN_DB->bd);
+        foreach($descriptor->tables() as $tabla) {
+            $campos = $descriptor->describe($tabla);
+            echo HTML_Helper::tag("p", array("class"=>"table-title"), $tabla);
+            echo HTML_Table::table(
+                $campos, array("class"=>"tbl-campos"));
+        }
+        ?>
+    </body>
 </html>

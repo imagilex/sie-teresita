@@ -6,19 +6,19 @@ include "apoyo.php";
 
 include_once("u_db/data_base.php");
 
-$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
+$db=new data_base(MAIN_DB->usr, MAIN_DB->host, MAIN_DB->pass, MAIN_DB->bd);
 
 include_once("u_mapa/mapa.php");
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]))
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
 ?>
@@ -63,20 +63,20 @@ if(!isset($_SESSION["tipo"]))
 //B_reportes();
 BH_Ayuda('','');
 
-$id_mapa=PostString("id_mapa").Get("id_mapa");
-$docto=PostString("docto").Get("docto");
+$id_mapa = Get_Vars_Helper::getPostVar("id_mapa");
+$docto = Get_Vars_Helper::getPostVar("docto");
 
 $superiores= array();
 $inferiores="";
 
-if($regs=consulta_directa($Con, "select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
+if($regs=consulta_directa("select id_mapa, nombre from mapa inner join mapa_submapa on id_mapa = mapa_hijo and mapa_padre='$id_mapa' order by posicion, nombre"))
 {
-	$inferiores='<optgroup label="Inferior">';
-	while($reg=mysqli_fetch_array($regs))
-	{
-		$inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
-	}
-	$inferiores.='</optgroup>';
+    $inferiores='<optgroup label="Inferior">';
+    while($reg=mysqli_fetch_array($regs))
+    {
+        $inferiores.='<option value="'.$reg["id_mapa"].'">'.$reg["nombre"].'</option>';
+    }
+    $inferiores.='</optgroup>';
 }
 
 ?>
@@ -93,8 +93,3 @@ $cont->print_mapa("mapas.php?",'950px','760px',$docto);
 </td></tr></table>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

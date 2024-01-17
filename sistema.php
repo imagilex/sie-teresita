@@ -6,33 +6,33 @@ include "apoyo.php";
 
 $Con=Conectar();
 
-//	$_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
-//	$_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
+//    $_SESSION["tipo"]=0 --> Usuario tipo ADMINISTRADOR
+//    $_SESSION["tipo"]=1 --> Usuario tipo CONSULTA
 
 if(!isset($_SESSION["tipo"]))
 {
-	header("location: index.php?noCache=".rand(0,32000));
-	exit();
+    header("location: index.php?noCache=".rand(0,32000));
+    exit();
 }
 
-$seccion=PostString("seccion");
+$seccion = Get_Vars_Helper::getPostVar("seccion");
 if($seccion!="")
 {
-	if($seccion=="1")
-	{
-		header("location: seguridad.php");
-		exit();
-	}
-	else if($seccion=="2")
-	{
-		header("location: codigos_generales.php");
-		exit();
-	}
-	else if($seccion=="3")
-	{
-		header("location: configuracion_basica.php");
-		exit();
-	}
+    if($seccion=="1")
+    {
+        header("location: seguridad.php");
+        exit();
+    }
+    else if($seccion=="2")
+    {
+        header("location: codigos_generales.php");
+        exit();
+    }
+    else if($seccion=="3")
+    {
+        header("location: configuracion_basica.php");
+        exit();
+    }
 }
 
 ?>
@@ -77,20 +77,15 @@ if($seccion!="")
 //B_reportes();
 ?>
 <div align="right">
-	<form action="sistema.php" method="post" name="sist">
-		Secci&oacute;n:
-		<select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
-			<?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
-		</select>
-	</form>
+    <form action="sistema.php" method="post" name="sist">
+        Secci&oacute;n:
+        <select name="seccion" onchange="javascript: document.sist.submit();"><option value=""></option>
+            <?php menu_items($_SESSION["tipo"],'0.4.51'); ?>
+        </select>
+    </form>
 </div>
 <?php
 BH_Ayuda('0.4','51');
 ?>
 </body>
 </html>
-<?php
-
-mysqli_close($Con);
-
-?>

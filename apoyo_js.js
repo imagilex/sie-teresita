@@ -2,25 +2,25 @@ function Navegador()
 
 {
 
-	var IE=document.all != undefined;
+    var IE=document.all != undefined;
 
-	var OPERA = window.opera != undefined;
+    var OPERA = window.opera != undefined;
 
-	if(OPERA) return "OPERA";
+    if(OPERA) return "OPERA";
 
-	if(IE) return "IE";
+    if(IE) return "IE";
 
-	if((window)&&(window.netscape)&&(window.netscape.security))
+    if((window)&&(window.netscape)&&(window.netscape.security))
 
-	{
+    {
 
-		if(window.XML){return "FIREFOX15";}
+        if(window.XML){return "FIREFOX15";}
 
-		else return "FIREFOX10";
+        else return "FIREFOX10";
 
-	}
+    }
 
-	return "OTRO";
+    return "OTRO";
 
 }
 
@@ -28,69 +28,69 @@ function Validar_Email(Cadena)
 
 {
 
-	var Punto = Cadena.substring(Cadena.lastIndexOf('.') + 1, Cadena.length);
+    var Punto = Cadena.substring(Cadena.lastIndexOf('.') + 1, Cadena.length);
 
     var Dominio = Cadena.substring(Cadena.lastIndexOf('@') + 1, Cadena.lastIndexOf('.'));
 
-   	var Usuario = Cadena.substring(0, Cadena.lastIndexOf('@'));
+       var Usuario = Cadena.substring(0, Cadena.lastIndexOf('@'));
 
     var Reserv = "@/º\"\'+*{}\\<>?¿[]áéíóú#·¡!^*;,:";
 
-   	var valido = true;
+       var valido = true;
 
-	//Punto no debe tener caracteres especiales
+    //Punto no debe tener caracteres especiales
 
-    for (var Cont=0; Cont<Punto.length; Cont++) 
+    for (var Cont=0; Cont<Punto.length; Cont++)
 
-	{  
+    {
 
-       	X = Punto.substring(Cont,Cont+1);
+           X = Punto.substring(Cont,Cont+1);
 
-       	if (Reserv.indexOf(X)!=-1)  
+           if (Reserv.indexOf(X)!=-1)
 
-           	valido = false;
+               valido = false;
 
-   	}
+       }
 
-	//Dominio no debe tener caracteres especiales
+    //Dominio no debe tener caracteres especiales
 
-    for (var Cont=0; Cont<Dominio.length; Cont++) 
+    for (var Cont=0; Cont<Dominio.length; Cont++)
 
-	{  
+    {
 
-       	X = Dominio.substring(Cont,Cont+1);
+           X = Dominio.substring(Cont,Cont+1);
 
-       	if (Reserv.indexOf(X)!=-1)  
+           if (Reserv.indexOf(X)!=-1)
 
-           	valido = false;
+               valido = false;
 
-   	}
+       }
 
-	//Usuario no debe tener caracteres especiales
+    //Usuario no debe tener caracteres especiales
 
-    for (var Cont=0; Cont<Usuario.length; Cont++) 
+    for (var Cont=0; Cont<Usuario.length; Cont++)
 
-	{  
+    {
 
-       	X = Usuario.substring(Cont,Cont+1);
+           X = Usuario.substring(Cont,Cont+1);
 
-       	if (Reserv.indexOf(X)!=-1)  
+           if (Reserv.indexOf(X)!=-1)
 
-           	valido = false;
+               valido = false;
 
-   	}
+       }
 
-	//Verificacion de sintaxis básica
+    //Verificacion de sintaxis básica
 
-   	if (Punto.length<2 || Dominio.length <1 || Cadena.lastIndexOf('.')<0 || Cadena.lastIndexOf('@')<0 || Usuario.length<1) 
+       if (Punto.length<2 || Dominio.length <1 || Cadena.lastIndexOf('.')<0 || Cadena.lastIndexOf('@')<0 || Usuario.length<1)
 
-	{
+    {
 
-       	valido = false;
+           valido = false;
 
-   	} 
+       }
 
-   	return valido;
+       return valido;
 
 }
 
@@ -100,9 +100,9 @@ function DownloadFile(arch_name,edicion)
 
 //alert (edicion);
 
-	if(edicion=="BI")
+    if(edicion=="BI")
 
-	{
+    {
 
 /*if(confirm("El documento esta diponible para editarse\nDesea hacerlo?"))
 
@@ -132,7 +132,7 @@ if(confirm("El documento solo esta disponible para consulta"))
 
 window.open('download.php?archivo='+arch_name+"&save=false");*/
 
-		CargaArchger(arch_name)
+        CargaArchger(arch_name)
 
 }
 
@@ -146,7 +146,7 @@ if(confirm("El documento solo esta disponible para consulta"))
 
 window.open('download.php?archivo='+arch_name+"&save=false");*/
 
-		CargaArchgerF(arch_name)
+        CargaArchgerF(arch_name)
 
 }
 
@@ -166,36 +166,36 @@ function DownloadFile_ger(arch_name,edicion,file)
 
 {
 
-	if(edicion=="true")
+    if(edicion=="true")
 
-	{
+    {
 
-	files=file;
+    files=file;
 
-	//alert(files);
+    //alert(files);
 
-	lolo= CargaArch(arch_name,files);
+    lolo= CargaArch(arch_name,files);
 
-	//	if(confirm("El documento esta diponible para editarse\nDesea hacerlo?"))
+    //    if(confirm("El documento esta diponible para editarse\nDesea hacerlo?"))
 
-	//		window.open('download.php?archivo='+arch_name+"&save=true");
+    //        window.open('download.php?archivo='+arch_name+"&save=true");
 
-	//	else
+    //    else
 
-	//		window.open('download.php?archivo='+arch_name+"&save=false");
+    //        window.open('download.php?archivo='+arch_name+"&save=false");
 
-	}
+    }
 
-	else
+    else
 
-	{
+    {
 
-		//if(confirm("El documento solo esta disponible para consulta"))
+        //if(confirm("El documento solo esta disponible para consulta"))
 
-		//	window.open('download.php?archivo='+arch_name+"&save=false");
+        //    window.open('download.php?archivo='+arch_name+"&save=false");
 
-		CargaArchger(arch_name)
+        CargaArchger(arch_name)
 
-	}
+    }
 
 }

@@ -1,30 +1,30 @@
 <?php
 include("../apoyo.php");
 
-/*echo "<br />accion = ".($accion=PostString("accion").Get("accion"));
-echo "<br />url_retorno = ".($url_retorno=PostString("url_retorno").Get("url_retorno"));
-echo "<br />carpeta = ".($carpeta=PostString("carpeta").Get("carpeta"));
-echo "<br />ruta = ".($ruta=PostString("ruta").Get("ruta"));*/
-$accion=PostString("accion").Get("accion");
-$url_retorno=PostString("url_retorno").Get("url_retorno");
-$carpeta=PostString("carpeta").Get("carpeta");
-$ruta=PostString("ruta").Get("ruta");
+/*echo "<br />accion = ".($accion = Get_Vars_Helper::getPGVar("accion"));
+echo "<br />url_retorno = ".($url_retorno = Get_Vars_Helper::getPGVar("url_retorno"));
+echo "<br />carpeta = ".($carpeta = Get_Vars_Helper::getPGVar("carpeta"));
+echo "<br />ruta = ".($ruta = Get_Vars_Helper::getPGVar("ruta"));*/
+$accion = Get_Vars_Helper::getPGVar("accion");
+$url_retorno = Get_Vars_Helper::getPGVar("url_retorno");
+$carpeta = Get_Vars_Helper::getPGVar("carpeta");
+$ruta = Get_Vars_Helper::getPGVar("ruta");
 
 if($accion!="")
 {
-	if($accion=='crea_carpteta' && $carpeta!="" && $ruta!="")
-	{
-		mkdir($ruta."/".$carpeta);
-		$new_ruta=$ruta."/".$carpeta;
-	}
-	else if($accion=="carga_archivo")
-	{
-		if(isset($_FILES["archivo"]["name"]) && $_FILES["archivo"]["name"]!="")
-		{
-			move_uploaded_file($_FILES["archivo"]["tmp_name"],$ruta."/".basename($_FILES["archivo"]["name"]));
-		}
-		$new_ruta=$ruta;
-	}
+    if($accion=='crea_carpteta' && $carpeta!="" && $ruta!="")
+    {
+        mkdir($ruta."/".$carpeta);
+        $new_ruta=$ruta."/".$carpeta;
+    }
+    else if($accion=="carga_archivo")
+    {
+        if(isset($_FILES["archivo"]["name"]) && $_FILES["archivo"]["name"]!="")
+        {
+            move_uploaded_file($_FILES["archivo"]["tmp_name"],$ruta."/".basename($_FILES["archivo"]["name"]));
+        }
+        $new_ruta=$ruta;
+    }
 }
 header("location: ".$_SERVER['HTTP_REFERER']."&ruta_expl=$new_ruta");
 ?>

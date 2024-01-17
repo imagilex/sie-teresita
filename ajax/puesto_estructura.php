@@ -9,9 +9,9 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
+$db=new data_base(MAIN_DB->usr, MAIN_DB->host, MAIN_DB->pass, MAIN_DB->bd);
 
-$dato=PostString("pto").Get("pto");
+$dato = Get_Vars_Helper::getPGVar("pto");
 
 if($dato=="") exit();
 
@@ -22,22 +22,22 @@ $query="select descripcion from puesto where clave in (select puesto_hijo from o
 $subditos=$db->consulta($query);
 ?>
 <table align="center" border="0">
-	<tr><td colspan="2">&nbsp;</td></tr>
-	<tr>
-	  <th align="right" style="padding-right:20px;">Reporta a: </th>
-	  <td valign="middle" align="center"><?php echo htmlentities($jefe["descripcion"]); ?></td></tr>
-	<tr><th align="right" style="padding-right:20px;">Puesto: </th><td valign="middle" align="center">
-		<img src="Imagenes/up.png" border="0" /><br />&nbsp;<br />
-		<font size="+2"><a href="organigrama_puesto.php?pto=<?php echo $dato; ?>" title="Descriptivo de Puesto"><?php echo htmlentities($pto["descripcion"]); ?></a></font><br />&nbsp;<br />
-		<?php
-		if($subditos->num_rows > 0) echo '<img src="Imagenes/down.png" border="0" />';
-		?>
-	</td></tr><?php
-	if($subditos->num_rows > 0)
-	{
-	?>
-	<tr><th align="right" style="padding-right:20px;">Le reportan: </th><td valign="middle" align="center"><?php while($subdito=mysqli_fetch_array($subditos)) echo htmlentities($subdito["descripcion"])."<br />" ?></td></tr>
-	<?php
-	}
-	?>
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+      <th align="right" style="padding-right:20px;">Reporta a: </th>
+      <td valign="middle" align="center"><?php echo htmlentities($jefe["descripcion"]); ?></td></tr>
+    <tr><th align="right" style="padding-right:20px;">Puesto: </th><td valign="middle" align="center">
+        <img src="Imagenes/up.png" border="0" /><br />&nbsp;<br />
+        <font size="+2"><a href="organigrama_puesto.php?pto=<?php echo $dato; ?>" title="Descriptivo de Puesto"><?php echo htmlentities($pto["descripcion"]); ?></a></font><br />&nbsp;<br />
+        <?php
+        if($subditos->num_rows > 0) echo '<img src="Imagenes/down.png" border="0" />';
+        ?>
+    </td></tr><?php
+    if($subditos->num_rows > 0)
+    {
+    ?>
+    <tr><th align="right" style="padding-right:20px;">Le reportan: </th><td valign="middle" align="center"><?php while($subdito=mysqli_fetch_array($subditos)) echo htmlentities($subdito["descripcion"])."<br />" ?></td></tr>
+    <?php
+    }
+    ?>
 </table>

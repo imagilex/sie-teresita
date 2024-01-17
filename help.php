@@ -3,10 +3,10 @@ include("apoyo.php");
 $Con=Conectar();
 
 $title="";
-if(Get("file")!="")
+if(Get_Vars_Helper::getGetVar("file")!="")
 {
-	$titul=@mysqli_fetch_array(consulta_directa($Con, "select descripcion from ayuda where archivo='".Get("file")."'"));
-	if($titul["descripcion"]!="") $title=$titul["descripcion"];
+    $titul=@mysqli_fetch_array(consulta_directa("select descripcion from ayuda where archivo='".Get_Vars_Helper::getGetVar("file")."'"));
+    if($titul["descripcion"]!="") $title=$titul["descripcion"];
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -22,38 +22,35 @@ if(Get("file")!="")
 
 BarraHerramientas();
 
-if(Get("file")!="")
+if(Get_Vars_Helper::getGetVar("file")!="")
 {
-	?>
-	<table border="0" width="65%" align="center"><tr><td><?php
+    ?>
+    <table border="0" width="65%" align="center"><tr><td><?php
 
-	$archivo=Get("file");
+    $archivo = Get_Vars_Helper::getGetVar("file");
 
-	$info=pathinfo($Dir."/Ayuda/".$archivo);
+    $info = pathinfo($Dir."/Ayuda/".$archivo);
 
 
-	if(strtoupper($info["extension"])=="TXT")
-	{
-		MostrarArchivo($Dir."/Ayuda/".$archivo);
-	}
-	else if(strtoupper($info["extension"])=="JPG" || strtoupper($info["extension"])=="PNG" || strtoupper($info["extension"])=="BMP" || strtoupper($info["extension"])=="GIF")
-	{
-		?>
-		<img src="Ayuda/<?php echo $archivo; ?>" border="0" />
-		<?php
-	}
-	else
-	{
-		echo "NO SE RECONOCE EL TIPO DE ARCHIVO";
-	}
+    if(strtoupper($info["extension"])=="TXT")
+    {
+        MostrarArchivo($Dir."/Ayuda/".$archivo);
+    }
+    else if(strtoupper($info["extension"])=="JPG" || strtoupper($info["extension"])=="PNG" || strtoupper($info["extension"])=="BMP" || strtoupper($info["extension"])=="GIF")
+    {
+        ?>
+        <img src="Ayuda/<?php echo $archivo; ?>" border="0" />
+        <?php
+    }
+    else
+    {
+        echo "NO SE RECONOCE EL TIPO DE ARCHIVO";
+    }
 
-	?></td></tr></table>
-	<?php
+    ?></td></tr></table>
+    <?php
 }
 
 ?>
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

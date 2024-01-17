@@ -8,16 +8,16 @@ if(isset($_SESSION["id_persona_usr"])) unset($_SESSION["id_persona_usr"]);
 
 include "apoyo.php";
 
-$ira=PostString("ira").Get("ira");;
+$ira = Get_Vars_Helper::getPGVar("ira");;
 
 $Con=Conectar();
 
 
-if($regs=consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
-	{
-		$registro=$regs->fetch_array();
-		$principal=$registro["valor"];
-	}
+if($regs=consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Principal'"))
+    {
+        $registro=$regs->fetch_array();
+        $principal=$registro["valor"];
+    }
 
 ?>
 
@@ -36,34 +36,34 @@ if($regs=consulta_directa($Con, "select valor from seccion where id_seccion='Pri
 <script language="javascript" src="apoyo_js.js"></script>
 <script language="javascript" src="prototype.js"></script>
 <script language="javascript">
-	function Validar()
-	{
-		if(document.frmInicio.usr.value!="" && document.frmInicio.pass.value!="") return true;
-		else
-		{
-			if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseña");
-			else if(document.frmInicio.usr.value=="") alert("Ingresa tu usuario");
-			else if(document.frmInicio.pass.value=="") alert("Ingresa tu password");
-			return false;
-		}
-	}
+    function Validar()
+    {
+        if(document.frmInicio.usr.value!="" && document.frmInicio.pass.value!="") return true;
+        else
+        {
+            if(document.frmInicio.usr.value=="" && document.frmInicio.pass.value=="") alert("Ingresa tu usuario y contraseña");
+            else if(document.frmInicio.usr.value=="") alert("Ingresa tu usuario");
+            else if(document.frmInicio.pass.value=="") alert("Ingresa tu password");
+            return false;
+        }
+    }
 </script>
 <style type="text/css">
 <!--
 a:link {
-	text-decoration: none;
+    text-decoration: none;
 }
 a:visited {
-	text-decoration: none;
-	color: #999;
+    text-decoration: none;
+    color: #999;
 }
 a:hover {
-	text-decoration: none;
-	color: #999;
+    text-decoration: none;
+    color: #999;
 }
 a:active {
-	text-decoration: none;
-	color: #999;
+    text-decoration: none;
+    color: #999;
 }
 -->
 </style>
@@ -96,160 +96,160 @@ fullscreen = window.open(pagina, "fullscreen", 'top=0,left=0,width='+(screen.ava
 
 if($ira=="1") //quienes somos
 {
-	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
-	?>
-	<table border="0" align="center" width="65%">
-		<tr>
-			<td height="50">&nbsp;</td>
-		</tr>
-		<tr>
-			<td>
-				<h2 align="center"><?php echo $titulo["valor"]; ?></h2>
-				<?php
-				MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
-				?>
-			</td>
-		</tr>
-	</table>
-	<?php
+    $titulo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='texto'"));
+    ?>
+    <table border="0" align="center" width="65%">
+        <tr>
+            <td height="50">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <h2 align="center"><?php echo $titulo["valor"]; ?></h2>
+                <?php
+                MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
+                ?>
+            </td>
+        </tr>
+    </table>
+    <?php
 }
 else if($ira=="2") // nuestros productos
 {
-	$titulo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
-	$imagen=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
-	?>
-	<script language="javascript">
-		//location.href="catalogos_01.php?lista=1&noCache="+parseInt(Math.random()*1000);
-		location.href="productos/index.php";
-	</script>
-	<table border="0" align="center" width="70%">
-		<tr>
-			<td height="50" colspan="2">&nbsp;</td>
-		</tr>
-		<tr>
-			<td valign="top">
-				<h2><?php echo $titulo["valor"]; ?></h2>
-				<?php
-				MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
-				?>
-				<p align="right"><a href="catalogos_01.php?lista=1" target="_parent">Ver Catalogo</a></p>
-			</td>
-			<td valign="middle" align="center" width="50%">
-				<img src="Archivos_Secciones/<?php echo $imagen["valor"]; ?>"  />
-			</td>
-		</tr>
-	</table>
-	<?php
+    $titulo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='titulo'"));
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='texto'"));
+    $imagen=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='nuestros_productos' and elemento='imagen'"));
+    ?>
+    <script language="javascript">
+        //location.href="catalogos_01.php?lista=1&noCache="+parseInt(Math.random()*1000);
+        location.href="productos/index.php";
+    </script>
+    <table border="0" align="center" width="70%">
+        <tr>
+            <td height="50" colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <h2><?php echo $titulo["valor"]; ?></h2>
+                <?php
+                MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
+                ?>
+                <p align="right"><a href="catalogos_01.php?lista=1" target="_parent">Ver Catalogo</a></p>
+            </td>
+            <td valign="middle" align="center" width="50%">
+                <img src="Archivos_Secciones/<?php echo $imagen["valor"]; ?>"  />
+            </td>
+        </tr>
+    </table>
+    <?php
 }
 else if($ira=="3") // contactenos
 {
-	$archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
-	?>
+    $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+    ?>
   <table border="0" align="center" width="65%">
-		<tr>
-			<td height="75">&nbsp;
+        <tr>
+            <td height="75">&nbsp;
 
-			</td>
-		</tr>
-		<tr>
-			<td align="center">
-				<?php
-				MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
-				?>
-				<br />
-				<a href="mailto:info@manaiz.com"><font color="#990099">info@manaiz.com</font></a>
-			</td>
-		</tr>
-	</table>
-	<?php
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <?php
+                MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
+                ?>
+                <br />
+                <a href="mailto:info@manaiz.com"><font color="#990099">info@manaiz.com</font></a>
+            </td>
+        </tr>
+    </table>
+    <?php
 }
 else
 {
-	$txt1=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
-	$txt2=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
-	?>
+    $txt1=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Principal' and elemento='Slogan'"));
+    $txt2=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='Quienes_somos' and elemento='titulo'"));
+    ?>
 
 <?php
 echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.mx/site\";</SCRIPT>";
 ?>
-	<!--<table border="0" align="center" height="92.5%">
-		<tr>
-			<td height="75" align="center" valign="middle">
-				<h2><i><font color="#999999"><?php echo $txt1["valor"]; ?></font></i></h2>
-			</td>
-		</tr><tr>
-			<td height="50" align="center" valign="middle">
-				<img src="Archivos_Secciones/<?php echo $principal; ?>" />
-			</td>
-		</tr>
-		<tr>
-			<td height="15"><div>
-			  <div align="center">
-			    <p>&nbsp;</p>
-			    <p>Elasticintas Teresita S.A de C.V.</p>
-			  </div>
-			  <div></div>
-		    </div></td>
-		</tr>
-		<tr>
-			<td height="100" align="center" valign="middle">
-				<?php $archivo=mysqli_fetch_array(consulta_directa($Con, "select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
-	?>
-	<table border="0" align="center" width="100%">
-		<tr><td></td>
-		</tr>
-		<tr>
-			<td align="justify"><font color="#a6a6a6">
-				<?php
-				MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
-				?></font>
-				<br />
-				<a href="mailto:ventas@teresita.com.mx"><font color="#990099">ventas@teresita.com.mx</font></a>
-			</td>
-		</tr>
-	</table>
-			</td>
-		</tr>
-		<tr>
-			<td height="15"></td>
-		</tr>
-	</table>-->
-	<!--<table width="50%" align="center">
-		<tr>
-			<td>
-				<marquee style="font-size:medium; color:#666666; font-family:Verdana, Arial, Helvetica, sans-serif; font-style:italic"; scrolldelay="200">
-					Lentejuelas,
-					Galones de Lentejuela,
-					Galones de Tul,
-					Galones de Perla,
-					Elásticos,
-					Espiguilla,
-					Espiguilla Metálica,
-					Encaje de Bolillo,
-					Cintas,
-					Cintas Metálicas,
-					Cintas con Alambre,
-					Trenzas,
-					Trenzas Metálicas,
-					Mallas,
-					Mallas Metálicas,
-					Cordones Trenzados,
-					Cordones Torcidos,
-					Cordones Elásticos,
-					Cordones con Cenefa,
-					Cordones con Alambre,
-					Flecos,
-					Flecos de Cadeneta,
-					Fleco Torcido,
-					Soutache
-				</marquee>
-			</td>
-		</tr>
-	</table>
-	-->
-	<?php
+    <!--<table border="0" align="center" height="92.5%">
+        <tr>
+            <td height="75" align="center" valign="middle">
+                <h2><i><font color="#999999"><?php echo $txt1["valor"]; ?></font></i></h2>
+            </td>
+        </tr><tr>
+            <td height="50" align="center" valign="middle">
+                <img src="Archivos_Secciones/<?php echo $principal; ?>" />
+            </td>
+        </tr>
+        <tr>
+            <td height="15"><div>
+              <div align="center">
+                <p>&nbsp;</p>
+                <p>Elasticintas Teresita S.A de C.V.</p>
+              </div>
+              <div></div>
+            </div></td>
+        </tr>
+        <tr>
+            <td height="100" align="center" valign="middle">
+                <?php $archivo=mysqli_fetch_array(consulta_directa("select valor from seccion where id_seccion='contactenos' and elemento='texto'"));
+    ?>
+    <table border="0" align="center" width="100%">
+        <tr><td></td>
+        </tr>
+        <tr>
+            <td align="justify"><font color="#a6a6a6">
+                <?php
+                MostrarArchivo($Dir."/Archivos_Secciones/".$archivo["valor"]);
+                ?></font>
+                <br />
+                <a href="mailto:ventas@teresita.com.mx"><font color="#990099">ventas@teresita.com.mx</font></a>
+            </td>
+        </tr>
+    </table>
+            </td>
+        </tr>
+        <tr>
+            <td height="15"></td>
+        </tr>
+    </table>-->
+    <!--<table width="50%" align="center">
+        <tr>
+            <td>
+                <marquee style="font-size:medium; color:#666666; font-family:Verdana, Arial, Helvetica, sans-serif; font-style:italic"; scrolldelay="200">
+                    Lentejuelas,
+                    Galones de Lentejuela,
+                    Galones de Tul,
+                    Galones de Perla,
+                    Elásticos,
+                    Espiguilla,
+                    Espiguilla Metálica,
+                    Encaje de Bolillo,
+                    Cintas,
+                    Cintas Metálicas,
+                    Cintas con Alambre,
+                    Trenzas,
+                    Trenzas Metálicas,
+                    Mallas,
+                    Mallas Metálicas,
+                    Cordones Trenzados,
+                    Cordones Torcidos,
+                    Cordones Elásticos,
+                    Cordones con Cenefa,
+                    Cordones con Alambre,
+                    Flecos,
+                    Flecos de Cadeneta,
+                    Fleco Torcido,
+                    Soutache
+                </marquee>
+            </td>
+        </tr>
+    </table>
+    -->
+    <?php
 }
 
 ?>
@@ -274,6 +274,3 @@ echo"<SCRIPT LANGUAGE=\"javascript\">location.href = \"http://www.teresita.com.m
 <!--Finaliza piede página-->
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

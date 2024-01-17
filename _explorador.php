@@ -9,55 +9,55 @@ header("Cache-Control: post-check=0, pre-check=0",false);
 header("Pragma: no-cache");
 include("apoyo.php");
 $Con=Conectar();
-$raiz=PostString("raiz").Get("raiz");
-$proyecto=PostString("proyecto").Get("proyecto");
-$ruta_expl=PostString("ruta_expl").Get("ruta_expl");
+$raiz = Get_Vars_Helper::getPGVar("raiz");
+$proyecto = Get_Vars_Helper::getPGVar("proyecto");
+$ruta_expl = Get_Vars_Helper::getPGVar("ruta_expl");
 if($ruta_expl!="")
 {
-	$pos=strpos($ruta_expl,"Archivos_Planes");
-	if($pos!==false)
-		$ruta_expl=substr($ruta_expl,$pos);
+    $pos=strpos($ruta_expl,"Archivos_Planes");
+    if($pos!==false)
+        $ruta_expl=substr($ruta_expl,$pos);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                PARTE DE UPLOAD
 
-$accion=PostString("accion");
+$accion = Get_Vars_Helper::getPostVar("accion");
 if($accion!="")
 {
-	if($accion=="add_files")
-	{
+    if($accion=="add_files")
+    {
 
-		$archivos=PostString("archivo");
-		$arch=$archivos;
-		if($archivos!="")
-		{
+        $archivos = Get_Vars_Helper::getPostVar("archivo");
+        $arch=$archivos;
+        if($archivos!="")
+        {
 
-			/*foreach($archivos as $arch			{)*/
+            /*foreach($archivos as $arch            {)*/
 
-			//echo "file: ".$arch."<br>";
-				//$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				$arch_upl="file";
-				//echo "kk ".$arch_upl;
-				$arch_upl2=str_replace("-","_",str_replace(".",".",str_replace(" ","_",$arch)));
-				//echo "kke ".$arch_upl2;
-			//echo "<br>";
+            //echo "file: ".$arch."<br>";
+                //$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
+                $arch_upl="file";
+                //echo "kk ".$arch_upl;
+                $arch_upl2=str_replace("-","_",str_replace(".",".",str_replace(" ","_",$arch)));
+                //echo "kke ".$arch_upl2;
+            //echo "<br>";
 
-			//echo $_FILES[$arch_upl]["name"];
-				if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
-				{
-					$datos=@mysqli_fetch_array(consulta_directa($Con, "select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
-					$noarchivo=$datos["archivo"];
-			//		echo "original= ".  $noarchivo."<br>";
-			//		echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
-					if ($noarchivo == basename( $_FILES[$arch_upl]['name']))
-					{
-					$original=str_replace("\\","/",$Dir)."/".$datos["ruta"];
+            //echo $_FILES[$arch_upl]["name"];
+                if(isset($_FILES[$arch_upl]["name"]) && $_FILES[$arch_upl]["name"]!="")
+                {
+                    $datos=@mysqli_fetch_array(consulta_directa("select ruta,archivo from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'"));
+                    $noarchivo=$datos["archivo"];
+            //        echo "original= ".  $noarchivo."<br>";
+            //        echo "noarchivo= ".  basename( $_FILES[$arch_upl]['name']);
+                    if ($noarchivo == basename( $_FILES[$arch_upl]['name']))
+                    {
+                    $original=str_replace("\\","/",$Dir)."/".$datos["ruta"];
 
-					$Pnewfile = explode("/",$datos["ruta"]);
-					$PVdir=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/";
-		//			echo $original."<br>";
-		//			echo $PFnewfile."<br>";
-		  $arch0=sizeof($Pnewfile)-1;
+                    $Pnewfile = explode("/",$datos["ruta"]);
+                    $PVdir=$Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/";
+        //            echo $original."<br>";
+        //            echo $PFnewfile."<br>";
+          $arch0=sizeof($Pnewfile)-1;
           $fil=$Pnewfile[$arch0];
           $filexp=explode(".",$Pnewfile[$arch0]);
           $Filname=$filexp[0];
@@ -126,49 +126,49 @@ case 0:
     closedir($handle);
 }
 
-				//	$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Pnewfile[3];
-					$PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/". $archivoparacopiar;
+                //    $PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/".$Pnewfile[3];
+                    $PFnewfile= $Dir."/".$Pnewfile[0]."/".$Pnewfile[1]."/Versiones/". $archivoparacopiar;
 
 
 
 
-				//	if (!copy($original, $PFnewfile)) {
-					if (!copy($original, $archivoparacopiarNR)) {
+                //    if (!copy($original, $PFnewfile)) {
+                    if (!copy($original, $archivoparacopiarNR)) {
           echo "copia fallida $original";
           }
 //echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
 
-					if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
-					{
-					//echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
-						consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
-					}
-				}
-				else
-				{
-				$lolo="<script language=\"javascript\">alert('El archivo que esta publicando no coincide con el nombre o con el tipo de archivo');</script>";
-				}
-				}
-			else
-			{}
-		}
-		else
-		{
-		echo "nada";
-		}
-	}
-	else if($accion=="free_files")
-	{
-		$archivos=PostString("archivo");
-		if($archivos!="")
-		{
-			foreach($archivos as $arch)
-			{
-				$arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
-				consulta_directa($Con, "delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
-			}
-		}
-	}
+                    if(move_uploaded_file($_FILES[$arch_upl]["tmp_name"],str_replace("\\","/",$Dir)."/".$datos["ruta"]))
+                    {
+                    //echo str_replace("\\","/",$Dir)."/".$datos["ruta"];
+                        consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."' and ruta='".$datos["ruta"]."'");
+                    }
+                }
+                else
+                {
+                $lolo="<script language=\"javascript\">alert('El archivo que esta publicando no coincide con el nombre o con el tipo de archivo');</script>";
+                }
+                }
+            else
+            {}
+        }
+        else
+        {
+        echo "nada";
+        }
+    }
+    else if($accion=="free_files")
+    {
+        $archivos = Get_Vars_Helper::getPostVar("archivo");
+        if($archivos!="")
+        {
+            foreach($archivos as $arch)
+            {
+                $arch_upl=str_replace("-","_",str_replace(".","_",str_replace(" ","_",$arch)));
+                consulta_directa("delete from archivos where archivo='$arch' and usuario='".$_SESSION["id_usr"]."'");
+            }
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +218,7 @@ case "Definicion":
       $carpeta=$carpetaaa;
       $carpetaTi=$CarpetaR;
 }
-		$nombre_p=@mysqli_fetch_array(consulta_directa($Con, "select nombre from docto_general where id_documento='$proyecto'"));
+        $nombre_p=@mysqli_fetch_array(consulta_directa("select nombre from docto_general where id_documento='$proyecto'"));
 ?>
 var titulooriginal='<?php echo $carpeta ; ?>'
 var titulobacko='<?php echo $carpetaTi ; ?>'
@@ -240,208 +240,208 @@ document.getElementById('backtitle').innerHTML=titulobacko;
 }
 }
 function details2(directorio,nproy)
-	{
+    {
 
-	var Arr_Archivo = directorio.split("/");
+    var Arr_Archivo = directorio.split("/");
 
-	dir=directorio;
-	var bleer2= '<iframe  frameborder="0" ID="Frame1" style="height: 200px; width: 340px" SRC="Ldir.php?dir='+dir+'">';
-	var bleer3='</iframe>';
-	var bleer4 =bleer2 + bleer3;
-	YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
+    dir=directorio;
+    var bleer2= '<iframe  frameborder="0" ID="Frame1" style="height: 200px; width: 340px" SRC="Ldir.php?dir='+dir+'">';
+    var bleer3='</iframe>';
+    var bleer4 =bleer2 + bleer3;
+    YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
 YAHOO.example.container.panel1.setHeader(nproy+','+Arr_Archivo[7]);
 YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormCarpeta");
-		YAHOO.example.container.panel1.center();
-		YAHOO.example.container.panel1.show();
-	}
-	function NvaCap()
-	{
-	YAHOO.example.container.FormArchivo.hide();
-	YAHOO.example.container.FormArchivo.hide();
+        YAHOO.example.container.panel1.center();
+        YAHOO.example.container.panel1.show();
+    }
+    function NvaCap()
+    {
+    YAHOO.example.container.FormArchivo.hide();
+    YAHOO.example.container.FormArchivo.hide();
  YAHOO.example.container.panel1.hide();
- 	YAHOO.example.container.FormCarpeta.hide();
-		YAHOO.example.container.FormCarpeta.center();
-		YAHOO.example.container.FormCarpeta.show();
-	}
+     YAHOO.example.container.FormCarpeta.hide();
+        YAHOO.example.container.FormCarpeta.center();
+        YAHOO.example.container.FormCarpeta.show();
+    }
 
-	function Fnuevo()
-	{
-	//alert('1');
-		YAHOO.example.container.FormArchivo.hide();
-		//YAHOO.example.container.panel1.hide();
+    function Fnuevo()
+    {
+    //alert('1');
+        YAHOO.example.container.FormArchivo.hide();
+        //YAHOO.example.container.panel1.hide();
 
-			<?php
+            <?php
 if ($CarpetaR=="")
 {
 ?>
 var bleer4='<table style=\"width: 100%\"> <form id="form_arch" name="form_arch" method=\"post\"> <tr> <td style=\"width: 31px\"> <input name=\"lista\" type=\"radio\" checked style=\"width: 20px\" value=\"1\" onclick=\"javascript: CargaArch();\"/> </td> <td>Archivo</td> </tr> <tr> <td style=\"width: 31px\"><input name=\"lista\" type=\"radio\" style=\"width: 20px\" value=\"2\" onclick=\"javascript: NvaCap();\"/></td> <td> Carpeta</td> </tr> </form> </table>';
- 		<?php
- 		}
- 		else
- 		{
- 		?>
- 		var bleer4='<table style=\"width: 100%\"> <form id="form_arch" name="form_arch" method=\"post\"> <tr> <td style=\"width: 31px\"> <input name=\"lista\" type=\"radio\" checked style=\"width: 20px\" value=\"1\" onclick=\"javascript: CargaArch();\"/> </td> <td>Archivo</td> </tr></form> </table>';
+         <?php
+         }
+         else
+         {
+         ?>
+         var bleer4='<table style=\"width: 100%\"> <form id="form_arch" name="form_arch" method=\"post\"> <tr> <td style=\"width: 31px\"> <input name=\"lista\" type=\"radio\" checked style=\"width: 20px\" value=\"1\" onclick=\"javascript: CargaArch();\"/> </td> <td>Archivo</td> </tr></form> </table>';
 
 
- 		<?php
- 		}
- 		?>
+         <?php
+         }
+         ?>
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
 YAHOO.example.container.panel1.setHeader("Agregar");
 YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.show();
 YAHOO.example.container.panel1.center();
-	return false;
+    return false;
 }
 
 
-	function CargaArch()
-	{
-	YAHOO.example.container.FormArchivo.hide();
-	YAHOO.example.container.FormArchivo.hide();
+    function CargaArch()
+    {
+    YAHOO.example.container.FormArchivo.hide();
+    YAHOO.example.container.FormArchivo.hide();
  YAHOO.example.container.panel1.hide();
- 	YAHOO.example.container.FormCarpeta.hide();
-		YAHOO.example.container.FormArchivo.center();
-		YAHOO.example.container.FormArchivo.show();
-	}
-	function FACancel()
-	{
-		YAHOO.example.container.FormArchivo.hide();
-		return false;
-	}
-	//FormArchivo
-		function FACancel2()
-	{
-	//alert('lolo');
+     YAHOO.example.container.FormCarpeta.hide();
+        YAHOO.example.container.FormArchivo.center();
+        YAHOO.example.container.FormArchivo.show();
+    }
+    function FACancel()
+    {
+        YAHOO.example.container.FormArchivo.hide();
+        return false;
+    }
+    //FormArchivo
+        function FACancel2()
+    {
+    //alert('lolo');
 YAHOO.example.container.panel1.hide();
-	return false;
-	}
-			function FACancel2w()
-	{
-	YAHOO.example.container.FormArchivo.hide();
-	YAHOO.example.container.FormArchivo.hide();
+    return false;
+    }
+            function FACancel2w()
+    {
+    YAHOO.example.container.FormArchivo.hide();
+    YAHOO.example.container.FormArchivo.hide();
  YAHOO.example.container.panel1.hide();
- 	YAHOO.example.container.FormCarpeta.hide();
+     YAHOO.example.container.FormCarpeta.hide();
 return true;
-	}
-	function FCCancel()
-	{
-		YAHOO.example.container.FormCarpeta.hide();
-		return false;
-	}
-	function FAOk()
-	{
-		var x,inputs=$('dataArchivo').getElementsByTagName('input');
-		var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
-		var direccion="";
-		for(x=0;x<variables.length;x++)
-			if(variables[x].split('=')[0]=='ruta')
-				direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
-		$('ruta_ca').value=direccion;
-		for(x=0;x<inputs.length;x++)
-		{
-			if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
-			{
-				inputs[x].value=location.href;
-			}
-		}
-		//nosesese
-		$nosese=$('dataArchivo').action;
-		//alert($nosese);
-		$('dataArchivo').submit();
-		YAHOO.example.container.FormArchivo.hide();
-		return false;
-	}
-		function FAOk2()
-	{
-		var x,inputs=$('dataArchivo2').getElementsByTagName('input');
-		var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
-		var direccion="";
-		for(x=0;x<variables.length;x++)
-			if(variables[x].split('=')[0]=='ruta')
-				direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
-		$('ruta_ca').value=direccion;
-		for(x=0;x<inputs.length;x++)
-		{
-			if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
-			{
-				inputs[x].value=location.href;
-			}
-		}
-		//nosesese
-		$nosese=$('dataArchivo2').action;
-		//alert($nosese);
-		$('dataArchivo2').submit();
-		YAHOO.example.container.FormArchivo.hide();
-		return false;
-	}
-	function FCOk()
-	{
-		var x,inputs=$('dataCarpeta').getElementsByTagName('input');
-		var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
-		var direccion="";
-		for(x=0;x<variables.length;x++)
-			if(variables[x].split('=')[0]=='ruta')
-				direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
-		$('ruta_nc').value=direccion;
-		for(x=0;x<inputs.length;x++)
-		{
-			if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
-			{
-				inputs[x].value=location.href;
-			}
-		}
-		$('dataCarpeta').submit();
-		YAHOO.example.container.FormCarpeta.hide();
-		return false;
-	}
-	function FASubmit()
-	{
-		YAHOO.example.container.FormArchivo.hide();
-		return false;
-	}
-	function FCSubmit()
-	{
-		YAHOO.example.container.FormCarpeta.hide();
-		return false;
-	}
-	YAHOO.namespace("example.container");
-	YAHOO.util.Event.onDOMReady(function(){
-		YAHOO.example.container.FormCarpeta = new YAHOO.widget.Panel("FormCarpeta",{
-			width: "250px",
-			visible: false,
-			constraintoviewport: true,
-			draggable: true
-		});
-		YAHOO.example.container.FormCarpeta.render();
-	});
-	YAHOO.util.Event.onDOMReady(function(){
-		YAHOO.example.container.FormArchivo = new YAHOO.widget.Panel("FormArchivo",{
-			width: "300px",
-			visible: false,
-			constraintoviewport: true,
-			draggable: true
-		});
-		YAHOO.example.container.FormArchivo.render();
-	});
+    }
+    function FCCancel()
+    {
+        YAHOO.example.container.FormCarpeta.hide();
+        return false;
+    }
+    function FAOk()
+    {
+        var x,inputs=$('dataArchivo').getElementsByTagName('input');
+        var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
+        var direccion="";
+        for(x=0;x<variables.length;x++)
+            if(variables[x].split('=')[0]=='ruta')
+                direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
+        $('ruta_ca').value=direccion;
+        for(x=0;x<inputs.length;x++)
+        {
+            if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
+            {
+                inputs[x].value=location.href;
+            }
+        }
+        //nosesese
+        $nosese=$('dataArchivo').action;
+        //alert($nosese);
+        $('dataArchivo').submit();
+        YAHOO.example.container.FormArchivo.hide();
+        return false;
+    }
+        function FAOk2()
+    {
+        var x,inputs=$('dataArchivo2').getElementsByTagName('input');
+        var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
+        var direccion="";
+        for(x=0;x<variables.length;x++)
+            if(variables[x].split('=')[0]=='ruta')
+                direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
+        $('ruta_ca').value=direccion;
+        for(x=0;x<inputs.length;x++)
+        {
+            if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
+            {
+                inputs[x].value=location.href;
+            }
+        }
+        //nosesese
+        $nosese=$('dataArchivo2').action;
+        //alert($nosese);
+        $('dataArchivo2').submit();
+        YAHOO.example.container.FormArchivo.hide();
+        return false;
+    }
+    function FCOk()
+    {
+        var x,inputs=$('dataCarpeta').getElementsByTagName('input');
+        var variables=window.parent.frames["frame_archivos"].location.href.split("?")[1].split("&");
+        var direccion="";
+        for(x=0;x<variables.length;x++)
+            if(variables[x].split('=')[0]=='ruta')
+                direccion='<?php echo addslashes($Dir."/"); ?>'+variables[x].split('=')[1];
+        $('ruta_nc').value=direccion;
+        for(x=0;x<inputs.length;x++)
+        {
+            if(inputs[x].type=='hidden' && inputs[x].name=='url_retorno')
+            {
+                inputs[x].value=location.href;
+            }
+        }
+        $('dataCarpeta').submit();
+        YAHOO.example.container.FormCarpeta.hide();
+        return false;
+    }
+    function FASubmit()
+    {
+        YAHOO.example.container.FormArchivo.hide();
+        return false;
+    }
+    function FCSubmit()
+    {
+        YAHOO.example.container.FormCarpeta.hide();
+        return false;
+    }
+    YAHOO.namespace("example.container");
+    YAHOO.util.Event.onDOMReady(function(){
+        YAHOO.example.container.FormCarpeta = new YAHOO.widget.Panel("FormCarpeta",{
+            width: "250px",
+            visible: false,
+            constraintoviewport: true,
+            draggable: true
+        });
+        YAHOO.example.container.FormCarpeta.render();
+    });
+    YAHOO.util.Event.onDOMReady(function(){
+        YAHOO.example.container.FormArchivo = new YAHOO.widget.Panel("FormArchivo",{
+            width: "300px",
+            visible: false,
+            constraintoviewport: true,
+            draggable: true
+        });
+        YAHOO.example.container.FormArchivo.render();
+    });
 </script>
 <script language="javascript">
-	function ActivaFile(obj)
-	{
-		if($(obj).disabled) $(obj).disabled=false;
-		else $(obj).disabled = true;
-	}
+    function ActivaFile(obj)
+    {
+        if($(obj).disabled) $(obj).disabled=false;
+        else $(obj).disabled = true;
+    }
 
-	///////////////////////////////////////////////////////////////////////////////////////////
-	///                     activavfile
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    ///                     activavfile
 
 
 function Error_Mail(mensaje,titulo)
-	{
-	//alert('<?php echo $vista;?>');
-		YAHOO.example.container.FormArchivo.hide();
+    {
+    //alert('<?php echo $vista;?>');
+        YAHOO.example.container.FormArchivo.hide();
 var bleer4=mensaje;
 
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
@@ -450,13 +450,13 @@ YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
-	return false;
+    return false;
 }
 
 function Fleer(mensaje,titulo,ancho)
-	{
-	//alert('<?php echo $vista;?>');
-		YAHOO.example.container.FormArchivo.hide();
+    {
+    //alert('<?php echo $vista;?>');
+        YAHOO.example.container.FormArchivo.hide();
 var bleer4=mensaje;
 
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"150px", visible:false, draggable:true, close:true } );
@@ -465,13 +465,13 @@ YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
-	return false;
+    return false;
 }
 
 function FleerBO(mensaje,titulo,ancho)
-	{
-	//alert('<?php echo $vista;?>');
-		YAHOO.example.container.FormArchivo.hide();
+    {
+    //alert('<?php echo $vista;?>');
+        YAHOO.example.container.FormArchivo.hide();
 var bleer4=mensaje;
 
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:ancho, visible:false, draggable:true, close:true } );
@@ -480,7 +480,7 @@ YAHOO.example.container.panel1.setBody(bleer4);
 YAHOO.example.container.panel1.render("FormArchivo");
 YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
-	return false;
+    return false;
 }
 
 
@@ -490,9 +490,9 @@ YAHOO.example.container.panel1.hide();
 }
 
 function Error_Mail34(mensaje,titulo)
-	{
-	//alert('<?php echo $vista;?>');
-		YAHOO.example.container.FormArchivo.hide();
+    {
+    //alert('<?php echo $vista;?>');
+        YAHOO.example.container.FormArchivo.hide();
 var bleer4=mensaje;
 
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
@@ -503,40 +503,40 @@ YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
 }
 
-	function ActivaVFile(obj)
-	{
-	//alert(obj);
-	/*
-	var casa=0;
-	var lolo=getElementsById(obj);
-		if($(obj).disabled)
-		{
-		 $(obj).disabled = true;
-		$(obj).style.visibility="hidden";
+    function ActivaVFile(obj)
+    {
+    //alert(obj);
+    /*
+    var casa=0;
+    var lolo=getElementsById(obj);
+        if($(obj).disabled)
+        {
+         $(obj).disabled = true;
+        $(obj).style.visibility="hidden";
 YAHOO.example.container.FormArchivo.hide();
 YAHOO.example.container.panel1.hide();
-		}
-		else
-		{
-		var casa= casa+1;
-		//alert(casa);
-		//alert("lalala");
-		$(obj).disabled=false;
-		$(obj).style.visibility="visible";
+        }
+        else
+        {
+        var casa= casa+1;
+        //alert(casa);
+        //alert("lalala");
+        $(obj).disabled=false;
+        $(obj).style.visibility="visible";
 
-		*/
+        */
 
-		//'<form id="dataArchivo2" action="upload.php" method="post" <!--onsubmit="return FASubmit()"--> enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="text" name="archivo" id="archivo" value="<?php echo $Dir."/".$raiz; ?>" /> <input type="hidden" name="url_retorno" id="url_retorno" value="" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="archivo" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>'
+        //'<form id="dataArchivo2" action="upload.php" method="post" <!--onsubmit="return FASubmit()"--> enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="text" name="archivo" id="archivo" value="<?php echo $Dir."/".$raiz; ?>" /> <input type="hidden" name="url_retorno" id="url_retorno" value="" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="archivo" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>'
 
-					//alert('ahora publica');
+                    //alert('ahora publica');
 
-		YAHOO.example.container.FormArchivo.hide();
-		parent.YAHOO.example.container.FormCarpeta.hide();
-			//YAHOO.example.container.panel1.hide();
+        YAHOO.example.container.FormArchivo.hide();
+        parent.YAHOO.example.container.FormCarpeta.hide();
+            //YAHOO.example.container.panel1.hide();
 
-		//var bleer4='<form id="dataArchivo2" action="upload.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>';
-		var bleer4='<form id="dataArchivo2"  method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel2w()" /></td></tr> </table> </form>';
-		//			alert(bleer4);
+        //var bleer4='<form id="dataArchivo2" action="upload.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk()" /> <input type="button" value="Cancelar" onclick="FACancel()" /></td></tr> </table> </form>';
+        var bleer4='<form id="dataArchivo2"  method="post" onsubmit="return FASubmit()" enctype="multipart/form-data"> <input type="hidden" name="accion" id="accion" value="add_files" /> <input type="hidden" name="archivo" id="archivo" value="'+obj+'" /> <table align="center"> <tr><td align="left">Archivo: </td></tr> <tr><td align="center"><input type="file" maxlength="250" size="30" name="file" id="file" /></td></tr> <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk2()" /> <input type="button" value="Cancelar" onclick="FACancel2w()" /></td></tr> </table> </form>';
+        //            alert(bleer4);
 
 
 YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { width:"350px", visible:false, draggable:true, close:true } );
@@ -548,105 +548,105 @@ YAHOO.example.container.panel1.center();
 YAHOO.example.container.panel1.show();
 
 
-		/*
+        /*
 
 
-		}
-		*/
+        }
+        */
 
 
 
-	}
-	///////////////////////////////////////////////////////////////////////////////////////////
-	function Foco(obj)
-	{
-		window.event.cancelBubble=true;
-		obj.focus();
-		obj.select();
-	}
-	function Revisa()
-	{
-		return true;
-	}
-	function EjecutaAccion(accion)
-	{
-		$('sel_accion').value="";
-		var form=$('form_arch');
-		var inputs=form.getElementsByTagName('input');
-		var checks=new Array();
-		var hiddens=new Array();
-		var y=0,z=0;
-		for(x=0;x<inputs.length;x++)
-		{
-			if(inputs[x].type && inputs[x].type=="checkbox")
-			{
-				checks[y]=inputs[x];
-				y++;
-			}
-			if(inputs[x].type && inputs[x].type=="hidden" && inputs[x].name!="accion")
-			{
-				hiddens[z]=inputs[x];
-				z++;
-			}
-		}
-		var personas="";
-		for(x=0;x<checks.length;x++)
-		{
-			if(checks[x].checked && personas.split(',').indexOf(hiddens[x].value)==-1) personas += hiddens[x].value+",";
-		}
-		if(accion=="1")
-		{
-			//alert('accion1');
-			if(personas=="to=")
-			{
-				alert("No hay datos seleccionados");
-				return false;
-			}
-			open("envia_mail.php?to="+personas.substr(0,personas.length-1));
-		}
-		if(accion=="2")
-		{
-			y=0;
-			for(x=0;x<checks.length;x++)
-			{
-				if(checks[x].checked && hiddens[x].value!="<?php echo $_SESSION["id_persona_usr"]; ?>")
-				{
-					alert("¡Acción incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
-					return false;
-					y++;
-				}
-				if(checks[x].checked)
-				{
-					y++;
-				}
-			}
-			if(y>0)
-			{
-				if(confirm("¿Esta seguro?"))
-				{
-					$('accion').value='free_files';
-					$('form_arch').submit();
-					return true;
-				}
-			}
-			else
-			{
-				alert("No hay datos seleccionados");
-				return false;
-			}
-		}
-	}
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    function Foco(obj)
+    {
+        window.event.cancelBubble=true;
+        obj.focus();
+        obj.select();
+    }
+    function Revisa()
+    {
+        return true;
+    }
+    function EjecutaAccion(accion)
+    {
+        $('sel_accion').value="";
+        var form=$('form_arch');
+        var inputs=form.getElementsByTagName('input');
+        var checks=new Array();
+        var hiddens=new Array();
+        var y=0,z=0;
+        for(x=0;x<inputs.length;x++)
+        {
+            if(inputs[x].type && inputs[x].type=="checkbox")
+            {
+                checks[y]=inputs[x];
+                y++;
+            }
+            if(inputs[x].type && inputs[x].type=="hidden" && inputs[x].name!="accion")
+            {
+                hiddens[z]=inputs[x];
+                z++;
+            }
+        }
+        var personas="";
+        for(x=0;x<checks.length;x++)
+        {
+            if(checks[x].checked && personas.split(',').indexOf(hiddens[x].value)==-1) personas += hiddens[x].value+",";
+        }
+        if(accion=="1")
+        {
+            //alert('accion1');
+            if(personas=="to=")
+            {
+                alert("No hay datos seleccionados");
+                return false;
+            }
+            open("envia_mail.php?to="+personas.substr(0,personas.length-1));
+        }
+        if(accion=="2")
+        {
+            y=0;
+            for(x=0;x<checks.length;x++)
+            {
+                if(checks[x].checked && hiddens[x].value!="<?php echo $_SESSION["id_persona_usr"]; ?>")
+                {
+                    alert("¡Acción incorrecta!\nNo puede desbloquear los archivos de otros usuarios");
+                    return false;
+                    y++;
+                }
+                if(checks[x].checked)
+                {
+                    y++;
+                }
+            }
+            if(y>0)
+            {
+                if(confirm("¿Esta seguro?"))
+                {
+                    $('accion').value='free_files';
+                    $('form_arch').submit();
+                    return true;
+                }
+            }
+            else
+            {
+                alert("No hay datos seleccionados");
+                return false;
+            }
+        }
+    }
 
-	function Inic()
-	{
-		$('lista').value="<?php echo $vista; ?>";
-	}
-	</script>
-	<SCRIPT LANGUAGE=JAVASCRIPT TYPE="TEXT/JAVASCRIPT">
-	function titulo()
-	{
-	//alert('<?php echo $raiz; ?>');
-	<?php
+    function Inic()
+    {
+        $('lista').value="<?php echo $vista; ?>";
+    }
+    </script>
+    <SCRIPT LANGUAGE=JAVASCRIPT TYPE="TEXT/JAVASCRIPT">
+    function titulo()
+    {
+    //alert('<?php echo $raiz; ?>');
+    <?php
 if ($CarpetaR=="")
 {
 if ($CarpetaR=="gerardo")
@@ -675,12 +675,12 @@ $RUTA_PARTc="&carpetaa=".elimina_acentos($CarpetaR);
 $URL_A=$RUTA_PARTa.$RUTA_PARTb.$RUTA_PARTc;
 }
 ?>
-	cambiatitulo('<?php echo $carpeta ;?>');
-	bckuri=document.referer;
-	document.getElementById('bckt').href = '<?php echo $URL_A; ?>';
-	//document.getElementById('bcki').href = '<?php echo $URL_A; ?>';
-	//document.getElementById('bckf').href = '<?php echo $URL_A; ?>';
-	}
+    cambiatitulo('<?php echo $carpeta ;?>');
+    bckuri=document.referer;
+    document.getElementById('bckt').href = '<?php echo $URL_A; ?>';
+    //document.getElementById('bcki').href = '<?php echo $URL_A; ?>';
+    //document.getElementById('bckf').href = '<?php echo $URL_A; ?>';
+    }
 </script>
 </head>
 <body onload="titulo();">
@@ -691,9 +691,9 @@ $URL_A=$RUTA_PARTa.$RUTA_PARTb.$RUTA_PARTc;
 
 <?php
 function elimina_acentos($cadena){
-	$tofind = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ";
-	$replac = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
-	return(strtr($cadena,$tofind,$replac));
+    $tofind = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ";
+    $replac = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
+    return(strtr($cadena,$tofind,$replac));
 }
 ?>
 
@@ -701,35 +701,35 @@ function elimina_acentos($cadena){
 <?php //BarraHerramientas(); ?>
 <div style="visibility:hidden; font-size:12px;">
 <div id="FormCarpeta" class="div_panel">
-	<div class="hd">Agregar Carpeta</div>
-	<div class="bd">
-		<form id="dataCarpeta" action="ajax/archivos.php" method="post" onsubmit="return FCSubmit()">
-			<input type="hidden" name="accion" id="accion" value="crea_carpteta" />
-			<input type="hidden" name="ruta" id="ruta_nc" value="<?php echo $Dir."/".$raiz; ?>" />
-			<input type="hidden" name="url_retorno" id="url_retorno" value="" />
+    <div class="hd">Agregar Carpeta</div>
+    <div class="bd">
+        <form id="dataCarpeta" action="ajax/archivos.php" method="post" onsubmit="return FCSubmit()">
+            <input type="hidden" name="accion" id="accion" value="crea_carpteta" />
+            <input type="hidden" name="ruta" id="ruta_nc" value="<?php echo $Dir."/".$raiz; ?>" />
+            <input type="hidden" name="url_retorno" id="url_retorno" value="" />
 
-			<table align="center">
-				<tr><td align="left">Nombre: </td></tr>
-				<tr><td align="center"><input type="text" maxlength="250" size="30" name="carpeta" id="carpeta" /></td></tr>
-				<tr><td align="right"><input type="button" value="Aceptar" onclick="FCOk()" /> <input type="button" value="Cancelar" onclick="FCCancel()" /></td></tr>
-			</table>
-		</form>
-	</div>
+            <table align="center">
+                <tr><td align="left">Nombre: </td></tr>
+                <tr><td align="center"><input type="text" maxlength="250" size="30" name="carpeta" id="carpeta" /></td></tr>
+                <tr><td align="right"><input type="button" value="Aceptar" onclick="FCOk()" /> <input type="button" value="Cancelar" onclick="FCCancel()" /></td></tr>
+            </table>
+        </form>
+    </div>
 </div>
 <div id="FormArchivo" class="div_panel">
-	<div class="hd">Agregar Archivo</div>
-	<div class="bd">
-		<form id="dataArchivo" action="ajax/archivos.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data">
-			<input type="hidden" name="accion" id="accion" value="carga_archivo" />
-			<input type="hidden" name="ruta" id="ruta_ca" value="<?php echo $Dir."/".$raiz; ?>" />
-			<input type="hidden" name="url_retorno" id="url_retorno" value="" />
-			<table align="center">
-				<tr><td align="left">Archivo: </td></tr>
-				<tr><td align="center"><input type="file" maxlength="250" size="30" name="archivo" id="archivo" /></td></tr>
-				<tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk()" /> <input type="button" value="Cancelar" onclick="FACancel();" /></td></tr>
-			</table>
-		</form>
-	</div>
+    <div class="hd">Agregar Archivo</div>
+    <div class="bd">
+        <form id="dataArchivo" action="ajax/archivos.php" method="post" onsubmit="return FASubmit()" enctype="multipart/form-data">
+            <input type="hidden" name="accion" id="accion" value="carga_archivo" />
+            <input type="hidden" name="ruta" id="ruta_ca" value="<?php echo $Dir."/".$raiz; ?>" />
+            <input type="hidden" name="url_retorno" id="url_retorno" value="" />
+            <table align="center">
+                <tr><td align="left">Archivo: </td></tr>
+                <tr><td align="center"><input type="file" maxlength="250" size="30" name="archivo" id="archivo" /></td></tr>
+                <tr><td align="right"><input type="button" value="Aceptar" onclick="FAOk()" /> <input type="button" value="Cancelar" onclick="FACancel();" /></td></tr>
+            </table>
+        </form>
+    </div>
 </div>
 </div>
 <!--INICIA TABLA PRINCIPAL-->
@@ -803,10 +803,10 @@ function elimina_acentos($cadena){
 </table>
 <table border="0" align="center" style="width: 100%">
 <tr>
-		<td valign="top"><!--<iframe width="250" height="200" src="_explo_carpetas.php?raiz=<?php echo $raiz; ?>" id="frame_carpetas" frameborder="1" marginheight="5" marginwidth="5"></iframe>-->
-		<iframe width="100%" height="500" src="_explo_archivos.php?ruta=<?php echo (($ruta_expl!="")?($ruta_expl):($raiz)); ?>&proyecto=<?php echo $proyecto;?>&CarpetaR=<?php echo  $carpeta ?>" id="frame_archivos" frameborder="0" marginheight="0" marginwidth="0" allowtransparency="true"></iframe>
-		</td>
-	</tr>
+        <td valign="top"><!--<iframe width="250" height="200" src="_explo_carpetas.php?raiz=<?php echo $raiz; ?>" id="frame_carpetas" frameborder="1" marginheight="5" marginwidth="5"></iframe>-->
+        <iframe width="100%" height="500" src="_explo_archivos.php?ruta=<?php echo (($ruta_expl!="")?($ruta_expl):($raiz)); ?>&proyecto=<?php echo $proyecto;?>&CarpetaR=<?php echo  $carpeta ?>" id="frame_archivos" frameborder="0" marginheight="0" marginwidth="0" allowtransparency="true"></iframe>
+        </td>
+    </tr>
 </table>
 
   <!--Finaliza el cuerpo del html e Inicia el piede página-->
@@ -825,18 +825,15 @@ function elimina_acentos($cadena){
             </table></p>
 </div>
 </form>
-			<!--  INICIA DIV OCULTA -->
-			<div style="visibility:hidden">
-			Acci&oacute;n:
-			<select name="sel_accion" id="sel_accion" onchange="EjecutaAccion(this.value)">
-				<option value=""></option>
-				<option value="1">Enviar E-Mail</option>
-				<option value="2">Desbloquear</option>
-			</select></div>
-			<!--  TERMINA DIV OCULTA -->
+            <!--  INICIA DIV OCULTA -->
+            <div style="visibility:hidden">
+            Acci&oacute;n:
+            <select name="sel_accion" id="sel_accion" onchange="EjecutaAccion(this.value)">
+                <option value=""></option>
+                <option value="1">Enviar E-Mail</option>
+                <option value="2">Desbloquear</option>
+            </select></div>
+            <!--  TERMINA DIV OCULTA -->
 
 </body>
 </html>
-<?php
-mysqli_close($Con);
-?>

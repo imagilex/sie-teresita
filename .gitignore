@@ -16,6 +16,14 @@
 **/Reportes_Diarios
 
 __access_data.php
+__settings.php
+
+Archivos_Secciones/Mision.txt
+Archivos_Secciones/Politica_Calidad.txt
+Archivos_Secciones/Valores.txt
+Archivos_Secciones/Vision.txt
+Archivos_Secciones/contaetctos_txt.txt
+Archivos_Secciones/linea_introd.txt
 
 /*.txt
 /*.xlsx

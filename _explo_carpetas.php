@@ -10,8 +10,8 @@ header("Pragma: no-cache");
 include("apoyo.php");
 
 $Con=Conectar();
-$proyecto=PostString("proyecto").Get("proyecto");
-$raiz=PostString("raiz").Get("raiz");
+$proyecto = Get_Vars_Helper::getPGVar("proyecto");
+$raiz = Get_Vars_Helper::getPGVar("raiz");
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -25,12 +25,12 @@ $raiz=PostString("raiz").Get("raiz");
 <link href="estilos.css" rel="stylesheet" type="text/css" />
 <script language="javascript" src="prototype.js"></script>
 <script language="javascript">
-	var llevar=false;
-	function GoTo(ruta)
-	{
-		window.parent.frames["frame_archivos"].location.href='_explo_archivos.php?proyecto=<?php echo $proyecto; ?>&ruta='+ruta;
-		return false;
-	}
+    var llevar=false;
+    function GoTo(ruta)
+    {
+        window.parent.frames["frame_archivos"].location.href='_explo_archivos.php?proyecto=<?php echo $proyecto; ?>&ruta='+ruta;
+        return false;
+    }
 </script>
 </head>
 
@@ -40,36 +40,35 @@ $raiz=PostString("raiz").Get("raiz");
 function MuestraDirs($ruta, $directorio,$espacio="")
 {
 
-	?>
-	<div align="left" style="padding-left:20px;" ondblclick="return GoTo('<?php echo $ruta.(($espacio=="")?("/"):("")).$directorio; ?>');" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';"><?php echo $espacio; ?><img src="Imagenes/carpeta.JPG" border="0" align="middle" /> <?php echo (($directorio!="")?($directorio):($ruta)); ?></div>
-		<?php
-		$raiz=str_replace("\\","/",$ruta)."/".$directorio."/";
-		if ($handle = @opendir($raiz))
-		{
-			while (($file = readdir($handle)))
-			{
-				if($file!=".." && $file!="." && is_file($file)===false)
-				{
-					$information=pathinfo($file);
-					if(@$information["extension"]=="")
-						$archivos_fechas[]=$file;
-				}
-		    }
-			closedir($handle);
-		}
-		if(@count($archivos_fechas)>0)
-		{
-			foreach($archivos_fechas as $direct)
-			{
-				MuestraDirs($raiz, $direct,$espacio.".....");
-			}
-		}
-		?>
-	<?php
+    ?>
+    <div align="left" style="padding-left:20px;" ondblclick="return GoTo('<?php echo $ruta.(($espacio=="")?("/"):("")).$directorio; ?>');" onmousemove="javascript: this.style.background='999999';" onmouseout="javascript: this.style.background='FFFFFF';"><?php echo $espacio; ?><img src="Imagenes/carpeta.JPG" border="0" align="middle" /> <?php echo (($directorio!="")?($directorio):($ruta)); ?></div>
+        <?php
+        $raiz=str_replace("\\","/",$ruta)."/".$directorio."/";
+        if ($handle = @opendir($raiz))
+        {
+            while (($file = readdir($handle)))
+            {
+                if($file!=".." && $file!="." && is_file($file)===false)
+                {
+                    $information=pathinfo($file);
+                    if(@$information["extension"]=="")
+                        $archivos_fechas[]=$file;
+                }
+            }
+            closedir($handle);
+        }
+        if(@count($archivos_fechas)>0)
+        {
+            foreach($archivos_fechas as $direct)
+            {
+                MuestraDirs($raiz, $direct,$espacio.".....");
+            }
+        }
+        ?>
+    <?php
 }
 
-	MuestraDirs($raiz, "");
+    MuestraDirs($raiz, "");
 ?>
 </body>
 </html>
-<?php mysqli_close($Con); ?>
