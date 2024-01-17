@@ -9,7 +9,7 @@ header("Pragma: no-cache");
 include("../apoyo.php");
 include("../u_db/data_base.php");
 
-$db = new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
+$db = new data_base(MAIN_DB->usr, MAIN_DB->host, MAIN_DB->pass, MAIN_DB->bd);
 
 $dato = Get_Vars_Helper::getPGVar("clave");
 

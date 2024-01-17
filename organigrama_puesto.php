@@ -6,7 +6,7 @@ include "apoyo.php";
 
 include_once("u_db/data_base.php");
 
-$db=new data_base(BD_USR, BD_HOST, BD_PASS, BD_BD);
+$db=new data_base(MAIN_DB->usr, MAIN_DB->host, MAIN_DB->pass, MAIN_DB->bd);
 
 $Con=Conectar();
 
