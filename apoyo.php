@@ -283,19 +283,19 @@ function MostrarArchivo($Archivo,$fin="<br />")
 
 function CboCG(string $campo)
 {
-	$data = MAIN_DB->select(
-		"valor, descripcion", "codigos_generales",
-		"campo = '{$campo}'", "posicion, descripcion");
-	$opcs = array();
-	foreach($data as $reg) {
-		$opcs[$reg["valor"]] = $reg["descripcion"];
-	}
-	return HTML_Select::options($opcs, false);
+    $data = MAIN_DB->select(
+        "valor, descripcion", "codigos_generales",
+        "campo = '{$campo}'", "posicion, descripcion");
+    $opcs = array();
+    foreach($data as $reg) {
+        $opcs[$reg["valor"]] = $reg["descripcion"];
+    }
+    return HTML_Select::options($opcs, false);
 }
 
 function ErrorMySQL(mysqli $cnn)
 {
-	return $cnn && $cnn->errno ? $cnn->errno.": ".$cnn->error : "";
+    return $cnn && $cnn->errno ? $cnn->errno.": ".$cnn->error : "";
 }
 function ErrorMySQLAlert(mysqli $cnn)
 {
@@ -404,69 +404,69 @@ function BH_Ayuda($prefijo,$opcion)
 function DateMySQL(string $variable)
 {
     if(strlen($variable)==10
-		&& substr($variable,2,1)=="/"
-		&& substr($variable,5,1)=="/")
+        && substr($variable,2,1)=="/"
+        && substr($variable,5,1)=="/")
         return substr($variable,6,4) . "-" .
-			substr($variable,3,2) . "-" .
-			substr($variable,0,2);
+            substr($variable,3,2) . "-" .
+            substr($variable,0,2);
     return $variable;
 }
 function DateConvencional(string $variable, bool $as_text=false)
 {
     if(strlen($variable)==10
-		&& substr($variable,4,1)=="-"
-		&& substr($variable,7,1)=="-") {
+        && substr($variable,4,1)=="-"
+        && substr($variable,7,1)=="-") {
         if(!$as_text)
             return substr($variable,8,2) . "/" .
-				substr($variable,5,2) . "/" .
-				substr($variable,0,4);
+                substr($variable,5,2) . "/" .
+                substr($variable,0,4);
         else {
             $mes="";
             switch(substr($variable,5,2)){
                 case "01":
-					$mes="Enero";
-					break;
+                    $mes="Enero";
+                    break;
                 case "02":
-					$mes="Febrero";
-					break;
+                    $mes="Febrero";
+                    break;
                 case "03":
-					$mes="Marzo";
-					break;
+                    $mes="Marzo";
+                    break;
                 case "04":
-					$mes="Abril";
-					break;
+                    $mes="Abril";
+                    break;
                 case "05":
-					$mes="Mayo";
-					break;
+                    $mes="Mayo";
+                    break;
                 case "06":
-					$mes="Junio";
-					break;
+                    $mes="Junio";
+                    break;
                 case "07":
-					$mes="Julio";
-					break;
+                    $mes="Julio";
+                    break;
                 case "08":
-					$mes="Agosto";
-					break;
+                    $mes="Agosto";
+                    break;
                 case "09":
-					$mes="Septiembre";
-					break;
+                    $mes="Septiembre";
+                    break;
                 case "10":
-					$mes="Octubre";
-					break;
+                    $mes="Octubre";
+                    break;
                 case "11":
-					$mes="Noviembre";
-					break;
+                    $mes="Noviembre";
+                    break;
                 case "12":
-					$mes="Diciembre";
-					break;
+                    $mes="Diciembre";
+                    break;
             }
             $fecha = getdate();
             if($mes != "")
-				return $mes . " " .
-					substr($variable,8,2) . (
-						substr($variable,0,4) != $fecha["year"]
-						? ", " . substr($variable,0,4)
-						: "");
+                return $mes . " " .
+                    substr($variable,8,2) . (
+                        substr($variable,0,4) != $fecha["year"]
+                        ? ", " . substr($variable,0,4)
+                        : "");
         }
     }
     return "";
@@ -489,12 +489,12 @@ function DisplaySQLD3($lista,$usuar)
         foreach($columnas as $columna)
         {
             if(!in_array($columna["columna"], $cols))
-				$cols[] = array(
-					"columna"=>$columna["columna"],
-					"orden"=>$columna["orden"],
-					"etiqueta"=>$columna["etiqueta"]);
+                $cols[] = array(
+                    "columna"=>$columna["columna"],
+                    "orden"=>$columna["orden"],
+                    "etiqueta"=>$columna["etiqueta"]);
             if(!in_array($columna["tabla"], $tablas))
-				$tablas[] = $columna["tabla"];
+                $tablas[] = $columna["tabla"];
         }
         $select="select id_documento as id_documento_x, fase as fase_x, consecutivo as consecutivo_x, ";
         $from=" from ";
@@ -685,16 +685,16 @@ function Parametro(string $menu, string $elem, string $caract)
 {
     $aux=CTabla("estandares");
     $daux=$aux->select(
-		"id_estandar, valor_default",
-		"elemento='$elem' and menu='$menu' and caracteristica='$caract'")[0];
+        "id_estandar, valor_default",
+        "elemento='$elem' and menu='$menu' and caracteristica='$caract'")[0];
     $aux2=CTabla("estandares_usuario");
     $daux2=$aux2->select(
-		"valor",
-		"id_estandar='".$daux."' and usuario='".$_SESSION["id_usr"]."'")[0];
+        "valor",
+        "id_estandar='".$daux."' and usuario='".$_SESSION["id_usr"]."'")[0];
     if($daux2["valor"]!="")
-		return $daux2["valor"];
+        return $daux2["valor"];
     else
-		return $daux["valor_default"];
+        return $daux["valor_default"];
 }
 
 function B_reportes()
