@@ -166,7 +166,7 @@ if(Get_Vars_Helper::getPostVar("Nuevo")=="")
             <input type="hidden" name="save" />
         </td>
         <td align="right">Fecha:</td>
-        <td><?php echo FormFecha("fecha"); ?></td>
+        <td><?php echo HTML_Helper::form_fecha("fecha"); ?></td>
         <td></td>
     </tr>
 </table>
@@ -228,8 +228,8 @@ else
         <td align="right">Fecha:</td>
         <td>
             <?php
-            echo FormFecha("fecha");
-            $hoy=getdate();
+            echo HTML_Helper::form_fecha("fecha");
+            $hoy = getdate();
             ?>
             <script language="javascript">
                 document.datos.fecha_d.value="<?php echo intval($hoy["mday"]); ?>";

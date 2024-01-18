@@ -11,7 +11,7 @@ function Conectar()
     try {
         return MAIN_DB->conectar();
     } catch (Exception $e) {
-        Alert($e->getMessage());
+        echo HTML_Helper::JSAlert($e->getMessage());
     }
 }
 
@@ -280,78 +280,28 @@ function MostrarArchivo($Archivo,$fin="<br />")
     unset($Arch);
     return $maximo;
 }
-function CboCG($Campo)
+
+function CboCG(string $campo)
 {
-    $mysqli = Conectar();
-    $Cad="";
-    $qry = "select valor,descripcion from codigos_generales where campo='$Campo' order by posicion,descripcion";
-    if($Regs=consulta_directa($qry))
-        while($Reg=mysqli_fetch_array($Regs))
-        {
-            // $descr=preg_replace('á',"&aacute;",$Reg["descripcion"]);
-            // $descr=preg_replace('é','&eacute;',$descr);
-            // $descr=preg_replace('í','&iacute;',$descr);
-            // $descr=preg_replace('ó','&oacute;',$descr);
-            // $descr=preg_replace('ú','&uacute;',$descr);
-            // $descr=preg_replace('Á','&Aacute;',$descr);
-            // $descr=preg_replace('É','&Eacute;',$descr);
-            // $descr=preg_replace('Í','&Iacute;',$descr);
-            // $descr=preg_replace('Ó','&Oacute;',$descr);
-            // $descr=preg_replace('Ú','&Uacute;',$descr);
-            // $descr=preg_replace('Ñ','&Ntilde;',$descr);
-            // $descr=preg_replace('ñ','&ntilde;',$descr);
-            $descr = $Reg["descripcion"];
-            $Cad=$Cad."\n<option value=\"".$Reg["valor"]."\">".$descr."</option>";
-        }
-    return $Cad;
+    $data = MAIN_DB->select(
+        "valor, descripcion", "codigos_generales",
+        "campo = '{$campo}'", "posicion, descripcion");
+    $opcs = array();
+    foreach($data as $reg) {
+        $opcs[$reg["valor"]] = $reg["descripcion"];
+    }
+    return HTML_Select::options($opcs, false);
 }
-function Alert($Mensaje)
+
+function ErrorMySQL(mysqli $cnn)
 {
-    ?>
-    <script language="javascript">
-        alert("<?php echo $Mensaje; ?>");
-    </script>
-    <?php
+    return $cnn && $cnn->errno ? $cnn->errno.": ".$cnn->error : "";
 }
-function ErrorMySQL($cnn)
+function ErrorMySQLAlert(mysqli $cnn)
 {
-    if($cnn && $cnn->errno)
-        return $cnn->errno.": ".$cnn->error;
-    return "";
+    echo ErrorMySQL($cnn)!="" ? HTML_Helper::JSAlert(ErrorMySQL($cnn)) : "";
 }
-function ErrorMySQLAlert($cnn)
-{
-    if(ErrorMySQL($cnn)!="")
-        Alert(ErrorMySQL($cnn));
-}
-function FormFecha($Variable)
-{
-    $Dia=FormComboNum($Variable."_d",1,31,1);
-    $Mes=FormComboNum($Variable."_m",1,12,1);
-    $Mes="<select name=\"$Variable"."_m\" id=\"$Variable\"><option value=\"0\"></option>";
-    $Mes=$Mes."<option value=\"1\">Ene</option>";
-    $Mes=$Mes."<option value=\"2\">Feb</option>";
-    $Mes=$Mes."<option value=\"3\">Mar</option>";
-    $Mes=$Mes."<option value=\"4\">Abr</option>";
-    $Mes=$Mes."<option value=\"5\">May</option>";
-    $Mes=$Mes."<option value=\"6\">Jun</option>";
-    $Mes=$Mes."<option value=\"7\">Jul</option>";
-    $Mes=$Mes."<option value=\"8\">Ago</option>";
-    $Mes=$Mes."<option value=\"9\">Sep</option>";
-    $Mes=$Mes."<option value=\"10\">Oct</option>";
-    $Mes=$Mes."<option value=\"11\">Nov</option>";
-    $Mes=$Mes."<option value=\"12\">Dic</option>";
-    $Mes=$Mes."</select>";
-    $Anio="<input type=\"text\" maxlength=\"4\" size=\"4\" name=\"$Variable"."_a\" onblur=\"javascript: if(document.getElementById('$Variable"."_a').value.length!=4) alert('El año debe ser de cuatro digitos');\" />";
-    return $Dia." / ".$Mes." / ".$Anio;
-}
-function FormComboNum($Variable,$Inicio,$Fin,$Incremento)
-{
-    $Cad="";
-    for($x=$Inicio;$x<=$Fin;$x+=$Incremento)
-        $Cad=$Cad."<option value=\"$x\">$x</option>";
-    return '<select name="'.$Variable.'"><option></option>'.$Cad.'</select>';
-}
+
 function NoAcute($cad)
 {
     $cadena=$cad;
@@ -451,48 +401,75 @@ function BH_Ayuda($prefijo,$opcion)
         <?php
     }
 }
-function DateMySQL($Variable)
+function DateMySQL(string $variable)
 {
-    if(strlen($Variable)==10 && substr($Variable,2,1)=="/" && substr($Variable,5,1)=="/")
-        return substr($Variable,6,4)."-".substr($Variable,3,2)."-".substr($Variable,0,2);
-    return $Variable;
+    if(strlen($variable)==10
+        && substr($variable,2,1)=="/"
+        && substr($variable,5,1)=="/")
+        return substr($variable,6,4) . "-" .
+            substr($variable,3,2) . "-" .
+            substr($variable,0,2);
+    return $variable;
 }
-function DateConvencional($Variable,$as_text=false)
+function DateConvencional(string $variable, bool $as_text=false)
 {
-    if(strlen($Variable)==10 && substr($Variable,4,1)=="-" && substr($Variable,7,1)=="-")
-    {
+    if(strlen($variable)==10
+        && substr($variable,4,1)=="-"
+        && substr($variable,7,1)=="-") {
         if(!$as_text)
-            return substr($Variable,8,2)."/".substr($Variable,5,2)."/".substr($Variable,0,4);
-        else
-        {
+            return substr($variable,8,2) . "/" .
+                substr($variable,5,2) . "/" .
+                substr($variable,0,4);
+        else {
             $mes="";
-            switch(substr($Variable,5,2))
-            {
-                case "01": $mes="Enero"; break;
-                case "02": $mes="Febrero"; break;
-                case "03": $mes="Marzo"; break;
-                case "04": $mes="Abril"; break;
-                case "05": $mes="Mayo"; break;
-                case "06": $mes="Junio"; break;
-                case "07": $mes="Julio"; break;
-                case "08": $mes="Agosto"; break;
-                case "09": $mes="Septiembre"; break;
-                case "10": $mes="Octubre"; break;
-                case "11": $mes="Noviembre"; break;
-                case "12": $mes="Diciembre"; break;
+            switch(substr($variable,5,2)){
+                case "01":
+                    $mes="Enero";
+                    break;
+                case "02":
+                    $mes="Febrero";
+                    break;
+                case "03":
+                    $mes="Marzo";
+                    break;
+                case "04":
+                    $mes="Abril";
+                    break;
+                case "05":
+                    $mes="Mayo";
+                    break;
+                case "06":
+                    $mes="Junio";
+                    break;
+                case "07":
+                    $mes="Julio";
+                    break;
+                case "08":
+                    $mes="Agosto";
+                    break;
+                case "09":
+                    $mes="Septiembre";
+                    break;
+                case "10":
+                    $mes="Octubre";
+                    break;
+                case "11":
+                    $mes="Noviembre";
+                    break;
+                case "12":
+                    $mes="Diciembre";
+                    break;
             }
-            $fecha=getdate();
-            if($mes!="") return $mes." ".substr($Variable,8,2).(substr($Variable,0,4)!=$fecha["year"]?", ".substr($Variable,0,4):"");
+            $fecha = getdate();
+            if($mes != "")
+                return $mes . " " .
+                    substr($variable,8,2) . (
+                        substr($variable,0,4) != $fecha["year"]
+                        ? ", " . substr($variable,0,4)
+                        : "");
         }
     }
     return "";
-}
-function Esta_en($array,$elemento)
-{
-    foreach($array as $elem)
-        if($elem==$elemento)
-            return true;
-    return false;
 }
 function DisplaySQLD3($lista,$usuar)
 {
@@ -511,8 +488,13 @@ function DisplaySQLD3($lista,$usuar)
         $tablas=array();
         foreach($columnas as $columna)
         {
-            if(!Esta_en($cols,$columna["columna"])) $cols[]=array("columna"=>$columna["columna"],"orden"=>$columna["orden"],"etiqueta"=>$columna["etiqueta"]);
-            if(!Esta_en($tablas,$columna["tabla"])) $tablas[]=$columna["tabla"];
+            if(!in_array($columna["columna"], $cols))
+                $cols[] = array(
+                    "columna"=>$columna["columna"],
+                    "orden"=>$columna["orden"],
+                    "etiqueta"=>$columna["etiqueta"]);
+            if(!in_array($columna["tabla"], $tablas))
+                $tablas[] = $columna["tabla"];
         }
         $select="select id_documento as id_documento_x, fase as fase_x, consecutivo as consecutivo_x, ";
         $from=" from ";
@@ -699,14 +681,20 @@ function Komp($id_documento,$fase,$consecutivo)
         </table>';
     return $cad;
 }
-function Parametro($menu,$elem,$caract)
+function Parametro(string $menu, string $elem, string $caract)
 {
     $aux=CTabla("estandares");
-    $daux=$aux->select("id_estandar, valor_default", "elemento='$elem' and menu='$menu' and caracteristica='$caract'");
+    $daux=$aux->select(
+        "id_estandar, valor_default",
+        "elemento='$elem' and menu='$menu' and caracteristica='$caract'")[0];
     $aux2=CTabla("estandares_usuario");
-    $daux2=$aux2->select("valor","id_estandar='".$daux[0]["id_estandar"]."' and usuario='".$_SESSION["id_usr"]."'");
-    if($daux2[0]["valor"]!="") return $daux2[0]["valor"];
-    else return $daux[0]["valor_default"];
+    $daux2=$aux2->select(
+        "valor",
+        "id_estandar='".$daux."' and usuario='".$_SESSION["id_usr"]."'")[0];
+    if($daux2["valor"]!="")
+        return $daux2["valor"];
+    else
+        return $daux["valor_default"];
 }
 
 function B_reportes()
