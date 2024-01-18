@@ -54,6 +54,6 @@ if($archivo!="" && file_exists($archivo) && isset($informacion["extension"]))
     }
 }
 else {trigger_error("Archivo no encontrado: $archivo");}
-
+?>
 </body>
 </html>

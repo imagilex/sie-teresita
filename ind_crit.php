@@ -51,14 +51,14 @@ if($btn_ant || $btn_sig)
         if($x>0)
             $x--;
         else
-            Alert("¡Ya no existen más indicadores!");
+            echo HTML_Helper::JSAlert("¡Ya no existen más indicadores!");
     }
     else if($btn_sig)
     {
         if($x<count($ind)-1)
             $x++;
         else
-            Alert("¡Ya no existen más indicadores!");
+            echo HTML_Helper::JSAlert("¡Ya no existen más indicadores!");
     }
     $nivel="";
     $indicador=$ind[$x];

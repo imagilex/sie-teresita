@@ -192,7 +192,7 @@ if(Get_Vars_Helper::getPostVar("Nuevo")=="")
     </tr>
     <tr>
         <td align="right">Fecha:</td>
-        <td><?php echo FormFecha("fecha_alta"); ?></td>
+        <td><?php echo HTML_Helper::form_fecha("fecha_alta"); ?></td>
         <td></td>
     </tr>
 </table>
@@ -264,7 +264,7 @@ else
     <tr>
         <td align="right">Fecha:</td>
         <td>
-            <?php echo FormFecha("fecha_alta");
+            <?php echo HTML_Helper::form_fecha("fecha_alta");
             $hoy=getdate();
             ?>
             <script language="javascript">

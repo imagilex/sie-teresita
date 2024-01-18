@@ -284,7 +284,7 @@ if( !isset($_SESSION["tipo"]) &&  !isset($_SESSION["id_usr"]) )
 
             else
             {
-                Alert("El nombre de usuario y/o contraseña son incorrectos");
+              echo HTML_Helper::JSAlert("El nombre de usuario y/o contraseña son incorrectos");
             }
 
         }

@@ -21,6 +21,35 @@ if(!isset($__HTML_HPR_MODULE__)) {
             return "<$tag " . implode(" ", $attrs) . $closer;
         }
 
+        static public function JSBlock(string $codigo) {
+            return HTML_Helper::tag(
+                "script", array("language"=>"javascript"), $codigo);
+        }
+
+        static public function JSAlert(string $mensaje) {
+            return HTML_Helper::JSBlock("alert(\"{$mensaje}\");");
+        }
+
+        static public function form_fecha(string $variable) {
+            $var_d = $variable . "_d";
+            $var_m = $variable . "_m";
+            $var_a = $variable . "_a";
+            $dia = HTML_Select::select_numeric($var_d, 1, 31);
+            $mes = HTML_Select::create(
+                $var_m,
+                array(
+                    "", "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+                    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic", ),
+                id:$variable, with_empty_opc:false);
+            $anio = HTML_Input::text(
+                $var_a, array(
+                    "maxlength"=>"4", "size"=>"4",
+                    "onblur"=>
+                        "javascript: if(document.getElementById('{$var_a}').value.length!=4) alert('El año debe ser de cuatro digitos');"
+                    ));
+            return $dia." / ".$mes." / ".$anio;
+        }
+
     }
 
     class HTML_Table {
@@ -121,6 +150,86 @@ if(!isset($__HTML_HPR_MODULE__)) {
                 array(), $tr_attributes, $cells, $cell_attributtes);
             return HTML_Helper::tag(
                 "table", $attributes, "{$htag}{$btag}{$ftag}");
+        }
+
+    }
+
+    class HTML_Select {
+
+        static public function create(
+            string $name, iterable $options=array(),
+            iterable $options_group=array(), string $id="",
+            iterable $attributes=array(), bool $with_empty_opc=true) {
+            return HTML_Select::select(
+                $name, $options, $options_group,
+                $id, $attributes, $with_empty_opc);
+        }
+
+        static public function select(
+            string $name, iterable $options=array(),
+            iterable $options_group=array(), string $id="",
+            iterable $attributes=array(), bool $with_empty_opc=true) {
+            $opcs = "";
+            $opcs .= HTML_Select::options($options, $with_empty_opc);
+            foreach($options_group as $g => $options) {
+                $opcs .= HTML_Select::option_group($g, $options);
+            }
+            $attributes = array_merge($attributes, array("name"=>$name));
+            if($id) {
+                $attributes["id"] = $id;
+            }
+            return HTML_Helper::tag("select", $attributes, $opcs);
+        }
+
+        static public function select_numeric(
+            string $name, int $start, int $end, int $step=1) {
+            $opcs = array();
+            foreach(range($start, $end, $step) as $opc) {
+                $opcs[strval($opc)] = strval($opc);
+            }
+            return HTML_Select::create(
+                $name, $opcs);
+        }
+
+        static public function option(string $value, string $label) {
+            return HTML_Helper::tag("option", array("value"=>$value), $label);
+        }
+
+        static public function options(
+            iterable $options, bool $with_empty_opc=true) {
+            $opcs = $with_empty_opc ? HTML_Helper::tag("option") : "";
+            foreach($options as $k => $v) {
+                $opcs .= HTML_Select::option($k, $v);
+            }
+            return $opcs;
+        }
+
+        static public function option_group(
+            string $label, iterable $options, bool $with_empty_opc=false) {
+            $opcs = $with_empty_opc ? HTML_Helper::tag("option") : "";
+            $opcs .= HTML_Select::options($options, $with_empty_opc);
+            return HTML_Helper::tag("optgroup", array("label"=>$label), $opcs);
+        }
+
+    }
+
+    class HTML_Input {
+
+        static public function create(string $name, iterable $attributes=array(), string $id="") {
+            return HTML_Input::input($name, $attributes, $id);
+        }
+
+        static public function input(string $name, iterable $attributes=array(), string $id="") {
+            $attributes = array_merge($attributes, array("name"=>$name));
+            if($id) {
+                $attributes["id"] = $id;
+            }
+            return HTML_Helper::tag('input', $attributes, autoclose:true);
+        }
+
+        static public function text(string $name, iterable $attributes=array(), string $id="") {
+            $attributes = array_merge($attributes, array("type"=>"text"));
+            return HTML_Input::input($name, $attributes, $id);
         }
 
     }

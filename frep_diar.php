@@ -47,14 +47,14 @@ if($btn_ant || $btn_sig)
         if($x>0)
             $x--;
         else
-            Alert("¡Ya no existen más reportes!");
+            echo HTML_Helper::JSAlert("¡Ya no existen más reportes!");
     }
     else if($btn_sig)
     {
         if($x<count($reportes)-1)
             $x++;
         else
-            Alert("¡Ya no existen más reportes!");
+            echo HTML_Helper::JSAlert("¡Ya no existen más reportes!");
     }
     $nivel="";
     $id_reporte=$reportes[$x];

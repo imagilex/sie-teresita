@@ -21,7 +21,7 @@ if(Get_Vars_Helper::getPostVar("add")=='yes')
     $cuantos=mysqli_fetch_array(consulta_directa("select count(*) as n from reporte where nombre = '$nombre'"));
     if(intval($cuantos["n"])>0)
     {
-        Alert("Ya existe un reporte con el nombre agregado");
+        echo HTML_Helper::JSAlert("Ya existe un reporte con el nombre agregado");
     }
     else
     {
